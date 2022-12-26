@@ -491,6 +491,7 @@ int main(int argc, FAR char *argv[])
 
       width  -= (2 * xstep);
       height -= (2 * ystep);
+      sleep(1); ////
     }
 
   printf("Test finished\n");
