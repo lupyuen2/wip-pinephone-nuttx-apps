@@ -36,6 +36,8 @@
 #include <nuttx/video/fb.h>
 #include <nuttx/video/rgbcolors.h>
 
+#include "../arch/arm64/src/common/arm64_internal.h" //// TODO
+
 /****************************************************************************
  * Preprocessor Definitions
  ****************************************************************************/
@@ -106,6 +108,12 @@ static void draw_rect32(FAR struct fb_state_s *state,
       for (x = 0; x < area->w; x++)
         {
           *dest++ = g_rgb24[color];
+
+          /* Fixes missing rows in the rendered image, not sure why */
+
+          ARM64_DMB(); ////
+          ARM64_DSB(); ////
+          ARM64_ISB(); ////
         }
 
       row += state->pinfo.stride;
@@ -127,6 +135,12 @@ static void draw_rect16(FAR struct fb_state_s *state,
       for (x = 0; x < area->w; x++)
         {
           *dest++ = g_rgb16[color];
+
+          /* Fixes missing rows in the rendered image, not sure why */
+
+          ARM64_DMB(); ////
+          ARM64_DSB(); ////
+          ARM64_ISB(); ////
         }
 
       row += state->pinfo.stride;
@@ -148,6 +162,12 @@ static void draw_rect8(FAR struct fb_state_s *state,
       for (x = 0; x < area->w; x++)
         {
           *dest++ = g_rgb8[color];
+
+          /* Fixes missing rows in the rendered image, not sure why */
+
+          ARM64_DMB(); ////
+          ARM64_DSB(); ////
+          ARM64_ISB(); ////
         }
 
       row += state->pinfo.stride;
@@ -232,6 +252,12 @@ static void draw_rect1(FAR struct fb_state_s *state,
         }
 
       row += state->pinfo.stride;
+
+      /* Fixes missing rows in the rendered image, not sure why */
+
+      ARM64_DMB(); ////
+      ARM64_DSB(); ////
+      ARM64_ISB(); ////
     }
 }
 
@@ -341,7 +367,7 @@ int main(int argc, FAR char *argv[])
   printf("     yres: %u\n", state.vinfo.yres);
   printf("  nplanes: %u\n", state.vinfo.nplanes);
 
-#ifdef CONFIG_FB_OVERLAY
+#ifdef TODO_CONFIG_FB_OVERLAY ////
   printf("noverlays: %u\n", state.vinfo.noverlays);
 
   /* Select the first overlay, which should be the composed framebuffer */
