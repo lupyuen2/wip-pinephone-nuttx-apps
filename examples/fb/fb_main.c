@@ -104,6 +104,7 @@ static void draw_rect32(FAR struct fb_state_s *state,
   row = (FAR uint8_t *)state->fbmem + state->pinfo.stride * area->y;
   for (y = 0; y < area->h; y++)
     {
+#ifdef NOTUSED
       //// Begin
       if (y % 80 == 1)
         {
@@ -111,6 +112,7 @@ static void draw_rect32(FAR struct fb_state_s *state,
           test_tcon0(false);
         }
       //// End
+#endif
 
       dest = ((FAR uint32_t *)row) + area->x;
       for (x = 0; x < area->w; x++)
@@ -475,8 +477,14 @@ int main(int argc, FAR char *argv[])
              color, area.x, area.y, area.w, area.h);
 
       draw_rect(&state, &area, color);
-      //usleep(500 * 1000);
-      //sleep(1); //// TODO
+
+      for (int i = 0; i < 5; i++)
+        {
+          test_tcon0(false); //// TODO
+        }
+
+      usleep(500 * 1000);
+      sleep(1); //// TODO
 
       width  -= (2 * xstep);
       height -= (2 * ystep);
