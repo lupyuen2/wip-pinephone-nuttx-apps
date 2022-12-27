@@ -105,9 +105,9 @@ static void draw_rect32(FAR struct fb_state_s *state,
   for (y = 0; y < area->h; y++)
     {
       //// Begin
-      if (y % 10 == 0)
+      if (y % 80 == 1)
         {
-          printf("y=%d\n", y);
+          //printf("y=%d\n", y);
           test_tcon0(false);
         }
       //// End
@@ -475,8 +475,8 @@ int main(int argc, FAR char *argv[])
              color, area.x, area.y, area.w, area.h);
 
       draw_rect(&state, &area, color);
-      usleep(500 * 1000);
-      sleep(1); //// TODO
+      //usleep(500 * 1000);
+      //sleep(1); //// TODO
 
       width  -= (2 * xstep);
       height -= (2 * ystep);
@@ -526,17 +526,13 @@ static void test_tcon0(bool show_stats)
     {
       // Count TCON0 VBLANK, TCON1 VBLANK, TCON0 CPU Trigger Finish
       uint32_t val = getreg32(TCON_GINT0_REG);
-      if (val & SUN4I_TCON_GINT0_VBLANK_INT(0)) { tcon0_vblank++; }
-      if (val & SUN4I_TCON_GINT0_VBLANK_INT(1)) { tcon1_vblank++; }
-      if (val & SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT) { tcon0_tri_finish++; }
-
       uint32_t mask = SUN4I_TCON_GINT0_VBLANK_INT(0) |
 			   SUN4I_TCON_GINT0_VBLANK_INT(1) |
 			   SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT;
-      modreg32(0, mask, TCON_GINT0_REG);
 
-      ////TODO
-      if (val & SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT) { return; } ////
+      if (val & SUN4I_TCON_GINT0_VBLANK_INT(0)) { tcon0_vblank++; modreg32(0, mask, TCON_GINT0_REG); }
+      if (val & SUN4I_TCON_GINT0_VBLANK_INT(1)) { tcon1_vblank++; modreg32(0, mask, TCON_GINT0_REG); }
+      if (val & SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT) { tcon0_tri_finish++; modreg32(0, mask, TCON_GINT0_REG); break; }
     }
 
     if (show_stats)
