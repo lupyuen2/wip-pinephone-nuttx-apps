@@ -36,6 +36,8 @@
 #include <nuttx/video/fb.h>
 #include <nuttx/video/rgbcolors.h>
 
+static void test_tcon0(void); ////
+
 /****************************************************************************
  * Preprocessor Definitions
  ****************************************************************************/
@@ -105,6 +107,7 @@ static void draw_rect32(FAR struct fb_state_s *state,
       dest = ((FAR uint32_t *)row) + area->x;
       for (x = 0; x < area->w; x++)
         {
+          test_tcon0();////
           *dest++ = g_rgb24[color];
         }
 
@@ -126,6 +129,7 @@ static void draw_rect16(FAR struct fb_state_s *state,
       dest = ((FAR uint16_t *)row) + area->x;
       for (x = 0; x < area->w; x++)
         {
+          test_tcon0();////
           *dest++ = g_rgb16[color];
         }
 
@@ -147,6 +151,7 @@ static void draw_rect8(FAR struct fb_state_s *state,
       dest = row + area->x;
       for (x = 0; x < area->w; x++)
         {
+          test_tcon0();////
           *dest++ = g_rgb8[color];
         }
 
@@ -202,6 +207,7 @@ static void draw_rect1(FAR struct fb_state_s *state,
 
   for (y = 0; y < area->h; y++)
     {
+      test_tcon0();////
       /* 'pixel' points to the 1st pixel the next row */
 
       /* Special case: The row starts and ends within the same byte */
@@ -284,6 +290,8 @@ static void draw_rect(FAR struct fb_state_s *state,
 
 int main(int argc, FAR char *argv[])
 {
+  test_tcon0(); ////
+
   FAR const char *fbdev = g_default_fbdev;
   struct fb_state_s state;
   struct fb_area_s area;
@@ -472,4 +480,58 @@ int main(int argc, FAR char *argv[])
   munmap(state.fbmem, state.pinfo.fblen);
   close(state.fd);
   return EXIT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////
+// Test TCON0
+
+#include "../arch/arm64/src/a64/hardware/a64_memorymap.h"
+#include "../arch/arm64/src/common/arm64_arch.h"
+
+/* TCON Global Interrupt Register 0 (A64 Page 509) */
+
+#define TCON_GINT0_REG          (A64_TCON0_ADDR + 0x04)
+
+#define SUN4I_TCON_GINT0_VBLANK_ENABLE(pipe)		BIT(31 - (pipe))
+#define SUN4I_TCON_GINT0_TCON0_TRI_FINISH_ENABLE	BIT(27)
+#define SUN4I_TCON_GINT0_VBLANK_INT(pipe)		BIT(15 - (pipe))
+#define SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT		BIT(11)
+
+static void test_tcon0(void)
+{
+  static int i = 0;
+  static int tcon0_vblank = 0;
+  static int tcon1_vblank = 0;
+  static int tcon0_tri_finish = 0;
+
+  // Enable TCON0 VBLANK, TCON1 VBLANK, TCON0 CPU Trigger Finish
+  if (i == 0)
+    {
+      uint32_t mask = SUN4I_TCON_GINT0_VBLANK_ENABLE(0) |
+        SUN4I_TCON_GINT0_VBLANK_ENABLE(1) |
+        SUN4I_TCON_GINT0_TCON0_TRI_FINISH_ENABLE;
+      modreg32(mask, mask, TCON_GINT0_REG);
+    }
+
+  // Wait for TCON0 CPU Trigger Finish
+  for (; i < (1 << 25); i++)
+    {
+      // Count TCON0 VBLANK, TCON1 VBLANK, TCON0 CPU Trigger Finish
+      uint32_t val = getreg32(TCON_GINT0_REG);
+      if (val & SUN4I_TCON_GINT0_VBLANK_INT(0)) { tcon0_vblank++; }
+      if (val & SUN4I_TCON_GINT0_VBLANK_INT(1)) { tcon1_vblank++; }
+      if (val & SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT) { tcon0_tri_finish++; }
+
+      uint32_t mask = SUN4I_TCON_GINT0_VBLANK_INT(0) |
+			   SUN4I_TCON_GINT0_VBLANK_INT(1) |
+			   SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT;
+      modreg32(0, mask, TCON_GINT0_REG);
+
+      ////TODO
+      if (val & SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT) { return; } ////
+    }
+    printf("tcon0_vblank=%d\n", tcon0_vblank);
+    printf("tcon1_vblank=%d\n", tcon1_vblank);
+    printf("tcon0_tri_finish=%d\n", tcon0_tri_finish);
+    printf("i=%d\n", i);
 }
