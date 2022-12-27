@@ -36,7 +36,7 @@
 #include <nuttx/video/fb.h>
 #include <nuttx/video/rgbcolors.h>
 
-static void test_tcon0(void); ////
+static void test_tcon0(bool show_stats); ////
 
 /****************************************************************************
  * Preprocessor Definitions
@@ -104,10 +104,17 @@ static void draw_rect32(FAR struct fb_state_s *state,
   row = (FAR uint8_t *)state->fbmem + state->pinfo.stride * area->y;
   for (y = 0; y < area->h; y++)
     {
+      //// Begin
+      if (y % 10 == 0)
+        {
+          printf("y=%d\n", y);
+          test_tcon0(false);
+        }
+      //// End
+
       dest = ((FAR uint32_t *)row) + area->x;
       for (x = 0; x < area->w; x++)
         {
-          test_tcon0();////
           *dest++ = g_rgb24[color];
         }
 
@@ -129,7 +136,6 @@ static void draw_rect16(FAR struct fb_state_s *state,
       dest = ((FAR uint16_t *)row) + area->x;
       for (x = 0; x < area->w; x++)
         {
-          test_tcon0();////
           *dest++ = g_rgb16[color];
         }
 
@@ -151,7 +157,6 @@ static void draw_rect8(FAR struct fb_state_s *state,
       dest = row + area->x;
       for (x = 0; x < area->w; x++)
         {
-          test_tcon0();////
           *dest++ = g_rgb8[color];
         }
 
@@ -207,7 +212,6 @@ static void draw_rect1(FAR struct fb_state_s *state,
 
   for (y = 0; y < area->h; y++)
     {
-      test_tcon0();////
       /* 'pixel' points to the 1st pixel the next row */
 
       /* Special case: The row starts and ends within the same byte */
@@ -244,6 +248,8 @@ static void draw_rect1(FAR struct fb_state_s *state,
 static void draw_rect(FAR struct fb_state_s *state,
                       FAR struct fb_area_s *area, int color)
 {
+  test_tcon0(false);////
+
 #ifdef CONFIG_FB_UPDATE
   int ret;
 #endif
@@ -290,7 +296,7 @@ static void draw_rect(FAR struct fb_state_s *state,
 
 int main(int argc, FAR char *argv[])
 {
-  test_tcon0(); ////
+  test_tcon0(true); ////
 
   FAR const char *fbdev = g_default_fbdev;
   struct fb_state_s state;
@@ -476,6 +482,8 @@ int main(int argc, FAR char *argv[])
       height -= (2 * ystep);
     }
 
+  test_tcon0(true); ////
+
   printf("Test finished\n");
   munmap(state.fbmem, state.pinfo.fblen);
   close(state.fd);
@@ -497,7 +505,7 @@ int main(int argc, FAR char *argv[])
 #define SUN4I_TCON_GINT0_VBLANK_INT(pipe)		BIT(15 - (pipe))
 #define SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT		BIT(11)
 
-static void test_tcon0(void)
+static void test_tcon0(bool show_stats)
 {
   static int i = 0;
   static int tcon0_vblank = 0;
@@ -530,8 +538,12 @@ static void test_tcon0(void)
       ////TODO
       if (val & SUN4I_TCON_GINT0_TCON0_TRI_FINISH_INT) { return; } ////
     }
-    printf("tcon0_vblank=%d\n", tcon0_vblank);
-    printf("tcon1_vblank=%d\n", tcon1_vblank);
-    printf("tcon0_tri_finish=%d\n", tcon0_tri_finish);
-    printf("i=%d\n", i);
+
+    if (show_stats)
+      {
+        printf("tcon0_vblank=%d\n", tcon0_vblank);
+        printf("tcon1_vblank=%d\n", tcon1_vblank);
+        printf("tcon0_tri_finish=%d\n", tcon0_tri_finish);
+        printf("i=%d\n", i);
+      }
 }
