@@ -519,17 +519,20 @@ static void test_fb(struct fb_state_s *state) {
     state->pinfo.fblen
   );
 
-  // Fixes missing rows in the rendered image, not sure why
-  // ARM64_DMB();
-  // ARM64_DSB();
-  // ARM64_ISB();
+  // Copy the framebuffer to itself
+  for (int i = 0; i < state->pinfo.fblen; i++)
+    {
+      volatile uint8_t *fb = state->pinfo.fbmem;
+      volatile uint8_t v = fb[i];
+      fb[i] = v;
+    }
 
   // Fill entire framebuffer with grey
-  memset(
-    state->pinfo.fbmem,
-    0x80,
-    state->pinfo.fblen
-  );
+  // memset(
+  //   state->pinfo.fbmem,
+  //   0x80,
+  //   state->pinfo.fblen
+  // );
 
   // Fixes missing rows in the rendered image, not sure why
   // ARM64_DMB();
