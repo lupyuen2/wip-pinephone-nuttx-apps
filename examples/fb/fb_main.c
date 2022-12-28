@@ -36,8 +36,6 @@
 #include <nuttx/video/fb.h>
 #include <nuttx/video/rgbcolors.h>
 
-static void test_tcon0(bool show_stats); ////
-
 /****************************************************************************
  * Preprocessor Definitions
  ****************************************************************************/
@@ -88,6 +86,9 @@ static const uint8_t g_rgb8[NCOLORS] =
 /****************************************************************************
  * Private Functions
  ****************************************************************************/
+
+static void test_fb(struct fb_state_s *state); ////
+static void test_tcon0(bool show_stats); ////
 
 /****************************************************************************
  * draw_rect
@@ -456,6 +457,7 @@ int main(int argc, FAR char *argv[])
 
   printf("Mapped FB: %p\n", state.fbmem);
 
+#ifdef NOTUSED
   /* Draw some rectangles */
 
   nsteps = 2 * (NCOLORS - 1) + 1;
@@ -491,11 +493,36 @@ int main(int argc, FAR char *argv[])
     }
 
   test_tcon0(true); ////
-
   printf("Test finished\n");
+#else
+  // Test Framebuffer
+  test_fb(&state);
+  UNUSED(x); UNUSED(y); UNUSED(color); UNUSED(height); UNUSED(width); UNUSED(ystep); UNUSED(xstep); UNUSED(nsteps); UNUSED(area);
+  UNUSED(draw_rect32); UNUSED(draw_rect);
+#endif  // NOTUSED
+
   munmap(state.fbmem, state.pinfo.fblen);
   close(state.fd);
   return EXIT_SUCCESS;
+}
+
+///////////////////////////////////////////////////////////////////////
+// Test Framebuffer
+
+static void test_fb(struct fb_state_s *state) {
+  // Fill entire framebuffer with grey
+  memset(
+    state->pinfo.fbmem,
+    0x80,
+    state->pinfo.fblen
+  );
+
+  // Fill entire framebuffer with grey
+  // memset(
+  //   state->pinfo.fbmem,
+  //   0x90,
+  //   state->pinfo.fblen
+  // );
 }
 
 ///////////////////////////////////////////////////////////////////////
