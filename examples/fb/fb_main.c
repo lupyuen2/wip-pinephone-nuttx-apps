@@ -509,6 +509,8 @@ int main(int argc, FAR char *argv[])
 ///////////////////////////////////////////////////////////////////////
 // Test Framebuffer
 
+#include "../arch/arm64/src/common/arm64_arch.h"
+
 static void test_fb(struct fb_state_s *state) {
   // Fill entire framebuffer with grey
   memset(
@@ -517,19 +519,28 @@ static void test_fb(struct fb_state_s *state) {
     state->pinfo.fblen
   );
 
+  // Fixes missing rows in the rendered image, not sure why
+  // ARM64_DMB();
+  // ARM64_DSB();
+  // ARM64_ISB();
+
   // Fill entire framebuffer with grey
-  // memset(
-  //   state->pinfo.fbmem,
-  //   0x90,
-  //   state->pinfo.fblen
-  // );
+  memset(
+    state->pinfo.fbmem,
+    0x80,
+    state->pinfo.fblen
+  );
+
+  // Fixes missing rows in the rendered image, not sure why
+  // ARM64_DMB();
+  // ARM64_DSB();
+  // ARM64_ISB();
 }
 
 ///////////////////////////////////////////////////////////////////////
 // Test TCON0
 
 #include "../arch/arm64/src/a64/hardware/a64_memorymap.h"
-#include "../arch/arm64/src/common/arm64_arch.h"
 
 /* TCON Global Interrupt Register 0 (A64 Page 509) */
 
