@@ -87,8 +87,8 @@ static const uint8_t g_rgb8[NCOLORS] =
  * Private Functions
  ****************************************************************************/
 
-static void test_fb(struct fb_state_s *state); ////
-static void test_tcon0(bool show_stats); ////
+//static void test_fb(struct fb_state_s *state); ////
+//static void test_tcon0(bool show_stats); ////
 
 /****************************************************************************
  * draw_rect
@@ -251,7 +251,7 @@ static void draw_rect1(FAR struct fb_state_s *state,
 static void draw_rect(FAR struct fb_state_s *state,
                       FAR struct fb_area_s *area, int color)
 {
-  test_tcon0(false);////
+  //test_tcon0(false);////
 
 #ifdef CONFIG_FB_UPDATE
   int ret;
@@ -299,7 +299,7 @@ static void draw_rect(FAR struct fb_state_s *state,
 
 int main(int argc, FAR char *argv[])
 {
-  test_tcon0(true); ////
+  //test_tcon0(true); ////
 
   FAR const char *fbdev = g_default_fbdev;
   struct fb_state_s state;
@@ -480,7 +480,7 @@ int main(int argc, FAR char *argv[])
 
       draw_rect(&state, &area, color);
 
-      test_fb(&state); ////
+      //test_fb(&state); ////
 
       // for (int i = 0; i < 5; i++)
       //   {
@@ -494,7 +494,7 @@ int main(int argc, FAR char *argv[])
       height -= (2 * ystep);
     }
 
-  test_tcon0(true); ////
+  //test_tcon0(true); ////
   printf("Test finished\n");
 #else
   // Test Framebuffer
@@ -507,6 +507,8 @@ int main(int argc, FAR char *argv[])
   close(state.fd);
   return EXIT_SUCCESS;
 }
+
+#ifdef NOTUSED
 
 ///////////////////////////////////////////////////////////////////////
 // Test Framebuffer
@@ -594,3 +596,5 @@ static void test_tcon0(bool show_stats)
         printf("i=%d\n", i);
       }
 }
+
+#endif // NOTUSED
