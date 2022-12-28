@@ -87,7 +87,7 @@ static const uint8_t g_rgb8[NCOLORS] =
  * Private Functions
  ****************************************************************************/
 
-//static void test_fb(struct fb_state_s *state); ////
+static void test_fb(struct fb_state_s *state); ////
 //static void test_tcon0(bool show_stats); ////
 
 /****************************************************************************
@@ -457,7 +457,7 @@ int main(int argc, FAR char *argv[])
 
   printf("Mapped FB: %p\n", state.fbmem);
 
-#ifndef NOTUSED
+#ifdef NOTUSED
   /* Draw some rectangles */
 
   nsteps = 2 * (NCOLORS - 1) + 1;
@@ -508,45 +508,38 @@ int main(int argc, FAR char *argv[])
   return EXIT_SUCCESS;
 }
 
-#ifdef NOTUSED
-
 ///////////////////////////////////////////////////////////////////////
 // Test Framebuffer
 
-#include "../arch/arm64/src/common/arm64_arch.h"
-
 static void test_fb(struct fb_state_s *state) {
   // Fill entire framebuffer with grey
-  // memset(
-  //   state->pinfo.fbmem,
-  //   0x80,
-  //   state->pinfo.fblen
-  // );
+  memset(
+    state->pinfo.fbmem,
+    0x80,
+    state->pinfo.fblen
+  );
 
-  // Copy the framebuffer to itself
-  for (int i = 0; i < state->pinfo.fblen; i++)
-    {
-      volatile uint8_t *fb = state->pinfo.fbmem;
-      volatile uint8_t v = fb[i];
-      fb[i] = v;
-    }
-
-  // Fill entire framebuffer with grey
-  // memset(
-  //   state->pinfo.fbmem,
-  //   0x80,
-  //   state->pinfo.fblen
-  // );
-
-  // Fixes missing rows in the rendered image, not sure why
-  // ARM64_DMB();
-  // ARM64_DSB();
-  // ARM64_ISB();
+#ifdef CONFIG_FB_UPDATE
+  // Update the framebuffer
+  struct fb_area_s area =
+  {
+    .x = 0,
+    .y = 0,
+    .w = state->pinfo.xres_virtual,
+    .h = state->pinfo.yres_virtual
+  };
+  int ret = ioctl(state->fd, FBIO_UPDATE,
+                  (unsigned long)((uintptr_t)&area));
+  DEBUGASSERT(ret == OK);
+#endif
 }
+
+#ifdef NOTUSED
 
 ///////////////////////////////////////////////////////////////////////
 // Test TCON0
 
+#include "../arch/arm64/src/common/arm64_arch.h"
 #include "../arch/arm64/src/a64/hardware/a64_memorymap.h"
 
 /* TCON Global Interrupt Register 0 (A64 Page 509) */
