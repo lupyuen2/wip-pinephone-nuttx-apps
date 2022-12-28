@@ -511,13 +511,63 @@ int main(int argc, FAR char *argv[])
 ///////////////////////////////////////////////////////////////////////
 // Test Framebuffer
 
+static void render_grey_screen(struct fb_state_s *state);
+static void render_color_blocks(struct fb_state_s *state);
+
 static void test_fb(struct fb_state_s *state) {
+  render_grey_screen(state);
+  sleep(2);
+
+  render_color_blocks(state);
+  sleep(2);
+}
+
+static void render_grey_screen(struct fb_state_s *state) {
   // Fill entire framebuffer with grey
   memset(
     state->pinfo.fbmem,
     0x80,
     state->pinfo.fblen
   );
+
+#ifdef CONFIG_FB_UPDATE
+  // Update the framebuffer
+  struct fb_area_s area =
+  {
+    .x = 0,
+    .y = 0,
+    .w = state->pinfo.xres_virtual,
+    .h = state->pinfo.yres_virtual
+  };
+  int ret = ioctl(state->fd, FBIO_UPDATE,
+                  (unsigned long)((uintptr_t)&area));
+  DEBUGASSERT(ret == OK);
+#endif
+}
+
+static void render_color_blocks(struct fb_state_s *state) {
+  // Fill framebuffer with Blue, Green and Red Blocks
+  uint32_t *fbmem = state->pinfo.fbmem;
+  const size_t fblen = state->pinfo.fblen / 4;  // 4 bytes per pixel
+
+  // For every pixel...
+  for (int i = 0; i < fblen; i++) {
+
+    // Colors are in XRGB 8888 format
+    if (i < fblen / 4) {
+      // Blue for top quarter.
+      // RGB24_BLUE is 0x0000 00FF
+      fbmem[i] = RGB24_BLUE;
+    } else if (i < fblen / 2) {
+      // Green for next quarter.
+      // RGB24_GREEN is 0x0000 FF00
+      fbmem[i] = RGB24_GREEN;
+    } else {
+      // Red for lower half.
+      // RGB24_RED is 0x00FF 0000
+      fbmem[i] = RGB24_RED;
+    }
+  }
 
 #ifdef CONFIG_FB_UPDATE
   // Update the framebuffer
