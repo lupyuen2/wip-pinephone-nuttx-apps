@@ -457,7 +457,7 @@ int main(int argc, FAR char *argv[])
 
   printf("Mapped FB: %p\n", state.fbmem);
 
-#ifdef NOTUSED
+#ifndef NOTUSED
   /* Draw some rectangles */
 
   nsteps = 2 * (NCOLORS - 1) + 1;
@@ -480,10 +480,12 @@ int main(int argc, FAR char *argv[])
 
       draw_rect(&state, &area, color);
 
-      for (int i = 0; i < 5; i++)
-        {
-          test_tcon0(false); //// TODO
-        }
+      test_fb(&state); ////
+
+      // for (int i = 0; i < 5; i++)
+      //   {
+      //     test_tcon0(false); //// TODO
+      //   }
 
       usleep(500 * 1000);
       sleep(1); //// TODO
@@ -513,11 +515,11 @@ int main(int argc, FAR char *argv[])
 
 static void test_fb(struct fb_state_s *state) {
   // Fill entire framebuffer with grey
-  memset(
-    state->pinfo.fbmem,
-    0x80,
-    state->pinfo.fblen
-  );
+  // memset(
+  //   state->pinfo.fbmem,
+  //   0x80,
+  //   state->pinfo.fblen
+  // );
 
   // Copy the framebuffer to itself
   for (int i = 0; i < state->pinfo.fblen; i++)
