@@ -496,6 +496,7 @@ int main(int argc, FAR char *argv[])
 
   //test_tcon0(true); ////
   printf("Test finished\n");
+  UNUSED(test_fb); ////
 #else
   // Test Framebuffer
   test_fb(&state);
