@@ -457,7 +457,7 @@ int main(int argc, FAR char *argv[])
 
   printf("Mapped FB: %p\n", state.fbmem);
 
-#ifdef NOTUSED
+#ifndef NOTUSED
   /* Draw some rectangles */
 
   nsteps = 2 * (NCOLORS - 1) + 1;
