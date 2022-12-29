@@ -87,7 +87,7 @@ static const uint8_t g_rgb8[NCOLORS] =
  * Private Functions
  ****************************************************************************/
 
-static void test_fb(struct fb_state_s *state); ////
+static void test_fb(struct fb_state_s *state, int argc, FAR char *argv[]); ////
 //static void test_tcon0(bool show_stats); ////
 
 /****************************************************************************
@@ -320,7 +320,7 @@ int main(int argc, FAR char *argv[])
 
   if (argc == 2)
     {
-      fbdev = argv[1];
+      ////fbdev = argv[1];
     }
   else if (argc != 1)
     {
@@ -457,7 +457,6 @@ int main(int argc, FAR char *argv[])
 
   printf("Mapped FB: %p\n", state.fbmem);
 
-#ifndef NOTUSED
   /* Draw some rectangles */
 
   nsteps = 2 * (NCOLORS - 1) + 1;
@@ -497,12 +496,14 @@ int main(int argc, FAR char *argv[])
   //test_tcon0(true); ////
   printf("Test finished\n");
   UNUSED(test_fb); ////
-#else
+
   // Test Framebuffer
-  test_fb(&state);
-  UNUSED(x); UNUSED(y); UNUSED(color); UNUSED(height); UNUSED(width); UNUSED(ystep); UNUSED(xstep); UNUSED(nsteps); UNUSED(area);
-  UNUSED(draw_rect32); UNUSED(draw_rect);
-#endif  // NOTUSED
+  if (argc > 1)
+    {
+      test_fb(&state, argc, argv);
+      // UNUSED(x); UNUSED(y); UNUSED(color); UNUSED(height); UNUSED(width); UNUSED(ystep); UNUSED(xstep); UNUSED(nsteps); UNUSED(area);
+      // UNUSED(draw_rect32); UNUSED(draw_rect);
+    }
 
   munmap(state.fbmem, state.pinfo.fblen);
   close(state.fd);
@@ -516,18 +517,25 @@ static void render_grey(struct fb_state_s *state);
 static void render_blocks(struct fb_state_s *state);
 static void render_circle(struct fb_state_s *state);
 
-static void test_fb(struct fb_state_s *state) {
-  // Fill entire framebuffer with grey
-  render_grey(state);
-  sleep(2);
+// Test Framebuffer
+static void test_fb(struct fb_state_s *state, int argc, FAR char *argv[]) {
+  DEBUGASSERT(argc > 1);
+  switch (argv[1][0]) {
+    case '0':
+      // Fill entire framebuffer with grey
+      render_grey(state);
+      break;
 
-  // Fill framebuffer with Blue, Green and Red Blocks
-  render_blocks(state);
-  sleep(2);
+    case '1':
+      // Fill framebuffer with Blue, Green and Red Blocks
+      render_blocks(state);
+      break;
 
-  // Fill framebuffer with Green Circle
-  render_circle(state);
-  sleep(2);
+    case '2':
+      // Fill framebuffer with Green Circle
+      render_circle(state);
+      break;
+  }
 }
 
 static void render_grey(struct fb_state_s *state) {
