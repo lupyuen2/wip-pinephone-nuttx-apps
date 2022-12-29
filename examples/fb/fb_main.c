@@ -279,7 +279,7 @@ static void draw_rect(FAR struct fb_state_s *state,
 
 #ifdef CONFIG_FB_UPDATE
   ret = ioctl(state->fd, FBIO_UPDATE,
-              (unsigned long)((uintptr_t)area));
+              (unsigned long) area);
   if (ret < 0)
     {
       int errcode = errno;
@@ -342,7 +342,7 @@ int main(int argc, FAR char *argv[])
   /* Get the characteristics of the framebuffer */
 
   ret = ioctl(state.fd, FBIOGET_VIDEOINFO,
-              (unsigned long)((uintptr_t)&state.vinfo));
+              (unsigned long) &state.vinfo); ////
   if (ret < 0)
     {
       int errcode = errno;
@@ -377,7 +377,7 @@ int main(int argc, FAR char *argv[])
 
   state.oinfo.overlay = 0;
   ret = ioctl(state.fd, FBIOGET_OVERLAYINFO,
-                        (unsigned long)((uintptr_t)&state.oinfo));
+                        (unsigned long) &state.oinfo));
   if (ret < 0)
     {
       int errcode = errno;
@@ -406,7 +406,7 @@ int main(int argc, FAR char *argv[])
 #endif
 
   ret = ioctl(state.fd, FBIOGET_PLANEINFO,
-              (unsigned long)((uintptr_t)&state.pinfo));
+              (unsigned long) &state.pinfo);
   if (ret < 0)
     {
       int errcode = errno;
@@ -556,7 +556,7 @@ static void render_grey(struct fb_state_s *state) {
     .h = state->pinfo.yres_virtual
   };
   int ret = ioctl(state->fd, FBIO_UPDATE,
-                  (unsigned long)((uintptr_t)&area));
+                  (unsigned long) &area);
   DEBUGASSERT(ret == OK);
 #endif
 }
@@ -595,7 +595,7 @@ static void render_blocks(struct fb_state_s *state) {
     .h = state->pinfo.yres_virtual
   };
   int ret = ioctl(state->fd, FBIO_UPDATE,
-                  (unsigned long)((uintptr_t)&area));
+                  (unsigned long) &area);
   DEBUGASSERT(ret == OK);
 #endif
 }
@@ -645,7 +645,7 @@ static void render_circle(struct fb_state_s *state) {
     .h = state->pinfo.yres_virtual
   };
   int ret = ioctl(state->fd, FBIO_UPDATE,
-                  (unsigned long)((uintptr_t)&area));
+                  (unsigned long) &area);
   DEBUGASSERT(ret == OK);
 #endif
 }
