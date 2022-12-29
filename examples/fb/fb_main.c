@@ -320,7 +320,7 @@ int main(int argc, FAR char *argv[])
 
   if (argc == 2)
     {
-      ////fbdev = argv[1];
+      ////fbdev = argv[1];  // Hardcoded to "/dev/fb0" for this demo
     }
   else if (argc != 1)
     {
