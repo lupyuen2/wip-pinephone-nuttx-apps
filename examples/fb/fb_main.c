@@ -563,7 +563,7 @@ static void render_grey(struct fb_state_s *state) {
 
 static void render_blocks(struct fb_state_s *state) {
   // Fill framebuffer with Blue, Green and Red Blocks
-  uint32_t *fbmem = state->pinfo.fbmem;
+  uint32_t *fb = state->pinfo.fbmem;
   const size_t fblen = state->pinfo.fblen / 4;  // 4 bytes per pixel
 
   // For every pixel...
@@ -573,15 +573,15 @@ static void render_blocks(struct fb_state_s *state) {
     if (i < fblen / 4) {
       // Blue for top quarter.
       // RGB24_BLUE is 0x0000 00FF
-      fbmem[i] = RGB24_BLUE;
+      fb[i] = RGB24_BLUE;
     } else if (i < fblen / 2) {
       // Green for next quarter.
       // RGB24_GREEN is 0x0000 FF00
-      fbmem[i] = RGB24_GREEN;
+      fb[i] = RGB24_GREEN;
     } else {
       // Red for lower half.
       // RGB24_RED is 0x00FF 0000
-      fbmem[i] = RGB24_RED;
+      fb[i] = RGB24_RED;
     }
   }
 
@@ -602,7 +602,7 @@ static void render_blocks(struct fb_state_s *state) {
 
 static void render_circle(struct fb_state_s *state) {
   // Fill framebuffer with Green Circle
-  uint32_t *fbmem = state->pinfo.fbmem;
+  uint32_t *fb = state->pinfo.fbmem;
   const size_t fblen = state->pinfo.fblen / 4;  // 4 bytes per pixel
   const uint32_t width = state->pinfo.xres_virtual;
   const uint32_t height = state->pinfo.yres_virtual;
@@ -627,10 +627,10 @@ static void render_circle(struct fb_state_s *state) {
       // Colors are in XRGB 8888 format.
       if (x_shift*x_shift + y_shift*y_shift < half_width*half_width) {
         // RGB24_GREEN is 0x0000 FF00
-        fbmem[p] = RGB24_GREEN;
-      } else {  // Otherwise set to Transparent Black
+        fb[p] = RGB24_GREEN;
+      } else {  // Otherwise set to Black
         // RGB24_BLACK is 0x0000 0000
-        fbmem[p] = RGB24_BLACK;
+        fb[p] = RGB24_BLACK;
       }
     }
   }
