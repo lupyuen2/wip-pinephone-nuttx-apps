@@ -341,7 +341,7 @@ int main(int argc, FAR char *argv[])
   printf("     yres: %u\n", state.vinfo.yres);
   printf("  nplanes: %u\n", state.vinfo.nplanes);
 
-#ifdef CONFIG_FB_OVERLAY
+#ifdef NOTUSED //// CONFIG_FB_OVERLAY
   printf("noverlays: %u\n", state.vinfo.noverlays);
 
   /* Select the first overlay, which should be the composed framebuffer */
