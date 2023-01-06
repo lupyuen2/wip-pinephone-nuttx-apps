@@ -221,6 +221,8 @@ int main(int argc, FAR char *argv[])
 
       idle = idle ? idle : 1;
       usleep(idle * 1000);
+
+      lv_tick_inc(1); //// TODO
     }
 
   return EXIT_SUCCESS;
