@@ -94,7 +94,7 @@ static void touchpad_read(FAR lv_indev_drv_t *drv, FAR lv_indev_data_t *data)
       else if (touch_flags & TOUCH_UP)
         {
           touchpad_obj->last_state = LV_INDEV_STATE_REL;
-          puts("touchpad_read up");////
+          printf("touchpad_read up: x=%d, y=%d\n", touchpad_obj->last_x, touchpad_obj->last_y);////
         }
     }
 
