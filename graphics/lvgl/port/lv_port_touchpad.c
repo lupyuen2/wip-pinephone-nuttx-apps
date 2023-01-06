@@ -33,6 +33,11 @@
 #include <nuttx/input/touchscreen.h>
 #include "lv_port_touchpad.h"
 
+#undef LV_LOG_ERROR ////
+#undef LV_LOG_INFO ////
+#define LV_LOG_ERROR printf ////
+#define LV_LOG_INFO printf ////
+
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
@@ -60,6 +65,7 @@ struct touchpad_obj_s
 
 static void touchpad_read(FAR lv_indev_drv_t *drv, FAR lv_indev_data_t *data)
 {
+  puts("touchpad_read");////
   FAR struct touchpad_obj_s *touchpad_obj = drv->user_data;
   struct touch_sample_s sample;
 
@@ -103,12 +109,13 @@ static void touchpad_read(FAR lv_indev_drv_t *drv, FAR lv_indev_data_t *data)
 
 static FAR lv_indev_t *touchpad_init(int fd)
 {
+  puts("touchpad_init");////
   FAR struct touchpad_obj_s *touchpad_obj;
   touchpad_obj = malloc(sizeof(struct touchpad_obj_s));
 
   if (touchpad_obj == NULL)
     {
-      LV_LOG_ERROR("touchpad_obj_s malloc failed");
+      LV_LOG_ERROR("touchpad_obj_s malloc failed\n");
       return NULL;
     }
 
@@ -148,6 +155,7 @@ static FAR lv_indev_t *touchpad_init(int fd)
 
 FAR lv_indev_t *lv_port_touchpad_init(FAR const char *dev_path)
 {
+  puts("lv_port_touchpad_init");////
   FAR const char *device_path = dev_path;
   FAR lv_indev_t *indev;
   int fd;
@@ -157,15 +165,15 @@ FAR lv_indev_t *lv_port_touchpad_init(FAR const char *dev_path)
       device_path = CONFIG_LV_PORT_TOUCHPAD_DEFAULT_DEVICEPATH;
     }
 
-  LV_LOG_INFO("touchpad %s opening", device_path);
+  LV_LOG_INFO("touchpad %s opening\n", device_path);
   fd = open(device_path, O_RDONLY | O_NONBLOCK);
   if (fd < 0)
     {
-      LV_LOG_ERROR("touchpad %s open failed: %d", device_path, errno);
+      LV_LOG_ERROR("touchpad %s open failed: %d\n", device_path, errno);
       return NULL;
     }
 
-  LV_LOG_INFO("touchpad %s open success", device_path);
+  LV_LOG_INFO("touchpad %s open success\n", device_path);
 
   indev = touchpad_init(fd);
 
