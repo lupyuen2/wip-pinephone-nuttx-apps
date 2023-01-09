@@ -89,12 +89,12 @@ static void touchpad_read(FAR lv_indev_drv_t *drv, FAR lv_indev_data_t *data)
           touchpad_obj->last_x = LV_CLAMP(0, sample.point[0].x, hor_max);
           touchpad_obj->last_y = LV_CLAMP(0, sample.point[0].y, ver_max);
           touchpad_obj->last_state = LV_INDEV_STATE_PR;
-          ////printf("touchpad_read down: x=%d, y=%d\n", touchpad_obj->last_x, touchpad_obj->last_y);////
+          printf("touchpad_read down: x=%d, y=%d\n", touchpad_obj->last_x, touchpad_obj->last_y);////
         }
       else if (touch_flags & TOUCH_UP)
         {
           touchpad_obj->last_state = LV_INDEV_STATE_REL;
-          ////printf("touchpad_read up: x=%d, y=%d\n", touchpad_obj->last_x, touchpad_obj->last_y);////
+          printf("touchpad_read up: x=%d, y=%d\n", touchpad_obj->last_x, touchpad_obj->last_y);////
         }
     }
 
