@@ -317,10 +317,7 @@ void test_terminal(void)
       sizeof(buf) - 1
     );
     _info("read nsh_stdout: %d\n", ret);
-    if (ret > 0) {
-      buf[ret] = 0;
-      _info("%s\n", buf);
-    }
+    if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
 
     // Wait a while
     sleep(1);
@@ -334,10 +331,7 @@ void test_terminal(void)
       sizeof(buf) - 1
     );
     _info("read nsh_stderr: %d\n", ret);
-    if (ret > 0) {
-      buf[ret] = 0;
-      _info("%s\n", buf);
-    }
+    if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
 #endif
 
   }
