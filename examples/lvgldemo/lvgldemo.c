@@ -246,6 +246,11 @@ int main(int argc, FAR char *argv[])
 
 //// Testing LVGL Terminal
 //// Enable "Device Drivers > FIFO and named pipe drivers"
+
+#ifndef CONFIG_DEV_PIPE_SIZE
+#error Please enable "Device Drivers > FIFO and named pipe drivers" in menuconfig
+#endif
+
 #include "nshlib/nshlib.h"
 
 void test_terminal(void)
