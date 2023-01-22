@@ -248,6 +248,8 @@ int main(int argc, FAR char *argv[])
 // Testing LVGL Terminal
 #include "nshlib/nshlib.h"
 
+////#define TEST_PTY 
+#ifdef TEST_PTY
 //////////////////////////////////////////////////////////////////////////
 // Pseudo Terminal Implementation
 
@@ -459,9 +461,10 @@ error_pts:
   close(termpair.fd_pty);
 }
 
-#ifdef NOTUSED
+#else  // !TEST_PTY
 //////////////////////////////////////////////////////////////////////////
 // Pipe Implementation
+
 #ifndef CONFIG_DEV_PIPE_SIZE
 #error Please enable "Device Drivers > FIFO and named pipe drivers" in menuconfig
 #endif
@@ -496,7 +499,7 @@ void test_terminal(void)
 
   /* Create a new console using the pipes */
 
-  char *argv[] = { "nsh" };
+  char *argv[] = { NULL };
   pid_t pid = task_create(
     "NSH Console",
     100,  // Priority
@@ -571,4 +574,4 @@ test_terminal: nsh: NSH Console: fopen failed: 2
 
 test_terminal: write nsh_stdin: 9
 */
-#endif
+#endif  // !TEST_PTY
