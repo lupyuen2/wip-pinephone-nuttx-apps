@@ -298,14 +298,37 @@ void test_terminal(void)
     }
   _info("pid=\n", pid);
 
-  // TODO: Send a command to NSH stdin
-  // const char cmd[] = "ls\r\n";
-  // nsh_stdin[TERM_PIPE]
+  // Send a command to NSH stdin
+  const char cmd[] = "ls\r\n";
+  ret = write(
+    nsh_stdin[TERM_PIPE],
+    cmd,
+    sizeof(cmd)
+  );
+  _info("write nsh_stdin: %d\n", ret);
 
-  // TODO: Read the output from NSH stdout
-  // nsh_stdout[TERM_PIPE]
+  // Read the output from NSH stdout
+  static char buf[4];
+  ret = read(
+    nsh_stdout[TERM_PIPE],
+    buf,
+    sizeof(buf) - 1
+  );
+  _info("read nsh_stdout: %d\n", ret);
+  if (ret > 0) {
+    buf[ret] = 0;
+    _info("%s\n", buf);
+  }
 
-  // TODO: Read the output from NSH stderr
-  // nsh_stderr[TERM_PIPE]
+  // Read the output from NSH stderr
+  ret = read(    
+    nsh_stderr[TERM_PIPE],
+    buf,
+    sizeof(buf) - 1
+  );
+  _info("read nsh_stderr: %d\n", ret);
+  if (ret > 0) {
+    buf[ret] = 0;
+    _info("%s\n", buf);
+  }
 }
-
