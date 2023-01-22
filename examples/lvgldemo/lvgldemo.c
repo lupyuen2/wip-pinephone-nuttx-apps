@@ -519,6 +519,18 @@ void test_terminal(void)
 
   for (int i = 0; i < 5; i++) {
 
+    // Send a command to NSH stdin
+    const char cmd[] = "ls\r\n\r\n\r\n";
+    ret = write(
+      nsh_stdin[WRITE_PIPE],
+      cmd,
+      sizeof(cmd)
+    );
+    _info("write nsh_stdin: %d\n", ret);
+
+    // Wait a while
+    sleep(1);
+
     // Read the output from NSH stdout
     static char buf[64];
     ret = read(
@@ -535,6 +547,7 @@ void test_terminal(void)
     // Wait a while
     sleep(1);
 
+#ifdef NOTUSED
     // Read the output from NSH stderr
     ret = read(    
       nsh_stderr[READ_PIPE],
@@ -546,32 +559,60 @@ void test_terminal(void)
       buf[ret] = 0;
       _info("%s\n", buf);
     }
-
-    // Send a command to NSH stdin
-    const char cmd[] = "ls\r\n\r\n\r\n";
-    ret = write(
-      nsh_stdin[WRITE_PIPE],
-      cmd,
-      sizeof(cmd)
-    );
-    _info("write nsh_stdin: %d\n", ret);
-
-    // Wait a while
-    sleep(1);
+#endif
 
   }
 }
 
 /* Output:
-test_terminal: test_terminal
-test_terminal: pid=3
-test_terminal: read nsh_stdout: 30
-test_terminal: 
 NuttShell (NSH) NuttX-12.0.0
-
-test_terminal: read nsh_stderr: 34
-test_terminal: nsh: NSH Console: fopen failed: 2
-
+nsh> ls
+/:
+ dev/
+ var/
+nsh> est_terminal: write nsh_stdin: 9
+test_terminal: read nsh_stdout: 63
+test_terminal: K
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+nsh> ls
+/:
+ dev/
+ var/
 test_terminal: write nsh_stdin: 9
+test_terminal: read nsh_stdout: 63
+test_terminal: 
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+nsh> ls
+/:
+ de
+test_terminal: write nsh_stdin: 9
+test_terminal: read nsh_stdout: 63
+test_terminal: v/
+ var/
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+nsh> l
+test_terminal: write nsh_stdin: 9
+test_terminal: read nsh_stdout: 63
+test_terminal: s
+/:
+ dev/
+ var/
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+n
 */
 #endif  // !TEST_PTY
