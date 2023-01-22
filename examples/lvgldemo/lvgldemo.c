@@ -311,7 +311,7 @@ void test_terminal(void)
   sleep(1);
 
   // Read the output from NSH stdout
-  static char buf[4];
+  static char buf[64];
   ret = read(
     nsh_stdout[READ_PIPE],
     buf,
@@ -341,11 +341,12 @@ void test_terminal(void)
 
 /* Output:
 test_terminal: test_terminal
-test_terminal: pid=
+test_terminal: pid=3
 test_terminal: write nsh_stdin: 5
-test_terminal: read nsh_stdout: 3
+test_terminal: read nsh_stdout: 30
 test_terminal: 
-Nu
-test_terminal: read nsh_stderr: 3
-test_terminal: nsh
+NuttShell (NSH) NuttX-12.0.0
+
+test_terminal: read nsh_stderr: 34
+test_terminal: nsh: NSH Console: fopen failed: 2
 */
