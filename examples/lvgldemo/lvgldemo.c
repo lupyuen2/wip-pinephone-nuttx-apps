@@ -262,11 +262,17 @@ int main(int argc, FAR char *argv[])
 #include <sys/ioctl.h>
 #include <nuttx/serial/pty.h>
 
+struct term_pair_s
+{
+  ////int fd_uart;
+  int fd_pty;
+};
+
 void test_terminal(void)
 {
   _info("test_terminal\n");
   struct term_pair_s termpair;
-  struct termios tio;
+  /////struct termios tio;
   pthread_t si_thread;
   pthread_t so_thread;
   char buffer[16];
@@ -320,6 +326,7 @@ void test_terminal(void)
       goto error_pts;
     }
 
+#ifdef NOTUSED
   /* Open the second serial port to create a new console there */
 
   termpair.fd_uart = open(CONFIG_EXAMPLES_PTYTEST_SERIALDEV, O_RDWR);
@@ -374,6 +381,7 @@ void test_terminal(void)
       goto error_serial;
     }
 #endif
+#endif  // NOTUSED
 
   printf("Starting a new NSH Session using %s\n", buffer);
 
@@ -391,9 +399,14 @@ void test_terminal(void)
 
   /* Create a new console using this /dev/pts/N */
 
-  pid = task_create("NSH Console", CONFIG_EXAMPLES_PTYTEST_DAEMONPRIO,
-                    CONFIG_EXAMPLES_PTYTEST_STACKSIZE, nsh_consolemain,
-                    &argv[1]);
+  char *argv[] = { NULL };
+  pid = task_create(
+    "NSH Console", 
+    100,  // Priority
+    CONFIG_DEFAULT_TASK_STACKSIZE,
+    nsh_consolemain,
+    argv
+  );
   _info("task_create: pid=%d\n", pid);
   if (pid < 0)
     {
@@ -439,7 +452,7 @@ void test_terminal(void)
 error_thread2:
 error_thread1:
 error_console:
-  close(termpair.fd_uart);
+  ////close(termpair.fd_uart);
 error_serial:
   close(fd_pts);
 error_pts:
