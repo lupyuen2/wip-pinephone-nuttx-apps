@@ -271,7 +271,7 @@ void test_terminal(void)
   close(1);
   close(2);
 
-  /* Use the pipes as stdin, stdout, and stderr */
+  /* Use the pipes as stdin, stdout and stderr */
   #define READ_PIPE  0  // Read Pipes: stdin, stdout, stderr
   #define WRITE_PIPE 1  // Write Pipes: stdin, stdout, stderr
   dup2(nsh_stdin[READ_PIPE], 0);
