@@ -298,55 +298,63 @@ void test_terminal(void)
     }
   _info("pid=%d\n", pid);
 
-  // Send a command to NSH stdin
-  const char cmd[] = "ls\r\n";
-  ret = write(
-    nsh_stdin[WRITE_PIPE],
-    cmd,
-    sizeof(cmd)
-  );
-  _info("write nsh_stdin: %d\n", ret);
-
   // Wait a while
   sleep(1);
 
-  // Read the output from NSH stdout
-  static char buf[64];
-  ret = read(
-    nsh_stdout[READ_PIPE],
-    buf,
-    sizeof(buf) - 1
-  );
-  _info("read nsh_stdout: %d\n", ret);
-  if (ret > 0) {
-    buf[ret] = 0;
-    _info("%s\n", buf);
-  }
+  for (int i = 0; i < 5; i++) {
 
-  // Wait a while
-  sleep(1);
+    // Read the output from NSH stdout
+    static char buf[64];
+    ret = read(
+      nsh_stdout[READ_PIPE],
+      buf,
+      sizeof(buf) - 1
+    );
+    _info("read nsh_stdout: %d\n", ret);
+    if (ret > 0) {
+      buf[ret] = 0;
+      _info("%s\n", buf);
+    }
 
-  // Read the output from NSH stderr
-  ret = read(    
-    nsh_stderr[READ_PIPE],
-    buf,
-    sizeof(buf) - 1
-  );
-  _info("read nsh_stderr: %d\n", ret);
-  if (ret > 0) {
-    buf[ret] = 0;
-    _info("%s\n", buf);
+    // Wait a while
+    sleep(1);
+
+    // Read the output from NSH stderr
+    ret = read(    
+      nsh_stderr[READ_PIPE],
+      buf,
+      sizeof(buf) - 1
+    );
+    _info("read nsh_stderr: %d\n", ret);
+    if (ret > 0) {
+      buf[ret] = 0;
+      _info("%s\n", buf);
+    }
+
+    // Send a command to NSH stdin
+    const char cmd[] = "ls\r\n\r\n\r\n";
+    ret = write(
+      nsh_stdin[WRITE_PIPE],
+      cmd,
+      sizeof(cmd)
+    );
+    _info("write nsh_stdin: %d\n", ret);
+
+    // Wait a while
+    sleep(1);
+
   }
 }
 
 /* Output:
 test_terminal: test_terminal
 test_terminal: pid=3
-test_terminal: write nsh_stdin: 5
 test_terminal: read nsh_stdout: 30
 test_terminal: 
 NuttShell (NSH) NuttX-12.0.0
 
 test_terminal: read nsh_stderr: 34
 test_terminal: nsh: NSH Console: fopen failed: 2
+
+test_terminal: write nsh_stdin: 9
 */
