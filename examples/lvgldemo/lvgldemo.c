@@ -250,19 +250,16 @@ int main(int argc, FAR char *argv[])
 void test_terminal(void)
 {
   _info("test_terminal\n");
-  // TODO: stdin
-  // TODO: stdout
-  // TODO: stderr
 
-  /* Create the pipe */
+  /* Create the pipes */
 
-  int fd[2];
-  int ret = pipe(fd);
-  if (ret < 0)
-    {
-      _err("pipe failed: %d\n", errno);
-      return;
-    }
+  int nsh_stdin[2];
+  int nsh_stdout[2];
+  int nsh_stderr[2];
+  int ret;
+  ret = pipe(nsh_stdin);  if (ret < 0) { _err("stdin pipe failed: %d\n", errno);  return; }
+  ret = pipe(nsh_stdout); if (ret < 0) { _err("stdout pipe failed: %d\n", errno); return; }
+  ret = pipe(nsh_stderr); if (ret < 0) { _err("stderr pipe failed: %d\n", errno); return; }
 
   /* Close default stdin, stdout and stderr */
 
@@ -272,18 +269,21 @@ void test_terminal(void)
 
   /* Use this pts file as stdin, stdout, and stderr */
 
-  dup2(fd_pts, 0);
-  dup2(fd_pts, 1);
-  dup2(fd_pts, 2);
+  #define NSH_PIPE  0  // NSH stdin, stdout, stderr
+  #define TERM_PIPE 1  // Terminal stdin, stdout, stderr
+  dup2(nsh_stdin[NSH_PIPE], 0);
+  dup2(nsh_stdout[NSH_PIPE], 1);
+  dup2(nsh_stderr[NSH_PIPE], 2);
 
   /* Create a new console using this /dev/pts/N */
 
+  char *argv[] = { "nsh" };
   pid_t pid = task_create(
     "NSH Console",
     100,  // Priority
     CONFIG_DEFAULT_TASK_STACKSIZE,
     nsh_consolemain,
-    &argv[1]
+    argv
   );
   if (pid < 0)
     {
