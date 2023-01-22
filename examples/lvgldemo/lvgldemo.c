@@ -275,11 +275,11 @@ void test_terminal(void)
 
   /* Use the pipes as stdin, stdout, and stderr */
 
-  #define NSH_PIPE  0  // NSH Pipes: stdin, stdout, stderr
-  #define TERM_PIPE 1  // Terminal Pipes: stdin, stdout, stderr
-  dup2(nsh_stdin[NSH_PIPE], 0);
-  dup2(nsh_stdout[NSH_PIPE], 1);
-  dup2(nsh_stderr[NSH_PIPE], 2);
+  #define READ_PIPE  0  // Read Pipes: stdin, stdout, stderr
+  #define WRITE_PIPE 1  // Write Pipes: stdin, stdout, stderr
+  dup2(nsh_stdin[READ_PIPE], 0);
+  dup2(nsh_stdout[WRITE_PIPE], 1);
+  dup2(nsh_stderr[WRITE_PIPE], 2);
 
   /* Create a new console using the pipes */
 
@@ -301,16 +301,19 @@ void test_terminal(void)
   // Send a command to NSH stdin
   const char cmd[] = "ls\r\n";
   ret = write(
-    nsh_stdin[TERM_PIPE],
+    nsh_stdin[WRITE_PIPE],
     cmd,
     sizeof(cmd)
   );
   _info("write nsh_stdin: %d\n", ret);
 
+  // Wait a while
+  sleep(5);
+
   // Read the output from NSH stdout
   static char buf[4];
   ret = read(
-    nsh_stdout[TERM_PIPE],
+    nsh_stdout[READ_PIPE],
     buf,
     sizeof(buf) - 1
   );
@@ -320,9 +323,12 @@ void test_terminal(void)
     _info("%s\n", buf);
   }
 
+  // Wait a while
+  sleep(5);
+
   // Read the output from NSH stderr
   ret = read(    
-    nsh_stderr[TERM_PIPE],
+    nsh_stderr[READ_PIPE],
     buf,
     sizeof(buf) - 1
   );
