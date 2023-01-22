@@ -170,6 +170,11 @@ static demo_create_func_t find_demo_create_func(FAR const char *name)
 
 int main(int argc, FAR char *argv[])
 {
+  ////TODO: Begin
+  void test_terminal(void);
+  test_terminal();
+  ////TODO: End
+
   demo_create_func_t demo_create_func;
   FAR const char *demo = NULL;
   const int func_key_pair_len = sizeof(func_key_pair) /
@@ -237,4 +242,59 @@ int main(int argc, FAR char *argv[])
     }
 
   return EXIT_SUCCESS;
+}
+
+//// Testing LVGL Terminal
+#include "nshlib/nshlib.h"
+
+void test_terminal(void)
+{
+  _info("test_terminal\n");
+  // TODO: stdin
+  // TODO: stdout
+  // TODO: stderr
+
+  /* Create the pipe */
+
+  int fd[2];
+  int ret = pipe(fd);
+  if (ret < 0)
+    {
+      _err("pipe failed: %d\n", errno);
+      return;
+    }
+
+  /* Close default stdin, stdout and stderr */
+
+  close(0);
+  close(1);
+  close(2);
+
+  /* Use this pts file as stdin, stdout, and stderr */
+
+  dup2(fd_pts, 0);
+  dup2(fd_pts, 1);
+  dup2(fd_pts, 2);
+
+  /* Create a new console using this /dev/pts/N */
+
+  pid_t pid = task_create(
+    "NSH Console",
+    100,  // Priority
+    CONFIG_DEFAULT_TASK_STACKSIZE,
+    nsh_consolemain,
+    &argv[1]
+  );
+  if (pid < 0)
+    {
+      _err("task_create failed: %d\n", errno);
+      return;
+    }
+  _info("pid=\n", pid);
+
+  // TODO: Send a command to NSH stdin
+
+  // TODO: Read the output from NSH stdout
+
+  // TODO: Read the output from NSH stderr
 }
