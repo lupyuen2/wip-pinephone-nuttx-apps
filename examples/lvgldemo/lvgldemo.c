@@ -296,7 +296,7 @@ void test_terminal(void)
       _err("task_create failed: %d\n", errno);
       return;
     }
-  _info("pid=\n", pid);
+  _info("pid=%d\n", pid);
 
   // Send a command to NSH stdin
   const char cmd[] = "ls\r\n";
@@ -308,7 +308,7 @@ void test_terminal(void)
   _info("write nsh_stdin: %d\n", ret);
 
   // Wait a while
-  sleep(5);
+  sleep(1);
 
   // Read the output from NSH stdout
   static char buf[4];
@@ -324,7 +324,7 @@ void test_terminal(void)
   }
 
   // Wait a while
-  sleep(5);
+  sleep(1);
 
   // Read the output from NSH stderr
   ret = read(    
@@ -338,3 +338,14 @@ void test_terminal(void)
     _info("%s\n", buf);
   }
 }
+
+/* Output:
+test_terminal: test_terminal
+test_terminal: pid=
+test_terminal: write nsh_stdin: 5
+test_terminal: read nsh_stdout: 3
+test_terminal: 
+Nu
+test_terminal: read nsh_stderr: 3
+test_terminal: nsh
+*/
