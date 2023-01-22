@@ -258,7 +258,6 @@ void test_terminal(void)
   _info("test_terminal\n");
 
   /* Create the pipes */
-
   int nsh_stdin[2];
   int nsh_stdout[2];
   int nsh_stderr[2];
@@ -268,13 +267,11 @@ void test_terminal(void)
   ret = pipe(nsh_stderr); if (ret < 0) { _err("stderr pipe failed: %d\n", errno); return; }
 
   /* Close default stdin, stdout and stderr */
-
   close(0);
   close(1);
   close(2);
 
   /* Use the pipes as stdin, stdout, and stderr */
-
   #define READ_PIPE  0  // Read Pipes: stdin, stdout, stderr
   #define WRITE_PIPE 1  // Write Pipes: stdin, stdout, stderr
   dup2(nsh_stdin[READ_PIPE], 0);
@@ -282,7 +279,6 @@ void test_terminal(void)
   dup2(nsh_stderr[WRITE_PIPE], 2);
 
   /* Create a new console using the pipes */
-
   char *argv[] = { NULL };
   pid_t pid = task_create(
     "NSH Console",
