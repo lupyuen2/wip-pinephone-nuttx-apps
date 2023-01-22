@@ -267,15 +267,15 @@ void test_terminal(void)
   close(1);
   close(2);
 
-  /* Use this pts file as stdin, stdout, and stderr */
+  /* Use the pipes as stdin, stdout, and stderr */
 
-  #define NSH_PIPE  0  // NSH stdin, stdout, stderr
-  #define TERM_PIPE 1  // Terminal stdin, stdout, stderr
+  #define NSH_PIPE  0  // NSH Pipes: stdin, stdout, stderr
+  #define TERM_PIPE 1  // Terminal Pipes: stdin, stdout, stderr
   dup2(nsh_stdin[NSH_PIPE], 0);
   dup2(nsh_stdout[NSH_PIPE], 1);
   dup2(nsh_stderr[NSH_PIPE], 2);
 
-  /* Create a new console using this /dev/pts/N */
+  /* Create a new console using the pipes */
 
   char *argv[] = { "nsh" };
   pid_t pid = task_create(
@@ -293,8 +293,12 @@ void test_terminal(void)
   _info("pid=\n", pid);
 
   // TODO: Send a command to NSH stdin
+  // const char cmd[] = "ls\r\n";
+  // nsh_stdin[TERM_PIPE]
 
   // TODO: Read the output from NSH stdout
+  // nsh_stdout[TERM_PIPE]
 
   // TODO: Read the output from NSH stderr
+  // nsh_stderr[TERM_PIPE]
 }
