@@ -245,6 +245,7 @@ int main(int argc, FAR char *argv[])
 }
 
 //// Testing LVGL Terminal
+//// Enable "Device Drivers > FIFO and named pipe drivers"
 #include "nshlib/nshlib.h"
 
 void test_terminal(void)
@@ -302,3 +303,4 @@ void test_terminal(void)
   // TODO: Read the output from NSH stderr
   // nsh_stderr[TERM_PIPE]
 }
+
