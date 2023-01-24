@@ -351,7 +351,7 @@ void test_terminal(void)
 }
 
 // Callback for LVGL Timer
-void my_timer(lv_timer_t * timer) {
+void my_timer(lv_timer_t *timer) {
 
   // Get the Callback Data
   uint32_t *user_data = timer->user_data;
@@ -362,57 +362,43 @@ void my_timer(lv_timer_t * timer) {
 
   // TODO: Read the NSH Stdout
 
-  // TODO: Write to LVGL Label Widget
+  // TODO: Write NSH Output to LVGL Label Widget
 }
 
+// TODO: Read input from LVGL Text Area Widget
+
+// TODO: Send input to NSH Stdin
+
 /* Output:
-NuttShell (NSH) NuttX-12.0.0
-nsh> ls
-/:
- dev/
- var/
-nsh> est_terminal: write nsh_stdin: 9
-test_terminal: read nsh_stdout: 63
-test_terminal: K
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> ls
-/:
- dev/
- var/
-test_terminal: write nsh_stdin: 9
-test_terminal: read nsh_stdout: 63
-test_terminal: 
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> ls
-/:
- de
-test_terminal: write nsh_stdin: 9
-test_terminal: read nsh_stdout: 63
-test_terminal: v/
- var/
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> l
-test_terminal: write nsh_stdin: 9
-test_terminal: read nsh_stdout: 63
-test_terminal: s
-/:
- dev/
- var/
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-n
+- Ready to Boot CPU
+- Boot from EL2
+- Boot from EL1
+- Boot to C runtime for OS Initialize
+test_terminal: test_terminal
+up_dump_register: stack = 0x40a77cf0
+up_dump_register: x0:   0xffffffff          x1:   0xeafffffe
+up_dump_register: x2:   0x18                x3:   0x3
+up_dump_register: x4:   0x40a77e3c          x5:   0x40a77e38
+up_dump_register: x6:   0x18                x7:   0x0
+up_dump_register: x8:   0x0                 x9:   0x0
+up_dump_register: x10:  0x0                 x11:  0x0
+up_dump_register: x12:  0x0                 x13:  0x0
+up_dump_register: x14:  0x0                 x15:  0x1c28000
+up_dump_register: x16:  0x0                 x17:  0x0
+up_dump_register: x18:  0x0                 x19:  0xe24ee004e59ff0e8
+up_dump_register: x20:  0x18                x21:  0x4008a2c8
+up_dump_register: x22:  0x1388              x23:  0x0
+up_dump_register: x24:  0x0                 x25:  0x0
+up_dump_register: x26:  0x0                 x27:  0x0
+up_dump_register: x28:  0x0                 x29:  0x0
+up_dump_register: x30:  0x400a303c        
+up_dump_register: 
+up_dump_register: STATUS Registers:
+up_dump_register: SPSR:      0x80000005        
+up_dump_register: ELR:       0x400a30bc        
+up_dump_register: SP_EL0:    0x40a77e60        
+up_dump_register: SP_ELX:    0x40a77cf0        
+up_dump_register: TPIDR_EL0: 0x40a75b80        
+up_dump_register: TPIDR_EL1: 0x40a75b80        
+up_dump_register: EXE_DEPTH: 0x0  
 */
