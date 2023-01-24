@@ -253,6 +253,7 @@ int main(int argc, FAR char *argv[])
 #include <poll.h>
 #include "nshlib/nshlib.h"
 
+static bool has_input(int fd);
 static void my_timer(lv_timer_t * timer);
 
 // Create an LVGL Terminal that will let us interact with NuttX NSH Shell
@@ -319,32 +320,31 @@ void test_terminal(void) {
     // Wait a while
     usleep(100 * 1000);
 
-    // Read the output from NSH stdout.
-    // TODO: This will block if there's nothing to read.
+    // Read the output from NSH stdout
     static char buf[64];
-    ret = read(
-      nsh_stdout[READ_PIPE],
-      buf,
-      sizeof(buf) - 1
-    );
-    _info("read nsh_stdout: %d\n", ret);
-    if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
+    if (has_input(nsh_stdout[READ_PIPE])) {
+      ret = read(
+        nsh_stdout[READ_PIPE],
+        buf,
+        sizeof(buf) - 1
+      );
+      _info("read nsh_stdout: %d\n", ret);
+      if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
+    }
+
+    // Read the output from NSH stderr
+    if (has_input(nsh_stderr[READ_PIPE])) {
+      ret = read(    
+        nsh_stderr[READ_PIPE],
+        buf,
+        sizeof(buf) - 1
+      );
+      _info("read nsh_stderr: %d\n", ret);
+      if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
+    }
 
     // Wait a while
     usleep(100 * 1000);
-
-#ifdef NOTUSED
-    // Read the output from NSH stderr.
-    // TODO: This will block if there's nothing to read.
-    ret = read(    
-      nsh_stderr[READ_PIPE],
-      buf,
-      sizeof(buf) - 1
-    );
-    _info("read nsh_stderr: %d\n", ret);
-    if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
-#endif
-
   }
 }
 
@@ -394,6 +394,10 @@ static bool has_input(int fd) {
     _err("poll failed: %d\n", ret);
     return false;
   }
+
+  // Never comes here
+  DEBUGASSERT(false);
+  return false;
 }
 
 // TODO: Read input from LVGL Text Area Widget
