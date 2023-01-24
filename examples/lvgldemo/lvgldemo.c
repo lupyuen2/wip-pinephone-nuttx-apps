@@ -299,15 +299,14 @@ void test_terminal(void) {
   _info("pid=%d\n", pid);
 
   // Create an LVGL Timer to poll for output from NSH Shell
-  // Based on https://docs.lvgl.io/master/overview/timer.html#create-a-timer
-  // static uint32_t user_data = 10;
-  // lv_timer_t *timer = lv_timer_create(
-  //   timer_callback,  // Callback Function
-  //   1000,       // Timer Period (Milliseconds)
-  //   &user_data  // Callback Data
-  // );
-  // UNUSED(timer);
-  UNUSED(timer_callback);
+  Based on https://docs.lvgl.io/master/overview/timer.html#create-a-timer
+  static uint32_t user_data = 10;
+  lv_timer_t *timer = lv_timer_create(
+    timer_callback,  // Callback Function
+    1000,       // Timer Period (Milliseconds)
+    &user_data  // Callback Data
+  );
+  UNUSED(timer);
 
   // Create the LVGL Terminal Widgets
   create_widgets();
@@ -323,18 +322,6 @@ static void timer_callback(lv_timer_t *timer) {
   // _info("timer_callback called with callback data: %d\n", *user_data);
   *user_data += 1;
 
-  // Send a command to NSH stdin
-  if (*user_data % 5 == 0) {
-    const char cmd[] = "ls\r";
-    DEBUGASSERT(nsh_stdin[WRITE_PIPE] != 0);
-    ret = write(
-      nsh_stdin[WRITE_PIPE],
-      cmd,
-      sizeof(cmd)
-    );
-    _info("write nsh_stdin: %d\n", ret);
-  }
-
   // Read the output from NSH stdout
   static char buf[64];
   DEBUGASSERT(nsh_stdout[READ_PIPE] != 0);
@@ -344,7 +331,7 @@ static void timer_callback(lv_timer_t *timer) {
       buf,
       sizeof(buf) - 1
     );
-    _info("read nsh_stdout: %d\n", ret);
+    // _info("read nsh_stdout: %d\n", ret);
     if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
   }
 
@@ -356,7 +343,7 @@ static void timer_callback(lv_timer_t *timer) {
       buf,
       sizeof(buf) - 1
     );
-    _info("read nsh_stderr: %d\n", ret);
+    // _info("read nsh_stderr: %d\n", ret);
     if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
   }
 
@@ -428,7 +415,23 @@ static void input_callback(lv_event_t *e) {
 
     // Get the Text of the Keyboard Button
     const char *key = lv_keyboard_get_btn_text(kb, id);
+    if (key == NULL) { return; }
     _info("key[0]=%d, key=%s\n", key[0], key);
+    infodumpbuffer("input_callback", (const uint8_t *)key, strlen(key));
+
+    // If Enter is pressed...
+    if (key[0] == 0xef && key[0] == 0xa2 && key[0] == 0xa2) {
+
+      // Send the Command to NSH Input
+      const char cmd[] = "ls\r";
+      DEBUGASSERT(nsh_stdin[WRITE_PIPE] != 0);
+      ret = write(
+        nsh_stdin[WRITE_PIPE],
+        cmd,
+        sizeof(cmd)
+      );
+      _info("write nsh_stdin: %d\n", ret);
+    }
   }
 }
 
@@ -500,7 +503,7 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-289769 bytes read in 16 ms (17.3 MiB/s)
+290073 bytes read in 15 ms (18.4 MiB/s)
 Uncompressed size: 10412032 = 0x9EE000
 36162 bytes read in 4 ms (8.6 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
@@ -518,8 +521,24 @@ Starting kernel ...
 test_terminal: test_terminal
 test_terminal: pid=3
 input_callback: key[0]=113, key=q
+input_callback (0x400fbf21):
+0000  71                                               q               
 input_callback: key[0]=119, key=w
+input_callback (0x400fbf1a):
+0000  77                                               w               
 input_callback: key[0]=101, key=e
+input_callback (0x400fbf14):
+0000  65                                               e               
 input_callback: key[0]=114, key=r
+input_callback (0x400fbb55):
+0000  72                                               r               
 input_callback: key[0]=239, key=Ô¢¢
+input_callback (0x400fad9e):
+0000  ef a2 a2                                         ...             
+input_callback: key[0]=239, key=Ôïö
+input_callback (0x400fadaa):
+0000  ef 95 9a                                         ...             
+input_callback: key[0]=239, key=Ô¢¢
+input_callback (0x400fad9e):
+0000  ef a2 a2                                         ...             
 */
