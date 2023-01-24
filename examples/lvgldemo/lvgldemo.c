@@ -302,10 +302,10 @@ void test_terminal(void)
   _info("pid=%d\n", pid);
 
   // Wait a while
-  sleep(1);
+  usleep(100 * 1000);
 
   // Send a few commands to NSH
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 2; i++) {
 
     // Send a command to NSH stdin
     const char cmd[] = "ls\r\n\r\n\r\n";
@@ -317,7 +317,7 @@ void test_terminal(void)
     _info("write nsh_stdin: %d\n", ret);
 
     // Wait a while
-    sleep(1);
+    usleep(100 * 1000);
 
     // Read the output from NSH stdout.
     // TODO: This will block if there's nothing to read.
@@ -331,7 +331,7 @@ void test_terminal(void)
     if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
 
     // Wait a while
-    sleep(1);
+    usleep(100 * 1000);
 
 #ifdef NOTUSED
     // Read the output from NSH stderr.
