@@ -378,20 +378,20 @@ static bool has_input(int fd) {
   if (ret > 0) {
     // Poll OK
     if ((fdp.revents & POLLIN) != 0) {
-      _info("has input\n");
+      _info("has input: fd=%d\n", fd);
       return true;
     }
-    _info("no input\n");
+    _info("no input: fd=%d\n", fd);
     return false;
 
   } else if (ret == 0) {
     // Ignore Timeout
-    _info("timeout\n");
+    _info("timeout: fd=%d\n", fd);
     return false;
 
   } else if (ret < 0) {
     // Handle Error
-    _err("poll failed: %d\n", ret);
+    _err("poll failed: %d, fd=%d\n", ret, fd);
     return false;
   }
 
@@ -412,6 +412,7 @@ static bool has_input(int fd) {
 test_terminal: test_terminal
 test_terminal: pid=3
 test_terminal: write nsh_stdin: 9
+has_input: has input: fd=8
 test_terminal: read nsh_stdout: 63
 test_terminal: 
 NuttShell (NSH) NuttX-12.0.0
@@ -421,7 +422,9 @@ nsh> ls
  proc/
  var/
 
+has_input: timeout: fd=10
 test_terminal: write nsh_stdin: 9
+has_input: has input: fd=8
 test_terminal: read nsh_stdout: 63
 test_terminal: nsh> 
 nsh> 
@@ -431,44 +434,7 @@ nsh>
 nsh> ls
 /:
  dev
-test_terminal: write nsh_stdin: 9
-test_terminal: read nsh_stdout: 63
-test_terminal: /
- proc/
- var/
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh
-test_terminal: write nsh_stdin: 9
-test_terminal: read nsh_stdout: 63
-test_terminal: > ls
-/:
- dev/
- proc/
- var/
-nsh> 
-nsh> 
-nsh> 
-nsh> .
-test_terminal: write nsh_stdin: 9
-test_terminal: read nsh_stdout: 63
-test_terminal: [K
-nsh> 
-nsh> ls
-/:
- dev/
- proc/
- var/
-nsh> 
-nsh> 
-
+has_input: timeout: fd=10
 my_timer: my_timer called with callback data: 10
 my_timer: my_timer called with callback data: 11
-my_timer: my_timer called with callback data: 12
-my_timer: my_timer called with callback data: 13
-my_timer: my_timer called with callback data: 14
-my_timer: my_timer called with callback data: 15
 */
