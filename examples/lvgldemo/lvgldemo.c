@@ -296,25 +296,6 @@ void test_terminal(void) {
   if (pid < 0) { _err("task_create failed: %d\n", errno); return; }
   _info("pid=%d\n", pid);
 
-  // Wait a while
-  usleep(100 * 1000);
-
-  // Send a few commands to NSH
-  for (int i = 0; i < 2; i++) {
-
-    // Send a command to NSH stdin
-    const char cmd[] = "ls\r\n\r\n\r\n";
-    ret = write(
-      nsh_stdin[WRITE_PIPE],
-      cmd,
-      sizeof(cmd)
-    );
-    _info("write nsh_stdin: %d\n", ret);
-
-    // Wait a while
-    usleep(100 * 1000);
-  }
-
   // Create an LVGL Timer to poll for output from NSH Shell
   static uint32_t user_data = 10;
   lv_timer_t *timer = lv_timer_create(
@@ -334,8 +315,21 @@ static void my_timer(lv_timer_t *timer) {
   _info("my_timer called with callback data: %d\n", *user_data);
   *user_data += 1;
 
+  // Send a command to NSH stdin
+  if (*user_data % 3 == 0) {
+    const char cmd[] = "ls\r\n";
+    DEBUGASSERT(nsh_stdin[WRITE_PIPE] != 0);
+    ret = write(
+      nsh_stdin[WRITE_PIPE],
+      cmd,
+      sizeof(cmd)
+    );
+    _info("write nsh_stdin: %d\n", ret);
+  }
+
   // Read the output from NSH stdout
   static char buf[64];
+  DEBUGASSERT(nsh_stdout[READ_PIPE] != 0);
   if (has_input(nsh_stdout[READ_PIPE])) {
     ret = read(
       nsh_stdout[READ_PIPE],
@@ -347,6 +341,7 @@ static void my_timer(lv_timer_t *timer) {
   }
 
   // Read the output from NSH stderr
+  DEBUGASSERT(nsh_stderr[READ_PIPE] != 0);
   if (has_input(nsh_stderr[READ_PIPE])) {
     ret = read(    
       nsh_stderr[READ_PIPE],
@@ -404,65 +399,127 @@ static bool has_input(int fd) {
 // TODO: Send input to NSH Stdin
 
 /* Output:
+DRAM: 2048 MiB
+Trying to boot from MMC1
+NOTICE:  BL31: v2.2(release):v2.2-904-gf9ea3a629
+NOTICE:  BL31: Built : 15:32:12, Apr  9 2020
+NOTICE:  BL31: Detected Allwinner A64/H64/R18 SoC (1689)
+NOTICE:  BL31: Found U-Boot DTB at 0x4064410, model: PinePhone
+NOTICE:  PSCI: System suspend is unavailable
+
+
+U-Boot 2020.07 (Nov 08 2020 - 00:15:12 +0100)
+
+DRAM:  2 GiB
+MMC:   Device 'mmc@1c11000': seq 1 is in use by 'mmc@1c10000'
+mmc@1c0f000: 0, mmc@1c10000: 2, mmc@1c11000: 1
+Loading Environment from FAT... *** Warning - bad CRC, using default environment
+
+starting USB...
+No working controllers found
+Hit any key to stop autoboot:  0 
+switch to partitions #0, OK
+mmc0 is current device
+Scanning mmc 0:1...
+Found U-Boot script /boot.scr
+653 bytes read in 3 ms (211.9 KiB/s)
+## Executing script at 4fc00000
+gpio: pin 114 (gpio 114) value is 1
+295301 bytes read in 16 ms (17.6 MiB/s)
+Uncompressed size: 10428416 = 0x9F2000
+36162 bytes read in 5 ms (6.9 MiB/s)
+1078500 bytes read in 50 ms (20.6 MiB/s)
+## Flattened Device Tree blob at 4fa00000
+   Booting using the fdt blob at 0x4fa00000
+   Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
+   Loading Device Tree to 0000000049eec000, end 0000000049ef7d41 ... OK
+
+Starting kernel ...
+
 - Ready to Boot CPU
 - Boot from EL2
 - Boot from EL1
 - Boot to C runtime for OS Initialize
 test_terminal: test_terminal
 test_terminal: pid=3
-test_terminal: write nsh_stdin: 9
-test_terminal: write nsh_stdin: 9
 my_timer: my_timer called with callback data: 10
 has_input: has input: fd=8
 my_timer: read nsh_stdout: 63
-my_timer: 
-NuttShell (NSH) NuttX-12.0.0
-nsh> ls
+my_timer: createWidgetsWrapped: start
+createWidgetsWrapped: end
+
+NuttShel
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 11
+my_timer: write nsh_stdin: 5
+has_input: has input: fd=8
+my_timer: read nsh_stdout: 29
+my_timer: l (NSH) NuttX-12.0.0
+nsh> 
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 12
+has_input: has input: fd=8
+my_timer: read nsh_stdout: 42
+my_timer: ls
 /:
  dev/
  proc/
  var/
-
+nsh> 
+nsh> 
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 11
+my_timer: my_timer called with callback data: 13
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 14
+my_timer: write nsh_stdin: 5
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 15
 has_input: has input: fd=8
-my_timer: read nsh_stdout: 63
-my_timer: nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh> ls
+my_timer: read nsh_stdout: 42
+my_timer: ls
 /:
- dev
-has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 12
-has_input: has input: fd=8
-my_timer: read nsh_stdout: 63
-my_timer: /
+ dev/
  proc/
  var/
 nsh> 
 nsh> 
-nsh> 
-nsh> 
-nsh> 
-nsh
-has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 13
-has_input: has input: fd=8
-my_timer: read nsh_stdout: 59
-my_timer: > createWidgetsWrapped: start
-createWidgetsWrapped: end
-
-has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 14
-has_input: timeout: fd=8
-has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 15
-has_input: timeout: fd=8
 has_input: timeout: fd=10
 my_timer: my_timer called with callback data: 16
 has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 17
+my_timer: write nsh_stdin: 5
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 18
+has_input: has input: fd=8
+my_timer: read nsh_stdout: 42
+my_timer: ls
+/:
+ dev/
+ proc/
+ var/
+nsh> 
+nsh> 
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 19
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 20
+my_timer: write nsh_stdin: 5
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 21
+has_input: has input: fd=8
+my_timer: read nsh_stdout: 42
+my_timer: ls
+/:
+ dev/
+ proc/
+ var/
+nsh> 
+nsh> 
 has_input: timeout: fd=10
 */
