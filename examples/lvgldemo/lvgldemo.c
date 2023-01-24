@@ -342,6 +342,7 @@ static void timer_callback(lv_timer_t *timer) {
       DEBUGASSERT(output != NULL);
       lv_textarea_add_text(output, buf);
       _info("%s\n", buf); 
+      infodumpbuffer("timer_callback", (const uint8_t *)buf, ret);
     }
   }
 
@@ -360,6 +361,7 @@ static void timer_callback(lv_timer_t *timer) {
       DEBUGASSERT(output != NULL);
       lv_textarea_add_text(output, buf);
       _info("%s\n", buf); 
+      infodumpbuffer("timer_callback", (const uint8_t *)buf, ret);
     }
   }
 }
@@ -526,10 +528,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-290206 bytes read in 16 ms (17.3 MiB/s)
+290182 bytes read in 16 ms (17.3 MiB/s)
 Uncompressed size: 10412032 = 0x9EE000
 36162 bytes read in 5 ms (6.9 MiB/s)
-1078500 bytes read in 51 ms (20.2 MiB/s)
+1078500 bytes read in 50 ms (20.6 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -546,45 +548,68 @@ test_terminal: pid=3
 timer_callback: 
 NuttShell (NSH) NuttX-12.0.0
 nsh> 
-input_callback: key[0]=113, key=q
-input_callback (0x400fbf76):
-0000  71                                               q               
-input_callback: key[0]=119, key=w
+timer_callback (0x4010feb0):
+0000  0a 4e 75 74 74 53 68 65 6c 6c 20 28 4e 53 48 29  .NuttShell (NSH)
+0010  20 4e 75 74 74 58 2d 31 32 2e 30 2e 30 0a 6e 73   NuttX-12.0.0.ns
+0020  68 3e 20 1b 5b 4b                                h> .[K          
+input_callback: key[0]=117, key=u
+input_callback (0x400fbdff):
+0000  75                                               u               
+input_callback: key[0]=110, key=n
 input_callback (0x400fbf6f):
-0000  77                                               w               
+0000  6e                                               n               
+input_callback: key[0]=97, key=a
+input_callback (0x400fbf9c):
+0000  61                                               a               
+input_callback: key[0]=109, key=m
+input_callback (0x400faaa3):
+0000  6d                                               m               
 input_callback: key[0]=101, key=e
-input_callback (0x400fbf69):
+input_callback (0x400fbf78):
 0000  65                                               e               
-input_callback: key[0]=114, key=r
-input_callback (0x400fbbaa):
-0000  72                                               r               
+input_callback: key[0]=32, key= 
+input_callback (0x400fbeba):
+0000  20                                                               
+input_callback: key[0]=45, key=-
+input_callback (0x400fbb77):
+0000  2d                                               -               
+input_callback: key[0]=97, key=a
+input_callback (0x400fbf9c):
+0000  61                                               a               
 input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
+input_callback (0x400fae02):
 0000  ef a2 a2                                         ...             
 input_callback (0x401129e8):
-0000  71 77 65 72 0a                                   qwer.           
-input_callback: write nsh_stdin: 5
+0000  75 6e 61 6d 65 20 2d 61 0a                       uname -a.       
+input_callback: write nsh_stdin: 9
 input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
+input_callback (0x400fae02):
 0000  ef a2 a2                                         ...             
-timer_callback: qwer
+timer_callback: uname -a
+NuttX 12.0.0 bd6a0b0 Jan 22 2023 20:01:15 arm64 pineph
+timer_callback (0x4010feb0):
+0000  75 6e 61 6d 65 20 2d 61 0a 4e 75 74 74 58 20 31  uname -a.NuttX 1
+0010  32 2e 30 2e 30 20 62 64 36 61 30 62 30 20 4a 61  2.0.0 bd6a0b0 Ja
+0020  6e 20 32 32 20 32 30 32 33 20 32 30 3a 30 31 3a  n 22 2023 20:01:
+0030  31 35 20 61 72 6d 36 34 20 70 69 6e 65 70 68     15 arm64 pineph 
+timer_callback: one
 nsh> 
-timer_callback: nsh: qwer: command not found
-
+timer_callback (0x4010feb0):
+0000  6f 6e 65 0a 6e 73 68 3e 20 1b 5b 4b              one.nsh> .[K    
 input_callback: key[0]=108, key=l
-input_callback (0x400fc36b):
+input_callback (0x400fc37a):
 0000  6c                                               l               
 input_callback: key[0]=115, key=s
-input_callback (0x400fb2b8):
+input_callback (0x400fb2c7):
 0000  73                                               s               
 input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
+input_callback (0x400fae02):
 0000  ef a2 a2                                         ...             
 input_callback (0x401125a0):
 0000  6c 73 0a                                         ls.             
 input_callback: write nsh_stdin: 3
 input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
+input_callback (0x400fae02):
 0000  ef a2 a2                                         ...             
 timer_callback: ls
 /:
@@ -592,64 +617,8 @@ timer_callback: ls
  proc/
  var/
 nsh> 
-input_callback: key[0]=117, key=u
-input_callback (0x400fbdf0):
-0000  75                                               u               
-input_callback: key[0]=110, key=n
-input_callback (0x400fbf60):
-0000  6e                                               n               
-input_callback: key[0]=97, key=a
-input_callback (0x400fbf8d):
-0000  61                                               a               
-input_callback: key[0]=110, key=n
-input_callback (0x400fbf60):
-0000  6e                                               n               
-input_callback: key[0]=101, key=e
-input_callback (0x400fbf69):
-0000  65                                               e               
-input_callback: key[0]=239, key=Ôïö
-input_callback (0x400fadff):
-0000  ef 95 9a                                         ...             
-input_callback: key[0]=239, key=Ôïö
-input_callback (0x400fadff):
-0000  ef 95 9a                                         ...             
-input_callback: key[0]=109, key=m
-input_callback (0x400faaa3):
-0000  6d                                               m               
-input_callback: key[0]=101, key=e
-input_callback (0x400fbf69):
-0000  65                                               e               
-input_callback: key[0]=32, key= 
-input_callback (0x400fbeab):
-0000  20                                                               
-input_callback: key[0]=45, key=-
-input_callback (0x400fbb68):
-0000  2d                                               -               
-input_callback: key[0]=97, key=a
-input_callback (0x400fbf8d):
-0000  61                                               a               
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-0000  75 6e 61 6d 65 20 2d 61 0a                       uname -a.       
-input_callback: write nsh_stdin: 9
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-timer_callback: uname -a
-NuttX 12.0.0 bd6a0b0 Jan 22 2023 20:01:15 arm64 pineph
-timer_callback: one
-nsh> 
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-0000  0a                                               .               
-input_callback: write nsh_stdin: 1
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-timer_callback: 
-nsh> 
+timer_callback (0x4010feb0):
+0000  6c 73 0a 2f 3a 0a 20 64 65 76 2f 0a 20 70 72 6f  ls./:. dev/. pro
+0010  63 2f 0a 20 76 61 72 2f 0a 6e 73 68 3e 20 1b 5b  c/. var/.nsh> .[
+0020  4b                                               K               
 */
