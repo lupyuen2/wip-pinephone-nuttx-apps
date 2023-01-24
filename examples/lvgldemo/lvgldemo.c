@@ -251,13 +251,26 @@ int main(int argc, FAR char *argv[])
 #error Please enable "Device Drivers > FIFO and named pipe drivers" in menuconfig
 #endif
 
+#include <lvgl/lvgl.h>
 #include "nshlib/nshlib.h"
 
+void my_timer(lv_timer_t * timer);
+
+// Create an LVGL Terminal that will let us interact with NuttX NSH Shell
 void test_terminal(void)
 {
   _info("test_terminal\n");
 
-  /* Create the pipes */
+  // Create an LVGL Timer to poll for output from NSH Shell
+  static uint32_t user_data = 10;
+  lv_timer_t *timer = lv_timer_create(
+    my_timer,   // Callback
+    5000,       // Timer Period (Milliseconds)
+    &user_data  // Callback Data
+  );
+  UNUSED(timer);
+
+  // Create the pipes for NSH Shell
   int nsh_stdin[2];
   int nsh_stdout[2];
   int nsh_stderr[2];
@@ -266,19 +279,19 @@ void test_terminal(void)
   ret = pipe(nsh_stdout); if (ret < 0) { _err("stdout pipe failed: %d\n", errno); return; }
   ret = pipe(nsh_stderr); if (ret < 0) { _err("stderr pipe failed: %d\n", errno); return; }
 
-  /* Close default stdin, stdout and stderr */
+  // Close default stdin, stdout and stderr
   close(0);
   close(1);
   close(2);
 
-  /* Use the pipes as stdin, stdout and stderr */
+  // Use the pipes as NSH stdin, stdout and stderr
   #define READ_PIPE  0  // Read Pipes: stdin, stdout, stderr
   #define WRITE_PIPE 1  // Write Pipes: stdin, stdout, stderr
   dup2(nsh_stdin[READ_PIPE], 0);
   dup2(nsh_stdout[WRITE_PIPE], 1);
   dup2(nsh_stderr[WRITE_PIPE], 2);
 
-  /* Create a new console using the pipes */
+  // Create a new NSH Console using the pipes
   char *argv[] = { NULL };
   pid_t pid = task_create(
     "NSH Console",
@@ -335,6 +348,21 @@ void test_terminal(void)
 #endif
 
   }
+}
+
+// Callback for LVGL Timer
+void my_timer(lv_timer_t * timer) {
+
+  // Get the Callback Data
+  uint32_t *user_data = timer->user_data;
+  _info("my_timer called with callback data: %d\n", *user_data);
+  *user_data += 1;
+
+  // TODO: Call poll() to check if NSH Stdout has data to be read
+
+  // TODO: Read the NSH Stdout
+
+  // TODO: Write to LVGL Label Widget
 }
 
 /* Output:
