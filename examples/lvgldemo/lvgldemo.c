@@ -308,7 +308,7 @@ void test_terminal(void) {
   static uint32_t user_data = 10;
   lv_timer_t *timer = lv_timer_create(
     timer_callback,  // Callback Function
-    1000,       // Timer Period (Milliseconds)
+    100,        // Timer Period (Milliseconds)
     &user_data  // Callback Data
   );
   UNUSED(timer);
