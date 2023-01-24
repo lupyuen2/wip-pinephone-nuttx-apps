@@ -256,23 +256,19 @@ int main(int argc, FAR char *argv[])
 static bool has_input(int fd);
 static void my_timer(lv_timer_t * timer);
 
+// Pipes for NSH Shell: : stdin, stdout, stderr
+static int nsh_stdin[2];
+static int nsh_stdout[2];
+static int nsh_stderr[2];
+
+#define READ_PIPE  0  // Read Pipes: stdin, stdout, stderr
+#define WRITE_PIPE 1  // Write Pipes: stdin, stdout, stderr
+
 // Create an LVGL Terminal that will let us interact with NuttX NSH Shell
 void test_terminal(void) {
   _info("test_terminal\n");
 
-  // Create an LVGL Timer to poll for output from NSH Shell
-  static uint32_t user_data = 10;
-  lv_timer_t *timer = lv_timer_create(
-    my_timer,   // Callback
-    5000,       // Timer Period (Milliseconds)
-    &user_data  // Callback Data
-  );
-  UNUSED(timer);
-
   // Create the pipes for NSH Shell
-  int nsh_stdin[2];
-  int nsh_stdout[2];
-  int nsh_stderr[2];
   int ret;
   ret = pipe(nsh_stdin);  if (ret < 0) { _err("stdin pipe failed: %d\n", errno);  return; }
   ret = pipe(nsh_stdout); if (ret < 0) { _err("stdout pipe failed: %d\n", errno); return; }
@@ -284,8 +280,6 @@ void test_terminal(void) {
   close(2);
 
   // Use the pipes as NSH stdin, stdout and stderr
-  #define READ_PIPE  0  // Read Pipes: stdin, stdout, stderr
-  #define WRITE_PIPE 1  // Write Pipes: stdin, stdout, stderr
   dup2(nsh_stdin[READ_PIPE], 0);
   dup2(nsh_stdout[WRITE_PIPE], 1);
   dup2(nsh_stderr[WRITE_PIPE], 2);
@@ -319,46 +313,49 @@ void test_terminal(void) {
 
     // Wait a while
     usleep(100 * 1000);
-
-    // Read the output from NSH stdout
-    static char buf[64];
-    if (has_input(nsh_stdout[READ_PIPE])) {
-      ret = read(
-        nsh_stdout[READ_PIPE],
-        buf,
-        sizeof(buf) - 1
-      );
-      _info("read nsh_stdout: %d\n", ret);
-      if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
-    }
-
-    // Read the output from NSH stderr
-    if (has_input(nsh_stderr[READ_PIPE])) {
-      ret = read(    
-        nsh_stderr[READ_PIPE],
-        buf,
-        sizeof(buf) - 1
-      );
-      _info("read nsh_stderr: %d\n", ret);
-      if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
-    }
-
-    // Wait a while
-    usleep(100 * 1000);
   }
+
+  // Create an LVGL Timer to poll for output from NSH Shell
+  static uint32_t user_data = 10;
+  lv_timer_t *timer = lv_timer_create(
+    my_timer,   // Callback
+    5000,       // Timer Period (Milliseconds)
+    &user_data  // Callback Data
+  );
+  UNUSED(timer);
 }
 
 // Callback for LVGL Timer
 static void my_timer(lv_timer_t *timer) {
+  int ret;
 
   // Get the Callback Data
   uint32_t *user_data = timer->user_data;
   _info("my_timer called with callback data: %d\n", *user_data);
   *user_data += 1;
 
-  // TODO: Call poll() to check if NSH Stdout has output to be read
+  // Read the output from NSH stdout
+  static char buf[64];
+  if (has_input(nsh_stdout[READ_PIPE])) {
+    ret = read(
+      nsh_stdout[READ_PIPE],
+      buf,
+      sizeof(buf) - 1
+    );
+    _info("read nsh_stdout: %d\n", ret);
+    if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
+  }
 
-  // TODO: Read the NSH Stdout
+  // Read the output from NSH stderr
+  if (has_input(nsh_stderr[READ_PIPE])) {
+    ret = read(    
+      nsh_stderr[READ_PIPE],
+      buf,
+      sizeof(buf) - 1
+    );
+    _info("read nsh_stderr: %d\n", ret);
+    if (ret > 0) { buf[ret] = 0; _info("%s\n", buf); }
+  }
 
   // TODO: Write the NSH Output to LVGL Label Widget
 }
@@ -366,6 +363,7 @@ static void my_timer(lv_timer_t *timer) {
 // Return true if the File Descriptor has data to be read
 static bool has_input(int fd) {
 
+  // Poll the File Descriptor for Input
   struct pollfd fdp;
   fdp.fd = fd;
   fdp.events = POLLIN;
@@ -376,11 +374,12 @@ static bool has_input(int fd) {
   );
 
   if (ret > 0) {
-    // Poll OK
+    // If Poll is OK and there is Input...
     if ((fdp.revents & POLLIN) != 0) {
       _info("has input: fd=%d\n", fd);
       return true;
     }
+    // Else report no Input
     _info("no input: fd=%d\n", fd);
     return false;
 
@@ -412,9 +411,11 @@ static bool has_input(int fd) {
 test_terminal: test_terminal
 test_terminal: pid=3
 test_terminal: write nsh_stdin: 9
+test_terminal: write nsh_stdin: 9
+my_timer: my_timer called with callback data: 10
 has_input: has input: fd=8
-test_terminal: read nsh_stdout: 63
-test_terminal: 
+my_timer: read nsh_stdout: 63
+my_timer: 
 NuttShell (NSH) NuttX-12.0.0
 nsh> ls
 /:
@@ -423,10 +424,10 @@ nsh> ls
  var/
 
 has_input: timeout: fd=10
-test_terminal: write nsh_stdin: 9
+my_timer: my_timer called with callback data: 11
 has_input: has input: fd=8
-test_terminal: read nsh_stdout: 63
-test_terminal: nsh> 
+my_timer: read nsh_stdout: 63
+my_timer: nsh> 
 nsh> 
 nsh> 
 nsh> 
@@ -435,6 +436,33 @@ nsh> ls
 /:
  dev
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 10
-my_timer: my_timer called with callback data: 11
+my_timer: my_timer called with callback data: 12
+has_input: has input: fd=8
+my_timer: read nsh_stdout: 63
+my_timer: /
+ proc/
+ var/
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+nsh> 
+nsh
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 13
+has_input: has input: fd=8
+my_timer: read nsh_stdout: 59
+my_timer: > createWidgetsWrapped: start
+createWidgetsWrapped: end
+
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 14
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 15
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 16
+has_input: timeout: fd=8
+has_input: timeout: fd=10
 */
