@@ -371,10 +371,12 @@ static bool has_input(int fd) {
   if (ret > 0) {
     // If Poll is OK and there is Input...
     if ((fdp.revents & POLLIN) != 0) {
+      // Report that there's Input
       _info("has input: fd=%d\n", fd);
       return true;
     }
-    // Else report no Input
+
+    // Else report No Input
     _info("no input: fd=%d\n", fd);
     return false;
 
