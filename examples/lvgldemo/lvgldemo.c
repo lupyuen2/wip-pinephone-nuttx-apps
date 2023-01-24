@@ -355,11 +355,11 @@ void my_timer(lv_timer_t *timer) {
   _info("my_timer called with callback data: %d\n", *user_data);
   *user_data += 1;
 
-  // TODO: Call poll() to check if NSH Stdout has data to be read
+  // TODO: Call poll() to check if NSH Stdout has output to be read
 
   // TODO: Read the NSH Stdout
 
-  // TODO: Write NSH Output to LVGL Label Widget
+  // TODO: Write the NSH Output to LVGL Label Widget
 }
 
 // TODO: Read input from LVGL Text Area Widget
