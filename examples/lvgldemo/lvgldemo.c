@@ -439,17 +439,16 @@ static void input_callback(lv_event_t *e) {
 
       // Read the NSH Input
       DEBUGASSERT(input != NULL);
-      const char *cmd0 = lv_textarea_get_text(input);
-      if (cmd0 == NULL) { return; }
-      infodumpbuffer("input_callback", (const uint8_t *)cmd0, strlen(cmd0));
+      const char *cmd = lv_textarea_get_text(input);
+      if (cmd == NULL || cmd[0] == 0) { return; }
+      infodumpbuffer("input_callback", (const uint8_t *)cmd, strlen(cmd));
 
       // Send the Command to NSH stdin
-      const char cmd[] = "ls\r";
       DEBUGASSERT(nsh_stdin[WRITE_PIPE] != 0);
       ret = write(
         nsh_stdin[WRITE_PIPE],
         cmd,
-        sizeof(cmd)
+        strlen(cmd)
       );
       _info("write nsh_stdin: %d\n", ret);
 
@@ -527,10 +526,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-290143 bytes read in 16 ms (17.3 MiB/s)
+290206 bytes read in 16 ms (17.3 MiB/s)
 Uncompressed size: 10412032 = 0x9EE000
 36162 bytes read in 5 ms (6.9 MiB/s)
-1078500 bytes read in 50 ms (20.6 MiB/s)
+1078500 bytes read in 51 ms (20.2 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -564,180 +563,93 @@ input_callback (0x400fadf3):
 0000  ef a2 a2                                         ...             
 input_callback (0x401129e8):
 0000  71 77 65 72 0a                                   qwer.           
-input_callback: write nsh_stdin: 4
+input_callback: write nsh_stdin: 5
+input_callback: key[0]=239, key=Ô¢¢
+input_callback (0x400fadf3):
+0000  ef a2 a2                                         ...             
+timer_callback: qwer
+nsh> 
+timer_callback: nsh: qwer: command not found
+
+input_callback: key[0]=108, key=l
+input_callback (0x400fc36b):
+0000  6c                                               l               
+input_callback: key[0]=115, key=s
+input_callback (0x400fb2b8):
+0000  73                                               s               
 input_callback: key[0]=239, key=Ô¢¢
 input_callback (0x400fadf3):
 0000  ef a2 a2                                         ...             
 input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
+0000  6c 73 0a                                         ls.             
+input_callback: write nsh_stdin: 3
+input_callback: key[0]=239, key=Ô¢¢
+input_callback (0x400fadf3):
+0000  ef a2 a2                                         ...             
+timer_callback: ls
+/:
+ dev/
+ proc/
+ var/
+nsh> 
+input_callback: key[0]=117, key=u
+input_callback (0x400fbdf0):
+0000  75                                               u               
+input_callback: key[0]=110, key=n
+input_callback (0x400fbf60):
+0000  6e                                               n               
+input_callback: key[0]=97, key=a
+input_callback (0x400fbf8d):
+0000  61                                               a               
+input_callback: key[0]=110, key=n
+input_callback (0x400fbf60):
+0000  6e                                               n               
+input_callback: key[0]=101, key=e
+input_callback (0x400fbf69):
+0000  65                                               e               
+input_callback: key[0]=239, key=Ôïö
+input_callback (0x400fadff):
+0000  ef 95 9a                                         ...             
+input_callback: key[0]=239, key=Ôïö
+input_callback (0x400fadff):
+0000  ef 95 9a                                         ...             
+input_callback: key[0]=109, key=m
+input_callback (0x400faaa3):
+0000  6d                                               m               
+input_callback: key[0]=101, key=e
+input_callback (0x400fbf69):
+0000  65                                               e               
+input_callback: key[0]=32, key= 
+input_callback (0x400fbeab):
+0000  20                                                               
+input_callback: key[0]=45, key=-
+input_callback (0x400fbb68):
+0000  2d                                               -               
+input_callback: key[0]=97, key=a
+input_callback (0x400fbf8d):
+0000  61                                               a               
 input_callback: key[0]=239, key=Ô¢¢
 input_callback (0x400fadf3):
 0000  ef a2 a2                                         ...             
 input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
+0000  75 6e 61 6d 65 20 2d 61 0a                       uname -a.       
+input_callback: write nsh_stdin: 9
+input_callback: key[0]=239, key=Ô¢¢
+input_callback (0x400fadf3):
+0000  ef a2 a2                                         ...             
+timer_callback: uname -a
+NuttX 12.0.0 bd6a0b0 Jan 22 2023 20:01:15 arm64 pineph
+timer_callback: one
+nsh> 
 input_callback: key[0]=239, key=Ô¢¢
 input_callback (0x400fadf3):
 0000  ef a2 a2                                         ...             
 input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
+0000  0a                                               .               
+input_callback: write nsh_stdin: 1
 input_callback: key[0]=239, key=Ô¢¢
 input_callback (0x400fadf3):
 0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: 4
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-input_callback: write nsh_stdin: -1
-input_callback: key[0]=239, key=Ô¢¢
-input_callback (0x400fadf3):
-0000  ef a2 a2                                         ...             
-input_callback (0x401125a0):
-up_dump_register: stack = 0x40a725c0
-up_dump_register: x0:   0x296               x1:   0x18
-up_dump_register: x2:   0x4                 x3:   0x400fcbee
-up_dump_register: x4:   0x4a10              x5:   0x0
-up_dump_register: x6:   0x4                 x7:   0x88
-up_dump_register: x8:   0x2d                x9:   0x1f
-up_dump_register: x10:  0x296               x11:  0x16
-up_dump_register: x12:  0x1                 x13:  0x10
-up_dump_register: x14:  0xe                 x15:  0x1c28000
-up_dump_register: x16:  0x400865d8          x17:  0x34
-up_dump_register: x18:  0x40a73730          x19:  0x30e
-up_dump_register: x20:  0x0                 x21:  0x40a71d48
-up_dump_register: x22:  0x40a72748          x23:  0x40110dc0
-up_dump_register: x24:  0x40110090          x25:  0x1
-up_dump_register: x26:  0xffffffff          x27:  0x0
-up_dump_register: x28:  0x0                 x29:  0x0
-up_dump_register: x30:  0x400d1090        
-up_dump_register: 
-up_dump_register: STATUS Registers:
-up_dump_register: SPSR:      0x20000005        
-up_dump_register: ELR:       0x400d10b4        
-up_dump_register: SP_EL0:    0x40a73e60        
-up_dump_register: SP_ELX:    0x40a725c0        
-up_dump_register: TPIDR_EL0: 0x40a71b80        
-up_dump_register: TPIDR_EL1: 0x40a71b80        
-up_dump_register: EXE_DEPTH: 0x0               
+timer_callback: 
+nsh> 
 */
