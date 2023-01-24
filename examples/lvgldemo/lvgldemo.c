@@ -417,25 +417,19 @@ static void input_callback(lv_event_t *e) {
 
   // If Enter has been pressed, send the Command to NSH Input
   if (code == LV_EVENT_VALUE_CHANGED) {
+
+    // Get the Keyboard Widget from the LVGL Event
     const lv_obj_t *kb = lv_event_get_user_data(e);
     DEBUGASSERT(kb != NULL);
 
-    const uint16_t btn = lv_keyboard_get_selected_btn(kb);
-    _info("btn=%d\n", btn);
+    // Get the Button Index of the Keyboard Button Pressed
+    const uint16_t id = lv_keyboard_get_selected_btn(kb);
+    // _info("btn=%d\n", id);
 
-    // uint32_t key = lv_indev_get_key(lv_indev_get_act());
-    // _info("key=%d\n", key);
+    // Get the Text of the Keyboard Button
+    const char *key = lv_keyboard_get_btn_text(kb, id);
+    _info("key[0]=%d, key=%s\n", key[0], key);
   }
-
-  // if (code == LV_EVENT_FOCUSED) {
-  //   lv_keyboard_set_textarea(kb, ta);
-  //   lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN);
-  // }
-
-  // if (code == LV_EVENT_DEFOCUSED) {
-  //   lv_keyboard_set_textarea(kb, NULL);
-  //   lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
-  // }
 }
 
 // Return true if the File Descriptor has data to be read
@@ -506,7 +500,7 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-289763 bytes read in 16 ms (17.3 MiB/s)
+289769 bytes read in 16 ms (17.3 MiB/s)
 Uncompressed size: 10412032 = 0x9EE000
 36162 bytes read in 4 ms (8.6 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
@@ -523,14 +517,9 @@ Starting kernel ...
 - Boot to C runtime for OS Initialize
 test_terminal: test_terminal
 test_terminal: pid=3
-input_callback: btn=6
-input_callback: btn=1
-input_callback: btn=2
-input_callback: btn=3
-input_callback: btn=13
-input_callback: btn=14
-input_callback: btn=16
-input_callback: btn=20
-input_callback: btn=22
-input_callback: btn=22
+input_callback: key[0]=113, key=q
+input_callback: key[0]=119, key=w
+input_callback: key[0]=101, key=e
+input_callback: key[0]=114, key=r
+input_callback: key[0]=239, key=Ô¢¢
 */
