@@ -250,9 +250,10 @@ int main(int argc, FAR char *argv[])
 #error Please enable "Device Drivers > FIFO and named pipe drivers" in menuconfig
 #endif
 
+#include <poll.h>
 #include "nshlib/nshlib.h"
 
-void my_timer(lv_timer_t * timer);
+static void my_timer(lv_timer_t * timer);
 
 // Create an LVGL Terminal that will let us interact with NuttX NSH Shell
 void test_terminal(void) {
@@ -348,7 +349,7 @@ void test_terminal(void) {
 }
 
 // Callback for LVGL Timer
-void my_timer(lv_timer_t *timer) {
+static void my_timer(lv_timer_t *timer) {
 
   // Get the Callback Data
   uint32_t *user_data = timer->user_data;
@@ -360,6 +361,39 @@ void my_timer(lv_timer_t *timer) {
   // TODO: Read the NSH Stdout
 
   // TODO: Write the NSH Output to LVGL Label Widget
+}
+
+// Return true if the File Descriptor has data to be read
+static bool has_input(int fd) {
+
+  struct pollfd fdp;
+  fdp.fd = fd;
+  fdp.events = POLLIN;
+  int ret = poll(
+    (struct pollfd *)&fdp,  // File Descriptors
+    1,  // Number of File Descriptors
+    0   // Poll Timeout (Milliseconds)
+  );
+
+  if (ret > 0) {
+    // Poll OK
+    if ((fdp.revents & POLLIN) != 0) {
+      _info("has input\n");
+      return true;
+    }
+    _info("no input\n");
+    return false;
+
+  } else if (ret == 0) {
+    // Ignore Timeout
+    _info("timeout\n");
+    return false;
+
+  } else if (ret < 0) {
+    // Handle Error
+    _err("poll failed: %d\n", ret);
+    return false;
+  }
 }
 
 // TODO: Read input from LVGL Text Area Widget
