@@ -254,9 +254,9 @@ int main(int argc, FAR char *argv[])
 #include "nshlib/nshlib.h"
 
 static bool has_input(int fd);
-static void my_timer(lv_timer_t * timer);
-static void lv_example_keyboard_1(void);
-static void ta_event_cb(lv_event_t * e);
+static void timer_callback(lv_timer_t * timer);
+static void create_widgets(void);
+static void input_callback(lv_event_t * e);
 
 // Pipes for NSH Shell: : stdin, stdout, stderr
 static int nsh_stdin[2];
@@ -299,25 +299,28 @@ void test_terminal(void) {
   _info("pid=%d\n", pid);
 
   // Create an LVGL Timer to poll for output from NSH Shell
-  static uint32_t user_data = 10;
-  lv_timer_t *timer = lv_timer_create(
-    my_timer,   // Callback
-    1000,       // Timer Period (Milliseconds)
-    &user_data  // Callback Data
-  );
-  UNUSED(timer);
+  // Based on https://docs.lvgl.io/master/overview/timer.html#create-a-timer
+  // static uint32_t user_data = 10;
+  // lv_timer_t *timer = lv_timer_create(
+  //   timer_callback,  // Callback Function
+  //   1000,       // Timer Period (Milliseconds)
+  //   &user_data  // Callback Data
+  // );
+  // UNUSED(timer);
+  UNUSED(timer_callback);
 
   // Create the LVGL Terminal Widgets
-  lv_example_keyboard_1();
+  create_widgets();
 }
 
-// Callback for LVGL Timer
-static void my_timer(lv_timer_t *timer) {
+// Callback Function for LVGL Timer.
+// Based on https://docs.lvgl.io/master/overview/timer.html#create-a-timer
+static void timer_callback(lv_timer_t *timer) {
   int ret;
 
   // Get the Callback Data
   uint32_t *user_data = timer->user_data;
-  _info("my_timer called with callback data: %d\n", *user_data);
+  // _info("timer_callback called with callback data: %d\n", *user_data);
   *user_data += 1;
 
   // Send a command to NSH stdin
@@ -360,6 +363,76 @@ static void my_timer(lv_timer_t *timer) {
   // TODO: Write the NSH Output to LVGL Label Widget
 }
 
+// PinePhone LCD Panel Width and Height (pixels)
+#define PINEPHONE_LCD_PANEL_WIDTH  720
+#define PINEPHONE_LCD_PANEL_HEIGHT 1440
+
+// Margin of 10 pixels all around
+#define TERMINAL_MARGIN 10
+
+// Terminal Width is LCD Width minus Left and Right Margins
+#define TERMINAL_WIDTH  (PINEPHONE_LCD_PANEL_WIDTH - 2 * TERMINAL_MARGIN)
+
+// Terminal Height is Half of LCD Height minus Top and Bottom Margins
+#define TERMINAL_HEIGHT ((PINEPHONE_LCD_PANEL_WIDTH / 2) - 2 * TERMINAL_MARGIN)
+
+// Height of Input Text Area
+#define INPUT_HEIGHT 100
+
+// Height of Output Text Area is Terminal Height minus Input Height minus Middle Margin
+#define OUTPUT_HEIGHT (TERMINAL_HEIGHT - INPUT_HEIGHT - TERMINAL_MARGIN)
+
+// Create the LVGL Widgets for the LVGL Terminal.
+// Based on https://docs.lvgl.io/master/widgets/keyboard.html#keyboard-with-text-area
+static void create_widgets(void) {
+
+  // Create an LVGL Keyboard Widget
+  lv_obj_t *kb = lv_keyboard_create(lv_scr_act());
+
+  // Create an LVGL Text Area Widget for NSH Output
+  lv_obj_t *output = lv_textarea_create(lv_scr_act());
+  lv_obj_align(output, LV_ALIGN_TOP_LEFT, TERMINAL_MARGIN, TERMINAL_MARGIN);
+  lv_textarea_set_placeholder_text(output, "Hello");
+  lv_obj_set_size(output, TERMINAL_WIDTH, OUTPUT_HEIGHT);
+
+  // Create an LVGL Text Area Widget for NSH Input
+  lv_obj_t *input = lv_textarea_create(lv_scr_act());
+  lv_obj_align(input, LV_ALIGN_TOP_LEFT, TERMINAL_MARGIN, OUTPUT_HEIGHT + 2 * TERMINAL_MARGIN);
+  lv_obj_add_event_cb(input, input_callback, LV_EVENT_ALL, kb);
+  lv_obj_set_size(input, TERMINAL_WIDTH, INPUT_HEIGHT);
+
+  // Set the Keyboard to populate the NSH Input Text Area
+  lv_keyboard_set_textarea(kb, input);
+}
+
+// Callback Function for NSH Input Text Area.
+// Based on https://docs.lvgl.io/master/widgets/keyboard.html#keyboard-with-text-area
+static void input_callback(lv_event_t *e) {
+
+  // Decode the LVGL Event
+  lv_event_code_t code = lv_event_get_code(e);
+  lv_obj_t *ta = lv_event_get_target(e);
+  // lv_obj_t *kb = lv_event_get_user_data(e);
+  _info("code=%d\n", code);
+
+  // If Enter has been pressed, send the Command to NSH Input
+  if (code == LV_EVENT_KEY) {
+    uint32_t key = lv_indev_get_key(lv_indev_get_act());
+    _info("key=%d\n", key);
+    UNUSED(ta);
+  }
+
+  // if (code == LV_EVENT_FOCUSED) {
+  //   lv_keyboard_set_textarea(kb, ta);
+  //   lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN);
+  // }
+
+  // if (code == LV_EVENT_DEFOCUSED) {
+  //   lv_keyboard_set_textarea(kb, NULL);
+  //   lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
+  // }
+}
+
 // Return true if the File Descriptor has data to be read
 static bool has_input(int fd) {
 
@@ -377,17 +450,17 @@ static bool has_input(int fd) {
     // If Poll is OK and there is Input...
     if ((fdp.revents & POLLIN) != 0) {
       // Report that there's Input
-      _info("has input: fd=%d\n", fd);
+      // _info("has input: fd=%d\n", fd);
       return true;
     }
 
     // Else report No Input
-    _info("no input: fd=%d\n", fd);
+    // _info("no input: fd=%d\n", fd);
     return false;
 
   } else if (ret == 0) {
     // Ignore Timeout
-    _info("timeout: fd=%d\n", fd);
+    // _info("timeout: fd=%d\n", fd);
     return false;
 
   } else if (ret < 0) {
@@ -399,43 +472,6 @@ static bool has_input(int fd) {
   // Never comes here
   DEBUGASSERT(false);
   return false;
-}
-
-static void lv_example_keyboard_1(void)
-{
-    /*Create a keyboard to use it with an of the text areas*/
-    lv_obj_t * kb = lv_keyboard_create(lv_scr_act());
-
-    /*Create a text area. The keyboard will write here*/
-    lv_obj_t * ta;
-    ta = lv_textarea_create(lv_scr_act());
-    lv_obj_align(ta, LV_ALIGN_TOP_LEFT, 10, 10);
-    lv_obj_add_event_cb(ta, ta_event_cb, LV_EVENT_ALL, kb);
-    lv_textarea_set_placeholder_text(ta, "Hello");
-    lv_obj_set_size(ta, 140, 80);
-
-    ta = lv_textarea_create(lv_scr_act());
-    lv_obj_align(ta, LV_ALIGN_TOP_RIGHT, -10, 10);
-    lv_obj_add_event_cb(ta, ta_event_cb, LV_EVENT_ALL, kb);
-    lv_obj_set_size(ta, 140, 80);
-
-    lv_keyboard_set_textarea(kb, ta);
-}
-
-static void ta_event_cb(lv_event_t * e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t * ta = lv_event_get_target(e);
-    lv_obj_t * kb = lv_event_get_user_data(e);
-    if(code == LV_EVENT_FOCUSED) {
-        lv_keyboard_set_textarea(kb, ta);
-        lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN);
-    }
-
-    if(code == LV_EVENT_DEFOCUSED) {
-        lv_keyboard_set_textarea(kb, NULL);
-        lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
-    }
 }
 
 /* Output:
@@ -482,113 +518,113 @@ Starting kernel ...
 - Boot to C runtime for OS Initialize
 test_terminal: test_terminal
 test_terminal: pid=3
-my_timer: my_timer called with callback data: 10
+timer_callback: timer_callback called with callback data: 10
 has_input: has input: fd=8
-my_timer: read nsh_stdout: 63
-my_timer: createWidgetsWrapped: start
+timer_callback: read nsh_stdout: 63
+timer_callback: createWidgetsWrapped: start
 createWidgetsWrapped: end
 
 NuttShel
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 11
+timer_callback: timer_callback called with callback data: 11
 has_input: has input: fd=8
-my_timer: read nsh_stdout: 29
-my_timer: l (NSH) NuttX-12.0.0
+timer_callback: read nsh_stdout: 29
+timer_callback: l (NSH) NuttX-12.0.0
 nsh> 
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 12
+timer_callback: timer_callback called with callback data: 12
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 13
+timer_callback: timer_callback called with callback data: 13
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 14
-my_timer: write nsh_stdin: 4
+timer_callback: timer_callback called with callback data: 14
+timer_callback: write nsh_stdin: 4
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 15
+timer_callback: timer_callback called with callback data: 15
 has_input: has input: fd=8
-my_timer: read nsh_stdout: 33
-my_timer: ls
+timer_callback: read nsh_stdout: 33
+timer_callback: ls
 /:
  dev/
  proc/
  var/
 nsh> 
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 16
+timer_callback: timer_callback called with callback data: 16
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 17
+timer_callback: timer_callback called with callback data: 17
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 18
+timer_callback: timer_callback called with callback data: 18
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 19
-my_timer: write nsh_stdin: 4
+timer_callback: timer_callback called with callback data: 19
+timer_callback: write nsh_stdin: 4
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 20
+timer_callback: timer_callback called with callback data: 20
 has_input: has input: fd=8
-my_timer: read nsh_stdout: 33
-my_timer: ls
+timer_callback: read nsh_stdout: 33
+timer_callback: ls
 /:
  dev/
  proc/
  var/
 nsh> 
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 21
+timer_callback: timer_callback called with callback data: 21
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 22
+timer_callback: timer_callback called with callback data: 22
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 23
+timer_callback: timer_callback called with callback data: 23
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 24
-my_timer: write nsh_stdin: 4
+timer_callback: timer_callback called with callback data: 24
+timer_callback: write nsh_stdin: 4
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 25
+timer_callback: timer_callback called with callback data: 25
 has_input: has input: fd=8
-my_timer: read nsh_stdout: 33
-my_timer: ls
+timer_callback: read nsh_stdout: 33
+timer_callback: ls
 /:
  dev/
  proc/
  var/
 nsh> 
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 26
+timer_callback: timer_callback called with callback data: 26
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 27
+timer_callback: timer_callback called with callback data: 27
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 28
+timer_callback: timer_callback called with callback data: 28
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 29
-my_timer: write nsh_stdin: 4
+timer_callback: timer_callback called with callback data: 29
+timer_callback: write nsh_stdin: 4
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 30
+timer_callback: timer_callback called with callback data: 30
 has_input: has input: fd=8
-my_timer: read nsh_stdout: 33
-my_timer: ls
+timer_callback: read nsh_stdout: 33
+timer_callback: ls
 /:
  dev/
  proc/
  var/
 nsh> 
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 31
+timer_callback: timer_callback called with callback data: 31
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 32
+timer_callback: timer_callback called with callback data: 32
 has_input: timeout: fd=8
 has_input: timeout: fd=10
 */
