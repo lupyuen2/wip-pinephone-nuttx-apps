@@ -300,7 +300,7 @@ void test_terminal(void) {
   static uint32_t user_data = 10;
   lv_timer_t *timer = lv_timer_create(
     my_timer,   // Callback
-    5000,       // Timer Period (Milliseconds)
+    1000,       // Timer Period (Milliseconds)
     &user_data  // Callback Data
   );
   UNUSED(timer);
@@ -316,7 +316,7 @@ static void my_timer(lv_timer_t *timer) {
   *user_data += 1;
 
   // Send a command to NSH stdin
-  if (*user_data % 3 == 0) {
+  if (*user_data % 5 == 0) {
     const char cmd[] = "ls\r\n";
     DEBUGASSERT(nsh_stdin[WRITE_PIPE] != 0);
     ret = write(
@@ -425,10 +425,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-295301 bytes read in 16 ms (17.6 MiB/s)
+295299 bytes read in 17 ms (16.6 MiB/s)
 Uncompressed size: 10428416 = 0x9F2000
-36162 bytes read in 5 ms (6.9 MiB/s)
-1078500 bytes read in 50 ms (20.6 MiB/s)
+36162 bytes read in 4 ms (8.6 MiB/s)
+1078500 bytes read in 51 ms (20.2 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -451,22 +451,13 @@ createWidgetsWrapped: end
 NuttShel
 has_input: timeout: fd=10
 my_timer: my_timer called with callback data: 11
-my_timer: write nsh_stdin: 5
 has_input: has input: fd=8
 my_timer: read nsh_stdout: 29
 my_timer: l (NSH) NuttX-12.0.0
 nsh> 
 has_input: timeout: fd=10
 my_timer: my_timer called with callback data: 12
-has_input: has input: fd=8
-my_timer: read nsh_stdout: 42
-my_timer: ls
-/:
- dev/
- proc/
- var/
-nsh> 
-nsh> 
+has_input: timeout: fd=8
 has_input: timeout: fd=10
 my_timer: my_timer called with callback data: 13
 has_input: timeout: fd=8
@@ -490,28 +481,16 @@ my_timer: my_timer called with callback data: 16
 has_input: timeout: fd=8
 has_input: timeout: fd=10
 my_timer: my_timer called with callback data: 17
-my_timer: write nsh_stdin: 5
 has_input: timeout: fd=8
 has_input: timeout: fd=10
 my_timer: my_timer called with callback data: 18
-has_input: has input: fd=8
-my_timer: read nsh_stdout: 42
-my_timer: ls
-/:
- dev/
- proc/
- var/
-nsh> 
-nsh> 
-has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 19
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 20
+my_timer: my_timer called with callback data: 19
 my_timer: write nsh_stdin: 5
 has_input: timeout: fd=8
 has_input: timeout: fd=10
-my_timer: my_timer called with callback data: 21
+my_timer: my_timer called with callback data: 20
 has_input: has input: fd=8
 my_timer: read nsh_stdout: 42
 my_timer: ls
@@ -521,5 +500,66 @@ my_timer: ls
  var/
 nsh> 
 nsh> 
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 21
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 22
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 23
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 24
+my_timer: write nsh_stdin: 5
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 25
+has_input: has input: fd=8
+my_timer: read nsh_stdout: 42
+my_timer: ls
+/:
+ dev/
+ proc/
+ var/
+nsh> 
+nsh> 
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 26
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 27
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 28
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 29
+my_timer: write nsh_stdin: 5
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 30
+has_input: has input: fd=8
+my_timer: read nsh_stdout: 42
+my_timer: ls
+/:
+ dev/
+ proc/
+ var/
+nsh> 
+nsh> 
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 31
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 32
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 33
+has_input: timeout: fd=8
+has_input: timeout: fd=10
+my_timer: my_timer called with callback data: 34
+my_timer: write nsh_stdin: 5
+has_input: timeout: fd=8
 has_input: timeout: fd=10
 */
