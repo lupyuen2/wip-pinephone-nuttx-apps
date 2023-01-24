@@ -255,8 +255,7 @@ int main(int argc, FAR char *argv[])
 void my_timer(lv_timer_t * timer);
 
 // Create an LVGL Terminal that will let us interact with NuttX NSH Shell
-void test_terminal(void)
-{
+void test_terminal(void) {
   _info("test_terminal\n");
 
   // Create an LVGL Timer to poll for output from NSH Shell
