@@ -1,0 +1,3 @@
+[submodule "examples/lvglterm"]
+	path = examples/lvglterm
+	url = https://github.com/lupyuen/lvglterm
