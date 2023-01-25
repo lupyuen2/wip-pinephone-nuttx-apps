@@ -322,23 +322,20 @@ void test_terminal(void) {
 static void timer_callback(lv_timer_t *timer) {
   int ret;
 
-  // Get the Callback Data
-  uint32_t *user_data = timer->user_data;
-  // _info("timer_callback called with callback data: %d\n", *user_data);
-  *user_data += 1;
-
-  // Read the output from NSH stdout
+  // Poll NSH stdout to check if there's output to be processed
   static char buf[64];
   DEBUGASSERT(nsh_stdout[READ_PIPE] != 0);
   if (has_input(nsh_stdout[READ_PIPE])) {
+
+    // Read the output from NSH stdout
     ret = read(
       nsh_stdout[READ_PIPE],
       buf,
       sizeof(buf) - 1
     );
-    // _info("read nsh_stdout: %d\n", ret);
+
+    // Add to NSH Output Text Area
     if (ret > 0) {
-      // Add to NSH Output Text Area
       buf[ret] = 0;
       _info("%s\n", buf); 
       infodumpbuffer("timer_callback", (const uint8_t *)buf, ret);
@@ -349,17 +346,19 @@ static void timer_callback(lv_timer_t *timer) {
     }
   }
 
-  // Read the output from NSH stderr
+  // Poll NSH stderr to check if there's output to be processed
   DEBUGASSERT(nsh_stderr[READ_PIPE] != 0);
   if (has_input(nsh_stderr[READ_PIPE])) {
+
+    // Read the output from NSH stderr
     ret = read(    
       nsh_stderr[READ_PIPE],
       buf,
       sizeof(buf) - 1
     );
-    // _info("read nsh_stderr: %d\n", ret);
+
+    // Add to NSH Output Text Area
     if (ret > 0) {
-      // Add to NSH Output Text Area
       buf[ret] = 0;
       _info("%s\n", buf); 
       infodumpbuffer("timer_callback", (const uint8_t *)buf, ret);
