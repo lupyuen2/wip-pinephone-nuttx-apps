@@ -23,7 +23,6 @@
  ****************************************************************************/
 
 #include <nuttx/config.h>
-
 #include <sys/boardctl.h>
 #include <unistd.h>
 #include <stddef.h>
