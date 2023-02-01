@@ -400,7 +400,7 @@ static bool has_input(int fd) {
   return false;
 }
 
-// Remove Escape Codes from the string and replace by spaces
+// Remove Escape Codes from the string
 static void remove_escape_codes(char *buf, int len) {
   for (int i = 0; i < len; i++) {
     // Escape Code looks like 0x1b 0x5b 0x4b
