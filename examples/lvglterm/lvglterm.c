@@ -58,6 +58,15 @@ static void create_terminal(void);
 #  define NEED_BOARDINIT 1
 #endif
 
+#ifndef CONFIG_DEV_PIPE_SIZE
+#  error "Device Drivers > FIFO and named pipe drivers" should be enabled in menuconfig
+#endif
+
+// TODO: Configure font
+#ifndef CONFIG_LV_FONT_UNSCII_16
+#  error "LVGL configuration > Font usage > Enable built-in fonts > UNSCII 16" should be enabled in menuconfig
+#endif
+
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
@@ -120,10 +129,6 @@ int main(int argc, FAR char *argv[])
 /****************************************************************************
  * Private Functions
  ****************************************************************************/
-
-#ifndef CONFIG_DEV_PIPE_SIZE
-#error "Device Drivers > FIFO and named pipe drivers" should be enabled in menuconfig
-#endif
 
 static bool has_input(int fd);
 static void timer_callback(lv_timer_t * timer);
@@ -250,10 +255,6 @@ static void timer_callback(lv_timer_t *timer) {
     }
   }
 }
-
-#ifndef CONFIG_LV_FONT_UNSCII_16
-#error "LVGL configuration > Font usage > Enable built-in fonts > UNSCII 16" should be enabled in menuconfig
-#endif
 
 // Create the LVGL Widgets for the LVGL Terminal.
 // Based on https://docs.lvgl.io/master/widgets/keyboard.html#keyboard-with-text-area
