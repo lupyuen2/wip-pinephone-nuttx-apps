@@ -279,19 +279,20 @@ static void timer_callback(lv_timer_t *timer) {
 // Based on https://docs.lvgl.io/master/widgets/keyboard.html#keyboard-with-text-area
 static void create_widgets(void) {
 
+  // Set the Font Style for NSH Input and Output to a Monospaced Font
+  lv_style_init(&terminal_style);
+  lv_style_set_text_font(&terminal_style, &lv_font_unscii_16);
+
   // Create an LVGL Container with Column Flex Direction
   col = lv_obj_create(lv_scr_act());
   lv_obj_set_size(col, LV_PCT(100), LV_PCT(100));
   lv_obj_set_flex_flow(col, LV_FLEX_FLOW_COLUMN);
 
-  // Set the Font Style for NSH Input and Output to a Monospaced Font
-  lv_style_init(&terminal_style);
-  lv_style_set_text_font(&terminal_style, &lv_font_unscii_16);
-
   // Create an LVGL Text Area Widget for NSH Output
   output = lv_textarea_create(col);
   lv_obj_add_style(output, &terminal_style, 0);
-  lv_obj_set_size(output, LV_PCT(100), LV_PCT(33));
+  lv_obj_set_width(output, LV_PCT(100));
+  lv_obj_set_flex_grow(output, 1);  // Fill the column
 
   // Create an LVGL Text Area Widget for NSH Input
   input = lv_textarea_create(col);
