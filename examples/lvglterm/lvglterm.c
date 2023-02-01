@@ -302,6 +302,7 @@ static void create_widgets(void) {
 
   // Create an LVGL Keyboard Widget
   kb = lv_keyboard_create(col);
+  lv_obj_set_style_pad_all(kb, 0, 0);  // No padding
 
   // Register the Callback Function for NSH Input
   lv_obj_add_event_cb(input, input_callback, LV_EVENT_ALL, NULL);
