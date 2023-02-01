@@ -287,6 +287,7 @@ static void create_widgets(void) {
   col = lv_obj_create(lv_scr_act());
   lv_obj_set_size(col, LV_PCT(100), LV_PCT(100));
   lv_obj_set_flex_flow(col, LV_FLEX_FLOW_COLUMN);
+  lv_obj_set_style_pad_all(col, 0, 0);  // No padding
 
   // Create an LVGL Text Area Widget for NSH Output
   output = lv_textarea_create(col);
