@@ -139,9 +139,18 @@ static int nsh_stderr[2];
 #define READ_PIPE  0  // Read Pipes: stdin, stdout, stderr
 #define WRITE_PIPE 1  // Write Pipes: stdin, stdout, stderr
 
+// LVGL Container with Column Flex Direction
+static lv_obj_t *col;
+
 // LVGL Text Area Widgets for NSH Input and Output
 static lv_obj_t *input;
 static lv_obj_t *output;
+
+// LVGL Keyboard Widget
+static lv_obj_t *kb;
+
+// Font Style for NSH Input and Output
+static lv_style_t terminal_style;
 
 // Create an LVGL Terminal that will let us interact with NuttX NSH Shell
 static void create_terminal(void) {
@@ -270,27 +279,30 @@ static void timer_callback(lv_timer_t *timer) {
 // Based on https://docs.lvgl.io/master/widgets/keyboard.html#keyboard-with-text-area
 static void create_widgets(void) {
 
-  // Create an LVGL Keyboard Widget
-  lv_obj_t *kb = lv_keyboard_create(lv_scr_act());
+  // Create an LVGL Container with Column Flex Direction
+  col = lv_obj_create(lv_scr_act());
+  lv_obj_set_size(col, LV_PCT(100), LV_PCT(100));
+  lv_obj_set_flex_flow(col, LV_FLEX_FLOW_COLUMN);
 
   // Set the Font Style for NSH Input and Output to a Monospaced Font
-  static lv_style_t terminal_style;
   lv_style_init(&terminal_style);
   lv_style_set_text_font(&terminal_style, &lv_font_unscii_16);
 
   // Create an LVGL Text Area Widget for NSH Output
-  output = lv_textarea_create(lv_scr_act());
+  output = lv_textarea_create(col);
   lv_obj_add_style(output, &terminal_style, 0);
-  lv_obj_align(output, LV_ALIGN_TOP_LEFT, TERMINAL_MARGIN, TERMINAL_MARGIN);
-  lv_textarea_set_placeholder_text(output, "Hello");
-  lv_obj_set_size(output, TERMINAL_WIDTH, OUTPUT_HEIGHT);
+  lv_obj_set_size(output, LV_PCT(100), LV_PCT(33));
 
   // Create an LVGL Text Area Widget for NSH Input
-  input = lv_textarea_create(lv_scr_act());
+  input = lv_textarea_create(col);
   lv_obj_add_style(input, &terminal_style, 0);
-  lv_obj_align(input, LV_ALIGN_TOP_LEFT, TERMINAL_MARGIN, OUTPUT_HEIGHT + 2 * TERMINAL_MARGIN);
-  lv_obj_add_event_cb(input, input_callback, LV_EVENT_ALL, kb);
-  lv_obj_set_size(input, TERMINAL_WIDTH, INPUT_HEIGHT);
+  lv_obj_set_size(input, LV_PCT(100), LV_SIZE_CONTENT);
+
+  // Create an LVGL Keyboard Widget
+  kb = lv_keyboard_create(col);
+
+  // Register the Callback Function for NSH Input
+  lv_obj_add_event_cb(input, input_callback, LV_EVENT_ALL, NULL);
 
   // Set the Keyboard to populate the NSH Input Text Area
   lv_keyboard_set_textarea(kb, input);
@@ -308,10 +320,6 @@ static void input_callback(lv_event_t *e) {
 
   // If Enter has been pressed, send the Command to NSH Input
   if (code == LV_EVENT_VALUE_CHANGED) {
-
-    // Get the Keyboard Widget from the LVGL Event
-    const lv_obj_t *kb = lv_event_get_user_data(e);
-    DEBUGASSERT(kb != NULL);
 
     // Get the Button Index of the Keyboard Button Pressed
     const uint16_t id = lv_keyboard_get_selected_btn(kb);
