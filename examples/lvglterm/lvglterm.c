@@ -405,10 +405,10 @@ static void remove_escape_codes(char *buf, int len) {
   for (int i = 0; i < len; i++) {
     // Escape Code looks like 0x1b 0x5b 0x4b
     if (buf[i] == 0x1b) {
-      // Replace the 3 bytes with spaces
-      buf[i] = ' ';
-      if (i + 1 < len) { buf[i + 1] = ' '; }
-      if (i + 2 < len) { buf[i + 2] = ' '; }
+      // Remove 3 bytes
+      for (int j = i; j + 2 < len; j++) {
+        buf[j] = buf[j + 3];
+      }
     }
   }
 }
