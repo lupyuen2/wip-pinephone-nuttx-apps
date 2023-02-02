@@ -124,26 +124,27 @@ static lv_timer_t *g_timer;
  * Private Functions
  ****************************************************************************/
 
-// Create an LVGL Terminal that will let us interact with NuttX NSH Shell
+// Create an LVGL Terminal that will let us interact with NSH Shell
 static int create_terminal(void)
 {
   int ret;
-  static uint32_t user_data = 0;  // TODO
 
-  /* Create the pipes for NSH Shell */
+  /* Create the pipes for NSH Shell: stdin, stdout and stderr */
 
   ret = pipe(g_nsh_stdin);
   if (ret < 0)
     {
-      _err("stdin pipe failed: %d\n", errno);  
+      _err("stdin pipe failed: %d\n", errno);
       return ERROR;
     }
+
   ret = pipe(g_nsh_stdout);
   if (ret < 0)
-    { 
+    {
       _err("stdout pipe failed: %d\n", errno);
-      return ERROR; 
+      return ERROR;
     }
+
   ret = pipe(g_nsh_stderr);
   if (ret < 0)
     {
@@ -180,8 +181,8 @@ static int create_terminal(void)
   /* Create an LVGL Timer to poll for output from NSH Shell */
 
   g_timer = lv_timer_create(timer_callback,  /* Callback Function */
-                          TIMER_PERIOD,    /* Timer Period (Milliseconds) */
-                          &user_data);     /* Callback Data */
+                            TIMER_PERIOD,    /* Timer Period (millisec) */
+                            NULL);           /* Callback Argument */
   DEBUGASSERT(g_timer != NULL);
 
   /* Create the LVGL Terminal Widgets */
@@ -287,6 +288,7 @@ static int create_widgets(void)
   lv_obj_add_event_cb(input, input_callback, LV_EVENT_ALL, NULL);
 
   /* Set the Keyboard to populate the NSH Input Text Area */
+
   lv_keyboard_set_textarea(kb, input);
 
   return OK;
@@ -312,7 +314,10 @@ static void input_callback(lv_event_t *e)
       /* Get the Text of the Keyboard Button */
 
       const char *key = lv_keyboard_get_btn_text(kb, id);
-      if (key == NULL) { return; }
+      if (key == NULL)
+        {
+          return;
+        }
 
       /* If Key Pressed is Enter, send the Command to NSH stdin */
 
@@ -323,16 +328,15 @@ static void input_callback(lv_event_t *e)
           const char *cmd;
           DEBUGASSERT(input != NULL);
           cmd = lv_textarea_get_text(input);
-          if (cmd == NULL || cmd[0] == 0) { return; }
+          if (cmd == NULL || cmd[0] == 0)
+            {
+              return;
+            }
 
           /* Send the Command to NSH stdin */
 
           DEBUGASSERT(g_nsh_stdin[WRITE_PIPE] != 0);
-          ret = write(
-            g_nsh_stdin[WRITE_PIPE],
-            cmd,
-            strlen(cmd)
-          );
+          ret = write(g_nsh_stdin[WRITE_PIPE], cmd, strlen(cmd));
           DEBUGASSERT(ret == strlen(cmd));
 
           /* Erase the NSH Input */
@@ -352,22 +356,20 @@ static bool has_input(int fd)
   struct pollfd fdp;
   fdp.fd = fd;
   fdp.events = POLLIN;
-  ret = poll(
-    &fdp,  /* File Descriptors */
-    1,     /* Number of File Descriptors */
-    0      /* Poll Timeout (Milliseconds) */
-  );
+  ret = poll(&fdp,  /* File Descriptors */
+             1,     /* Number of File Descriptors */
+             0);    /* Poll Timeout (Milliseconds) */
 
   if (ret > 0)
     {
       /* If Poll is OK and there is Input */
 
       if ((fdp.revents & POLLIN) != 0)
-      {
-        /* Report that there's Input */
+        {
+          /* Report that there's Input */
 
-        return true;
-      }
+          return true;
+        }
 
       /* Else report No Input */
 
@@ -389,7 +391,7 @@ static bool has_input(int fd)
 
   /* Never comes here */
 
-  DEBUGASSERT(false);
+  DEBUGPANIC();
   return false;
 }
 
