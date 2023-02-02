@@ -86,10 +86,10 @@
  * Private Function Prototypes
  ****************************************************************************/
 
-static bool has_input(int fd);
-static void timer_callback(lv_timer_t * timer);
 static int create_widgets(void);
+static void timer_callback(lv_timer_t * timer);
 static void input_callback(lv_event_t * e);
+static bool has_input(int fd);
 static void remove_escape_codes(char *buf, int len);
 
 /****************************************************************************
@@ -127,7 +127,21 @@ static lv_timer_t *g_timer;
  * Private Functions
  ****************************************************************************/
 
-// Create an LVGL Terminal that will let us interact with NSH Shell
+/****************************************************************************
+ * Name: create_terminal
+ *
+ * Description:
+ *   Create the LVGL Terminal. Start the NSH Shell and redirect the NSH
+ *   stdin, stdout and stderr to the LVGL Widgets.
+ *
+ * Input Parameters:
+ *   None
+ *
+ * Returned Value:
+ *   Zero (OK) on success; a negated errno value is returned on any failure.
+ *
+ ****************************************************************************/
+
 static int create_terminal(void)
 {
   int ret;
@@ -167,7 +181,7 @@ static int create_terminal(void)
   dup2(g_nsh_stdout[WRITE_PIPE], 1);
   dup2(g_nsh_stderr[WRITE_PIPE], 2);
 
-  /* Start the NSH Shell and inherit the pipes */
+  /* Start the NSH Shell and inherit stdin, stdout and stderr */
 
   pid_t pid = task_create("NSH Console",
                           CONFIG_EXAMPLES_LVGLTERM_PRIORITY,
@@ -199,57 +213,20 @@ static int create_terminal(void)
   return OK;
 }
 
-// Callback Function for LVGL Timer.
-static void timer_callback(lv_timer_t *timer)
-{
-  int ret;
-  static char buf[64];
+/****************************************************************************
+ * Name: create_widgets
+ *
+ * Description:
+ *   Create the LVGL Widgets for LVGL Terminal.
+ *
+ * Input Parameters:
+ *   None
+ *
+ * Returned Value:
+ *   Zero (OK) on success; a negated errno value is returned on any failure.
+ *
+ ****************************************************************************/
 
-  DEBUGASSERT(g_nsh_stdout[READ_PIPE] != 0);
-  DEBUGASSERT(g_nsh_stderr[READ_PIPE] != 0);
-
-  /* Poll NSH stdout to check if there's output to be processed */
-
-  if (has_input(g_nsh_stdout[READ_PIPE]))
-    {
-      /* Read the output from NSH stdout */
-
-      ret = read(g_nsh_stdout[READ_PIPE], buf, sizeof(buf) - 1);
-
-      /* Add to NSH Output Text Area */
-
-      if (ret > 0)
-        {
-          buf[ret] = 0;
-          remove_escape_codes(buf, ret);
-
-          DEBUGASSERT(g_output != NULL);
-          lv_textarea_add_text(g_output, buf);
-        }
-    }
-
-  /* Poll NSH stderr to check if there's output to be processed */
-
-  if (has_input(g_nsh_stderr[READ_PIPE]))
-    {
-      /* Read the output from NSH stderr */
-
-      ret = read(g_nsh_stderr[READ_PIPE], buf, sizeof(buf) - 1);
-
-      /* Add to NSH Output Text Area */
-
-      if (ret > 0)
-        {
-          buf[ret] = 0;
-          remove_escape_codes(buf, ret);
-
-          DEBUGASSERT(g_output != NULL);
-          lv_textarea_add_text(g_output, buf);
-        }
-    }
-}
-
-// Create the LVGL Widgets for the LVGL Terminal
 static int create_widgets(void)
 {
   /* Set the Font Style for NSH Input and Output to a Monospaced Font */
@@ -297,7 +274,83 @@ static int create_widgets(void)
   return OK;
 }
 
-// Callback Function for NSH Input Text Area.
+/****************************************************************************
+ * Name: timer_callback
+ *
+ * Description:
+ *   Callback Function for LVGL Timer. Poll NSH stdout and stderr for output
+ *   and display the output.
+ *
+ * Input Parameters:
+ *   timer - LVGL Timer for the callback
+ *
+ * Returned Value:
+ *   None
+ *
+ ****************************************************************************/
+
+static void timer_callback(lv_timer_t *timer)
+{
+  int ret;
+  static char buf[64];
+
+  DEBUGASSERT(g_nsh_stdout[READ_PIPE] != 0);
+  DEBUGASSERT(g_nsh_stderr[READ_PIPE] != 0);
+
+  /* Poll NSH stdout to check if there's output to be processed */
+
+  if (has_input(g_nsh_stdout[READ_PIPE]))
+    {
+      /* Read the output from NSH stdout */
+
+      ret = read(g_nsh_stdout[READ_PIPE], buf, sizeof(buf) - 1);
+      if (ret > 0)
+        {
+          /* Add to NSH Output Text Area */
+
+          buf[ret] = 0;
+          remove_escape_codes(buf, ret);
+
+          DEBUGASSERT(g_output != NULL);
+          lv_textarea_add_text(g_output, buf);
+        }
+    }
+
+  /* Poll NSH stderr to check if there's output to be processed */
+
+  if (has_input(g_nsh_stderr[READ_PIPE]))
+    {
+      /* Read the output from NSH stderr */
+
+      ret = read(g_nsh_stderr[READ_PIPE], buf, sizeof(buf) - 1);
+      if (ret > 0)
+        {
+          /* Add to NSH Output Text Area */
+
+          buf[ret] = 0;
+          remove_escape_codes(buf, ret);
+
+          DEBUGASSERT(g_output != NULL);
+          lv_textarea_add_text(g_output, buf);
+        }
+    }
+}
+
+/****************************************************************************
+ * Name: input_callback
+ *
+ * Description:
+ *   Callback Function for NSH Input Text Area. If Enter Key was pressed,
+ *   send the NSH Input Command to NSH stdin.
+ *
+ * Input Parameters:
+ *   e - LVGL Event for the callback
+ *
+ * Returned Value:
+ *   None
+ *
+ ****************************************************************************/
+
 static void input_callback(lv_event_t *e)
 {
   int ret;
@@ -349,12 +402,25 @@ static void input_callback(lv_event_t *e)
     }
 }
 
-// Return true if the File Descriptor has data to be read
+/****************************************************************************
+ * Name: has_input
+ *
+ * Description:
+ *   Return true if the File Descriptor has data to be read.
+ *
+ * Input Parameters:
+ *   fd - File Descriptor to be checked
+ *
+ * Returned Value:
+ *   True if File Descriptor has data to be read; False otherwise
+ *
+ ****************************************************************************/
+
 static bool has_input(int fd)
 {
   int ret;
 
-  /* Poll the File Descriptor for Input */
+  /* Poll the File Descriptor for input */
 
   struct pollfd fdp;
   fdp.fd = fd;
@@ -365,28 +431,28 @@ static bool has_input(int fd)
 
   if (ret > 0)
     {
-      /* If Poll is OK and there is Input */
+      /* If poll is OK and there is input */
 
       if ((fdp.revents & POLLIN) != 0)
         {
-          /* Report that there's Input */
+          /* Report that there is input */
 
           return true;
         }
 
-      /* Else report No Input */
+      /* Else report no input */
 
       return false;
     }
   else if (ret == 0)
     {
-      /* If Timeout, report No Input */
+      /* If timeout, report no input */
 
       return false;
     }
   else if (ret < 0)
     {
-      /* Handle Error */
+      /* Handle error */
 
       _err("poll failed: %d, fd=%d\n", ret, fd);
       return false;
@@ -398,7 +464,21 @@ static bool has_input(int fd)
   return false;
 }
 
-// Remove Escape Codes from the string. Assumes that buf[len] is 0.
+/****************************************************************************
+ * Name: remove_escape_codes
+ *
+ * Description:
+ *   Remove ANSI Escape Codes from the string. Assumes that buf[len] is 0.
+ *
+ * Input Parameters:
+ *   buf - String to be processed
+ *   len - Length of string
+ *
+ * Returned Value:
+ *   None
+ *
+ ****************************************************************************/
+
 static void remove_escape_codes(char *buf, int len)
 {
   int i;
@@ -428,7 +508,9 @@ static void remove_escape_codes(char *buf, int len)
  * Name: main or lvglterm_main
  *
  * Description:
- *   Create an LVGL Terminal that will let us interact with NSH Shell.
+ *   Start an LVGL Terminal that runs interactive commands with NSH Shell.
+ *   NSH Commands are entered through an LVGL Keyboard. NSH Output is
+ *   rendered in an LVGL Widget.
  *
  * Input Parameters:
  *   Standard argc and argv
