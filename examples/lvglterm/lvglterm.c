@@ -63,7 +63,7 @@
 
 /* How often to poll for output from NSH Shell (milliseconds) */
 
-#define TIMER_PERIOD 100
+#define TIMER_PERIOD_MS 100
 
 /* Read and Write Pipes for NSH stdin, stdout and stderr */
 
@@ -101,20 +101,20 @@ static int g_nsh_stderr[2];
 
 /* LVGL Column Container for NSH Widgets */
 
-static lv_obj_t *col;
+static lv_obj_t *g_col;
 
 /* LVGL Text Area Widgets for NSH Input and Output */
 
-static lv_obj_t *input;
-static lv_obj_t *output;
+static lv_obj_t *g_input;
+static lv_obj_t *g_output;
 
 /* LVGL Keyboard Widget for NSH Terminal */
 
-static lv_obj_t *kb;
+static lv_obj_t *g_kb;
 
 /* LVGL Font Style for NSH Input and Output */
 
-static lv_style_t terminal_style;
+static lv_style_t g_terminal_style;
 
 /* LVGL Timer for polling NSH Output */
 
@@ -181,7 +181,7 @@ static int create_terminal(void)
   /* Create an LVGL Timer to poll for output from NSH Shell */
 
   g_timer = lv_timer_create(timer_callback,  /* Callback Function */
-                            TIMER_PERIOD,    /* Timer Period (millisec) */
+                            TIMER_PERIOD_MS, /* Timer Period (millisec) */
                             NULL);           /* Callback Argument */
   DEBUGASSERT(g_timer != NULL);
 
@@ -220,8 +220,8 @@ static void timer_callback(lv_timer_t *timer)
           buf[ret] = 0;
           remove_escape_codes(buf, ret);
 
-          DEBUGASSERT(output != NULL);
-          lv_textarea_add_text(output, buf);
+          DEBUGASSERT(g_output != NULL);
+          lv_textarea_add_text(g_output, buf);
         }
     }
 
@@ -240,8 +240,8 @@ static void timer_callback(lv_timer_t *timer)
           buf[ret] = 0;
           remove_escape_codes(buf, ret);
 
-          DEBUGASSERT(output != NULL);
-          lv_textarea_add_text(output, buf);
+          DEBUGASSERT(g_output != NULL);
+          lv_textarea_add_text(g_output, buf);
         }
     }
 }
@@ -251,45 +251,45 @@ static int create_widgets(void)
 {
   /* Set the Font Style for NSH Input and Output to a Monospaced Font */
 
-  lv_style_init(&terminal_style);
-  lv_style_set_text_font(&terminal_style, &lv_font_unscii_16);
+  lv_style_init(&g_terminal_style);
+  lv_style_set_text_font(&g_terminal_style, &lv_font_unscii_16);
 
   /* Create an LVGL Container with Column Flex Direction */
 
-  col = lv_obj_create(lv_scr_act());
-  DEBUGASSERT(col != NULL);
-  lv_obj_set_size(col, LV_PCT(100), LV_PCT(100));
-  lv_obj_set_flex_flow(col, LV_FLEX_FLOW_COLUMN);
-  lv_obj_set_style_pad_all(col, 0, 0);  /* No padding */
+  g_col = lv_obj_create(lv_scr_act());
+  DEBUGASSERT(g_col != NULL);
+  lv_obj_set_size(g_col, LV_PCT(100), LV_PCT(100));
+  lv_obj_set_flex_flow(g_col, LV_FLEX_FLOW_COLUMN);
+  lv_obj_set_style_pad_all(g_col, 0, 0);  /* No padding */
 
   /* Create an LVGL Text Area Widget for NSH Output */
 
-  output = lv_textarea_create(col);
-  DEBUGASSERT(output != NULL);
-  lv_obj_add_style(output, &terminal_style, 0);
-  lv_obj_set_width(output, LV_PCT(100));
-  lv_obj_set_flex_grow(output, 1);  /* Fill the column */
+  g_output = lv_textarea_create(g_col);
+  DEBUGASSERT(g_output != NULL);
+  lv_obj_add_style(g_output, &g_terminal_style, 0);
+  lv_obj_set_width(g_output, LV_PCT(100));
+  lv_obj_set_flex_grow(g_output, 1);  /* Fill the column */
 
   /* Create an LVGL Text Area Widget for NSH Input */
 
-  input = lv_textarea_create(col);
-  DEBUGASSERT(input != NULL);
-  lv_obj_add_style(input, &terminal_style, 0);
-  lv_obj_set_size(input, LV_PCT(100), LV_SIZE_CONTENT);
+  g_input = lv_textarea_create(g_col);
+  DEBUGASSERT(g_input != NULL);
+  lv_obj_add_style(g_input, &g_terminal_style, 0);
+  lv_obj_set_size(g_input, LV_PCT(100), LV_SIZE_CONTENT);
 
   /* Create an LVGL Keyboard Widget */
 
-  kb = lv_keyboard_create(col);
-  DEBUGASSERT(kb != NULL);
-  lv_obj_set_style_pad_all(kb, 0, 0);  /* No padding */
+  g_kb = lv_keyboard_create(g_col);
+  DEBUGASSERT(g_kb != NULL);
+  lv_obj_set_style_pad_all(g_kb, 0, 0);  /* No padding */
 
   /* Register the Callback Function for NSH Input */
 
-  lv_obj_add_event_cb(input, input_callback, LV_EVENT_ALL, NULL);
+  lv_obj_add_event_cb(g_input, input_callback, LV_EVENT_ALL, NULL);
 
   /* Set the Keyboard to populate the NSH Input Text Area */
 
-  lv_keyboard_set_textarea(kb, input);
+  lv_keyboard_set_textarea(g_kb, g_input);
 
   return OK;
 }
@@ -309,11 +309,11 @@ static void input_callback(lv_event_t *e)
     {
       /* Get the Button Index of the Keyboard Button Pressed */
 
-      const uint16_t id = lv_keyboard_get_selected_btn(kb);
+      const uint16_t id = lv_keyboard_get_selected_btn(g_kb);
 
       /* Get the Text of the Keyboard Button */
 
-      const char *key = lv_keyboard_get_btn_text(kb, id);
+      const char *key = lv_keyboard_get_btn_text(g_kb, id);
       if (key == NULL)
         {
           return;
@@ -326,8 +326,8 @@ static void input_callback(lv_event_t *e)
           /* Read the NSH Input */
 
           const char *cmd;
-          DEBUGASSERT(input != NULL);
-          cmd = lv_textarea_get_text(input);
+          DEBUGASSERT(g_input != NULL);
+          cmd = lv_textarea_get_text(g_input);
           if (cmd == NULL || cmd[0] == 0)
             {
               return;
@@ -341,7 +341,7 @@ static void input_callback(lv_event_t *e)
 
           /* Erase the NSH Input */
 
-          lv_textarea_set_text(input, "");
+          lv_textarea_set_text(g_input, "");
         }
     }
 }
