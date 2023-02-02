@@ -40,6 +40,18 @@
 #include <port/lv_port.h>
 #include "nshlib/nshlib.h"
 
+/* NSH Redirection requires Pipes */
+
+#ifndef CONFIG_DEV_PIPE_SIZE
+#  error "FIFO and Named Pipe Drivers" should be enabled in menuconfig
+#endif
+
+/* NSH Output requires a Monospaced Font */
+
+#ifndef LV_FONT_UNSCII_16
+#  error LVGL Font UNSCII 16 should be enabled in menuconfig
+#endif
+
 /****************************************************************************
  * Pre-processor Definitions
  ****************************************************************************/
@@ -69,15 +81,6 @@
 
 #define READ_PIPE  0
 #define WRITE_PIPE 1
-
-#ifndef CONFIG_DEV_PIPE_SIZE
-#  error "Device Drivers > FIFO and named pipe drivers" should be enabled in menuconfig
-#endif
-
-// TODO: Configure font
-#ifndef CONFIG_LV_FONT_UNSCII_16
-#  error "LVGL configuration > Font usage > Enable built-in fonts > UNSCII 16" should be enabled in menuconfig
-#endif
 
 /****************************************************************************
  * Private Function Prototypes
