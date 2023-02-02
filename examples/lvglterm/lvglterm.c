@@ -48,7 +48,7 @@
 
 /* NSH Output requires a Monospaced Font */
 
-#ifndef LV_FONT_UNSCII_16
+#ifndef CONFIG_LV_FONT_UNSCII_16
 #  error LVGL Font UNSCII 16 should be enabled in the configuration
 #endif
 
