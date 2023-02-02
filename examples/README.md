@@ -669,6 +669,17 @@ A simple reader example for the `LSM303` acc-mag sensor.
 
 A simple reader example for the `LSM6DSL` acc-gyro sensor.
 
+## `lvglterm` Run NuttShell (NSH) as LVGL Touchscreen Application
+
+An LVGL application that executes NuttShell (NSH) commands entered with a
+Touchscreen Keyboard and displays the NSH output. Prerequisite configuration
+settings:
+
+- `CONFIG_GRAPHICS_LVGL=y`     - LVGL graphics must be enabled.
+- `CONFIG_LV_FONT_UNSCII_16=y` - LVGL font UNSCII 16 must be enabled.
+- `CONFIG_PIPES=y`             - Pipes must be enabled.
+- `CONFIG_NSH_CONSOLE=y`       – NSH must be configured to use a console.
+
 ## `media`
 
 The media test simply writes values onto the media hidden behind a character
