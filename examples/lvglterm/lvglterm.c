@@ -43,13 +43,13 @@
 /* NSH Redirection requires Pipes */
 
 #ifndef CONFIG_DEV_PIPE_SIZE
-#  error "FIFO and Named Pipe Drivers" should be enabled in menuconfig
+#  error "FIFO and Named Pipe Drivers" should be enabled in the configuration
 #endif
 
 /* NSH Output requires a Monospaced Font */
 
 #ifndef LV_FONT_UNSCII_16
-#  error LVGL Font UNSCII 16 should be enabled in menuconfig
+#  error LVGL Font UNSCII 16 should be enabled in the configuration
 #endif
 
 /****************************************************************************
