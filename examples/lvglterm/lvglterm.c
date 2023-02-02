@@ -43,7 +43,7 @@
 /* NSH Redirection requires Pipes */
 
 #ifndef CONFIG_DEV_PIPE_SIZE
-#  error "FIFO and Named Pipe Drivers" should be enabled in the configuration
+#  error FIFO and Named Pipe Drivers should be enabled in the configuration
 #endif
 
 /* NSH Output requires a Monospaced Font */
