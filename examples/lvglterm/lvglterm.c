@@ -36,9 +36,10 @@
 #include <time.h>
 #include <debug.h>
 #include <poll.h>
+#include <spawn.h>
 #include <lvgl/lvgl.h>
 #include <port/lv_port.h>
-#include "nshlib/nshlib.h"
+////#include "nshlib/nshlib.h"
 
 /* NSH Redirection requires Pipes */
 
@@ -183,17 +184,40 @@ static int create_terminal(void)
 
   /* Start the NSH Shell and inherit stdin, stdout and stderr */
 
+#ifdef NOTUSED
   pid_t pid = task_create("NSH Console",
                           CONFIG_EXAMPLES_LVGLTERM_PRIORITY,
                           CONFIG_EXAMPLES_LVGLTERM_STACKSIZE,
                           nsh_consolemain,
                           NULL);
+
   if (pid < 0)
     {
       int errcode = errno;
       _err("task_create failed: %d\n", errcode);
       return -errcode;
     }
+
+#else
+  char * const argv[] = { NULL };
+  pid_t pid;
+  ret = posix_spawn(
+    &pid, 
+    "nsh",
+    NULL, // file_actions
+    NULL, // attr
+    argv, 
+    NULL // envp
+  );
+  _info("posix_spawn: ret=%d, pid=%d\n", ret, pid);
+
+  if (ret < 0)
+    {
+      int errcode = errno;
+      _err("posix_spawn failed: %d\n", errcode);
+      return -errcode;
+    }
+#endif
 
   /* Create an LVGL Timer to poll for output from NSH Shell */
 
