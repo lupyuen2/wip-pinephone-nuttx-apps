@@ -40,6 +40,12 @@
 #include <lvgl/lvgl.h>
 #include <port/lv_port.h>
 
+/* NSH Task requires posix_spawn() */
+
+#ifndef CONFIG_LIBC_EXECFUNCS
+#  error posix_spawn() should be enabled in the configuration
+#endif
+
 /* NSH Redirection requires Pipes */
 
 #ifndef CONFIG_DEV_PIPE_SIZE
