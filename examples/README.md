@@ -677,6 +677,7 @@ settings:
 
 - `CONFIG_GRAPHICS_LVGL=y`     - LVGL graphics must be enabled.
 - `CONFIG_LV_FONT_UNSCII_16=y` - LVGL font UNSCII 16 must be enabled.
+- `CONFIG_LIBC_EXECFUNCS=y`    - posix_spawn() must be enabled.
 - `CONFIG_PIPES=y`             - Pipes must be enabled.
 - `CONFIG_NSH_CONSOLE=y`       – NSH must be configured to use a console.
 
