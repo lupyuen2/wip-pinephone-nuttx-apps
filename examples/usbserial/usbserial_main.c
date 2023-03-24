@@ -38,7 +38,8 @@
 #include <nuttx/usb/usbdev.h>
 #include <nuttx/usb/usbdev_trace.h>
 
-#ifdef CONFIG_CDCACM
+////#ifdef CONFIG_CDCACM
+#ifdef CONFIG_USBHOST_CDCACM //// TODO
 #  include <nuttx/usb/cdcacm.h>
 #endif
 
@@ -199,7 +200,8 @@ int main(int argc, FAR char *argv[])
 
   printf("usbserial_main: Registering USB serial driver\n");
 
-#ifdef CONFIG_CDCACM
+////#ifdef CONFIG_CDCACM
+#ifdef CONFIG_USBHOST_CDCACM //// TODO
 
   ctrl.usbdev   = BOARDIOC_USBDEV_CDCACM;
   ctrl.action   = BOARDIOC_USBDEV_CONNECT;
