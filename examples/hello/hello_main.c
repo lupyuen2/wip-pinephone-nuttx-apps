@@ -73,7 +73,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Thu Apr 20 07:36:44 2023
+Script started on Thu Apr 20 07:50:07 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;66r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -101,7 +101,7 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347111 bytes read in 19 ms (17.4 MiB/s)
+346986 bytes read in 19 ms (17.4 MiB/s)
 Uncompressed size: 10514432 = 0xA07000
 36162 bytes read in 5 ms (6.9 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
@@ -115,14 +115,9 @@ Starting kernel ...
 a64_pio_config: port=3, pin=18, ext=-1, cfgaddr=0x1c20874, value=1, shift=8
 a64_pio_config: port=3, pin=19, ext=-1, cfgaddr=0x1c20874, value=1, shift=12
 a64_pio_config: port=3, pin=20, ext=-1, cfgaddr=0x1c20874, value=1, shift=16
-up_setup: baud_rate=115200
-up_setup: Clear fifos
-up_setup: Set trigger
-up_setup: Set up the IER
-up_setup: Enter DLAB=1 and set BAUD divisor
 up_setup: Clear DLAB
 up_setup: addr=0x1c28004, before=0x0, after=0x0
-up_setup: addr=0x1c28000, before=0x0, after=0x0
+up_setup: addr=0x1c28000, before=0xd, after=0xd
 up_setup: Configure the FIFOs
 arm64_serialinit: Enable clocking to UART3: Set UART3_GATING to High (Pass): addr=0x1c2006c, before=0x0, after=0x80000
 arm64_serialinit: Compare with UART0_GATING: addr=0x1c2006c, val=0x10000
@@ -209,11 +204,6 @@ nsh: mkfatfs: command not found
 
 NuttShell (NSH) NuttX-12.0.3
 nsh> [Khello
-up_setup: baud_rate=115200
-up_setup: Clear fifos
-up_setup: Set trigger
-up_setup: Set up the IER
-up_setup: Enter DLAB=1 and set BAUD divisor
 up_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
 up_setup: addr=0x1c28c00, before=0x0, after=0xd
@@ -221,146 +211,132 @@ up_setup: Configure the FIFOs
 Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=15
-Response: nbytes=7, buf=�S(
-[be] �
-[53] S
-[28] (
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�
-[7f] 
-[9e] �
-[08] 
-[10] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf={nA
-[7b] {
-[6e] n
-[41] A
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=��
-[b6] �
-[b7] �
-[00] 
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�)[6C
-[bf] �
-[29] )
-[09]    
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�E
-[ef] �
-[45] E
-[0b] 
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�V
-[bf] �
-[56] V
-[0b] 
-[12] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�/�
-[ef] �
-[2f] /
-[8a] �
-[10] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=-I
-[2d] -
-[49] I
-[01] 
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=8, buf=[�
-[5b] [
-[a9] �
-[13] 
-[00] 
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=8, buf=�I
-[7f] 
-[9b] �
-[49] I
-[00] 
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=8, buf=��
-[ff] �
+Response: nbytes=7, buf=�~I
 [db] �
-[13] 
+[7e] ~
+[49] I
+[08] 
 [00] 
 [00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=8, buf=�W
+[eb] �
+[57] W
+[05] 
+[05] 
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=[� 
+[5b] [
+[ae] �
+[20]  
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�WY
+[fb] �
+[57] W
+[59] Y
+[10] 
 [00] 
 [00] 
 [00] 
 Write command: nbytes=15
 Response: nbytes=7, buf=���
+[bb] �
+[91] �
+[81] �
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�-�
+[f5] �
+[2d] -
+[96] �
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=[8CE
+[7f] 
+[09]    
+[45] E
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=8, buf=�[R
+[fb] �
+[5b] [
+[52] R
+[08] 
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�gM
+[db] �
+[67] g
+[4d] M
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�T
+[ad] �
+[54] T
+[03] 
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�k
+[db] �
+[6b] k
+[10] 
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=����
 [ff] �
-[bf] �
-[9a] �
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=��X
-[fa] �
-[d1] �
-[58] X
-[00] 
+[bb] �
+[93] �
+[82] �
 [00] 
 [00] 
 [00] 
 Write command: nbytes=15
-Response: nbytes=8, buf=]��
-[5d] ]
-[a5] �
-[84] �
+Response: nbytes=7, buf=�[7C
+[fb] �
+[ad] �
+[09]    
+[01] 
 [00] 
 [00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[b3] �
+[02] 
 [00] 
 [00] 
 [00] 
 Write command: nbytes=15
 
-Script done on Thu Apr 20 07:37:12 2023
+Script done on Thu Apr 20 07:50:31 2023
 
 */
