@@ -73,7 +73,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Thu Apr 20 07:50:07 2023
+Script started on Fri Apr 21 09:18:26 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;66r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -101,10 +101,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-346986 bytes read in 19 ms (17.4 MiB/s)
+347001 bytes read in 19 ms (17.4 MiB/s)
 Uncompressed size: 10514432 = 0xA07000
-36162 bytes read in 5 ms (6.9 MiB/s)
-1078500 bytes read in 50 ms (20.6 MiB/s)
+36162 bytes read in 4 ms (8.6 MiB/s)
+1078500 bytes read in 51 ms (20.2 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -211,132 +211,423 @@ up_setup: Configure the FIFOs
 Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=15
-Response: nbytes=7, buf=�~I
-[db] �
-[7e] ~
-[49] I
-[08] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=8, buf=�W
-[eb] �
-[57] W
-[05] 
-[05] 
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=6, buf=[� 
-[5b] [
-[ae] �
-[20]  
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�WY
-[fb] �
-[57] W
-[59] Y
-[10] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
 Response: nbytes=7, buf=���
-[bb] �
-[91] �
+[bf] �
+[eb] �
+[1d] 
 [81] �
 [00] 
 [00] 
 [00] 
-[00] 
 Write command: nbytes=15
-Response: nbytes=7, buf=�-�
-[f5] �
-[2d] -
-[96] �
-[00] 
-[00] 
-[00] 
-[00] 
+Response: nbytes=4, buf=d���
+[64] d
+[82] �
+[90] �
+[ff] �
 Write command: nbytes=15
-Response: nbytes=7, buf=[8CE
-[7f] 
-[09]    
-[45] E
-[00] 
-[00] 
-[00] 
-[00] 
+Response: nbytes=5, buf=?���
+[3f] ?
+[d5] �
+[1a] 
+[c2] �
+[fe] �
 Write command: nbytes=15
-Response: nbytes=8, buf=�[R
-[fb] �
-[5b] [
+Response: nbytes=1, buf=�
+[ed] �
+Write command: nbytes=15
+Response: nbytes=8, buf=�YQR
+[bb] �
+[59] Y
+[51] Q
 [52] R
+[00] 
+[00] 
+[00] 
+[f1] �
+Write command: nbytes=15
+Response: nbytes=6, buf=�A
+[ae] �
+[14] 
+[41] A
+[08] 
+[01] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=1, buf=�
+[ff] �
+Write command: nbytes=15
+Response: nbytes=1, buf=�
+[ff] �
+Write command: nbytes=15
+Response: nbytes=2, buf=��
+[ff] �
+[fb] �
+Write command: nbytes=15
+Response: nbytes=7, buf=�oR�
+[ef] �
+[6f] o
+[52] R
+[82] �
+[02] 
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=8, buf=�ME
+[d7] �
+[4d] M
+[45] E
+[01] 
+[00] 
+[00] 
+[00] 
+[ff] �
+Write command: nbytes=15
+Response: nbytes=8, buf=��!*
+[db] �
+[fb] �
+[21] !
+[2a] *
+[08] 
+[00] 
+[00] 
+[f8] �
+Write command: nbytes=15
+Response: nbytes=7, buf=���
+[ff] �
+[95] �
+[81] �
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�I�
+[9f] �
+[49] I
+[93] �
+[02] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�
+[7f] 
+[16] 
+[12] 
+[92] �
+[00] 
+[82] �
+Write command: nbytes=15
+Response: nbytes=7, buf=��Ӊ
+[db] �
+[eb] �
+[d3] �
+[89] �
+[00] 
+[00] 
+[d0] �
+Write command: nbytes=15
+Response: nbytes=6, buf=_�
+[5f] _
+[10] 
+[80] �
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�m�@
+[ff] �
+[6d] m
+[c5] �
+[40] @
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=��
+[b6] �
+[d4] �
+[04] 
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�
+[ef] �
+[1d] 
 [08] 
 [00] 
 [00] 
 [00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�gM
-[db] �
-[67] g
-[4d] M
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�T
-[ad] �
-[54] T
-[03] 
-[01] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=�k
-[db] �
-[6b] k
-[10] 
-[00] 
-[00] 
-[00] 
-[00] 
-Write command: nbytes=15
-Response: nbytes=7, buf=����
 [ff] �
-[bb] �
-[93] �
-[82] �
+Write command: nbytes=15
+Response: nbytes=6, buf=.�]
+[2e] .
+[96] �
+[5d] ]
 [00] 
 [00] 
 [00] 
 Write command: nbytes=15
-Response: nbytes=7, buf=�[7C
-[fb] �
-[ad] �
-[09]    
-[01] 
+Response: nbytes=6, buf=��
+[b7] �
+[94] �
+[00] 
 [00] 
 [00] 
 [00] 
 Write command: nbytes=15
-Response: nbytes=5, buf=�
-[b3] �
+Response: nbytes=7, buf=uV
+[75] u
+[56] V
+[04] 
 [02] 
 [00] 
 [00] 
 [00] 
 Write command: nbytes=15
+Response: nbytes=7, buf=�ג 
+[dd] �
+[d7] �
+[92] �
+[20]  
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=m�M
+[6d] m
+[a7] �
+[4d] M
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�[E
+[bf] �
+[5b] [
+[45] E
+[10] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=}ӂ
+[7d] }
+[d3] �
+[82] �
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�We
+[fb] �
+[57] W
+[65] e
+[11] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�&�[6C
+[bf] �
+[26] &
+[89] �
+[08] 
+[09]    
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�R�
+[ae] �
+[52] R
+[82] �
+[00] 
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��J
+[df] �
+[c9] �
+[4a] J
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=/h�
+[2f] /
+[68] h
+[8a] �
+[12] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=w�
+[77] w
+[a2] �
+[12] 
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=��$
+[b6] �
+[9a] �
+[24] $
+[10] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=��K
+[b5] �
+[94] �
+[4b] K
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=��ׁ
+[fb] �
+[97] �
+[d7] �
+[81] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=-�
+[2d] -
+[d1] �
+[01] 
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=߫�B
+[df] �
+[ab] �
+[8b] �
+[42] B
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�V)
+[be] �
+[56] V
+[29] )
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�7
+[97] �
+[37] 7
+[13] 
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=�UI
+[bf] �
+[55] U
+[49] I
+[12] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=߿4�
+[df] �
+[bf] �
+[34] 4
+[82] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�e
+[ef] �
+[65] e
+[02] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�Y�
+[d7] �
+[59] Y
+[8a] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=���
+[bd] �
+[db] �
+[d3] �
+[10] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�Q
+[b9] �
+[51] Q
+[01] 
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+[b5] �
+[b4] �
+[10] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=ߋB
+[df] �
+[8b] �
+[10] 
+[42] B
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=U)
+[55] U
+[29] )
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+[b5] �
+[b4] �
+[12] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=7, buf=uK!
+[75] u
+[4b] K
+[21] !
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
 
-Script done on Thu Apr 20 07:50:31 2023
+Script done on Fri Apr 21 09:19:17 2023
 
 */
