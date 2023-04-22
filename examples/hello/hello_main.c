@@ -73,7 +73,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Sat Apr 22 15:25:50 2023
+Script started on Sat Apr 22 16:57:40 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;66r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -101,9 +101,9 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347042 bytes read in 20 ms (16.5 MiB/s)
+347012 bytes read in 20 ms (16.5 MiB/s)
 Uncompressed size: 10514432 = 0xA07000
-36162 bytes read in 5 ms (6.9 MiB/s)
+36162 bytes read in 4 ms (8.6 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
@@ -164,13 +164,13 @@ pmic_clrsetbits: reg=0x10, clr_mask=0x0, set_mask=0x1
 a64_rsb_read: rt_addr=0x2d, reg_addr=0x10
 a64_rsb_write: rt_addr=0x2d, reg_addr=0x10, value=0x37
 pinephone_modem_init: Status=0
-pinephone_modem_init: Wait 1000 ms
+pinephone_modem_init: Wait 2000 ms
 pinephone_modem_init: Status=0
 pinephone_modem_init: Configure PWR_BAT (PL7) for Output
 a64_pio_config: port=8, pin=7, ext=-1, cfgaddr=0x1f02c00, value=1, shift=28
-pinephone_modem_init: TESTING: Set PWR_BAT (PL7) to Low
+pinephone_modem_init: Set PWR_BAT (PL7) to High
 pinephone_modem_init: Status=1
-pinephone_modem_init: Wait 1000 ms
+pinephone_modem_init: Wait 2000 ms
 pinephone_modem_init: Status=1
 pinephone_modem_init: Configure RESET_N (PC4) for Output
 a64_pio_config: port=2, pin=4, ext=-1, cfgaddr=0x1c20848, value=1, shift=16
@@ -184,11 +184,11 @@ pinephone_modem_init: Configure PWRKEY (PB3) for Output
 a64_pio_config: port=1, pin=3, ext=0, cfgaddr=0x1c20824, value=1, shift=12
 pinephone_modem_init: Set PWRKEY (PB3) to High
 pinephone_modem_init: Status=1
-pinephone_modem_init: Wait 30 ms for VBAT to be stable
+pinephone_modem_init: Wait 2000 ms for VBAT to be stable
 pinephone_modem_init: Status=1
 pinephone_modem_init: Set PWRKEY (PB3) to Low
 pinephone_modem_init: Status=1
-pinephone_modem_init: Wait 500 ms
+pinephone_modem_init: Wait 2000 ms
 pinephone_modem_init: Status=1
 pinephone_modem_init: Set PWRKEY (PB3) to High
 pinephone_modem_init: Status=1
@@ -197,11 +197,11 @@ a64_pio_config: port=7, pin=8, ext=2, cfgaddr=0x1c20900, value=1, shift=0
 pinephone_modem_init: Set W_DISABLE (PH8) to High
 pinephone_modem_init: Status=1
 a64_pio_config: port=3, pin=5, ext=-1, cfgaddr=0x1c2086c, value=0, shift=20
-pinephone_modem_init: CTS=0
+pinephone_modem_init: CTS=1
 pinephone_modem_init: Configure RTS (PD4) for Output
 a64_pio_config: port=3, pin=4, ext=-1, cfgaddr=0x1c2086c, value=1, shift=16
 pinephone_modem_init: Set RTS (PD4) to Low
-pinephone_modem_init: CTS=0
+pinephone_modem_init: CTS=1
 pinephone_modem_init: Status=1
 nsh: mkfatfs: command not found
 
@@ -214,7 +214,1357 @@ up_setup: Configure the FIFOs
 Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=15
+Response: nbytes=6, buf==֕�
+[d6] �
+[95] �
+[95] �
+[00] 
+[12] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�6Q
+[bb] �
+[36] 6
+[51] Q
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=﫫
+[ef] �
+[ab] �
+[ab] �
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�
+[ae] �
+[14] 
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��S
+[df] �
+[d7] �
+[53] S
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=5
+[7f] 
+[35] 5
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�
+[cb] �
+[0b] 
+[02] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=����
+[ff] �
+[9a] �
+[92] �
+[82] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�UE
+[b6] �
+[55] U
+[45] E
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�
+[e9] �
+[1a] 
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=WQ
+[57] W
+[51] Q
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�V
+[df] �
+[56] V
+[08] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=ߔ
+[df] �
+[94] �
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[fb] �
+[16] 
+[08] 
+[08] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=/)I@
+[2f] /
+[29] )
+[49] I
+[40] @
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+[ab] �
+[84] �
+[04] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=o"
+[6f] o
+[22] "
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=k� 
+[6b] k
+[a6] �
+[20]  
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=7[7C
+[37] 7
+[15] 
+[09]    
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=� 
+[fb] �
+[b6] �
+[20]  
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�
+[fb] �
+[9b] �
+[95] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�+
+[ff] �
+[2b] +
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=_)
+[5f] _
+[29] )
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�
+[b6] �
+[12] 
+[12] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+[bf] �
+[9a] �
+[12] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=ߋ
+[df] �
+[8b] �
+[12] 
+[00] 
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=$A
+[24] $
+[41] A
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=]�
+[5d] ]
+[94] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�
+[bf] �
+[0b] 
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[af] �
+[94] �
+[04] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+�
+[b2] �
+[0a] 
 
-Script done on Sat Apr 22 15:26:19 2023
+[92] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�ב
+[df] �
+[d7] �
+[91] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�n
+[db] �
+[6e] n
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+
+[bf] �
+[81] �
+[0a] 
+
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�S�
+[d3] �
+[53] S
+[82] �
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[fa] �
+[02] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�"
+[d7] �
+[22] "
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=���
+[bf] �
+[bb] �
+[85] �
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[a2] �
+[02] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�"�
+[bf] �
+[22] "
+[82] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=_�
+[5f] _
+[83] �
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�R@
+[bf] �
+[52] R
+[04] 
+[40] @
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��S
+[df] �
+[d7] �
+[53] S
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�[7C
+[b6] �
+[04] 
+[09]    
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��K[5C
+[ff] �
+[d9] �
+[4b] K
+[09]    
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=���
+[be] �
+[8a] �
+[80] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��[6C
+[ff] �
+[ab] �
+[09]    
+[01] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=���
+[9a] �
+[93] �
+[82] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[94] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�:�
+[df] �
+[3a] :
+[01] 
+[80] �
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�ߒ
+[db] �
+[df] �
+[92] �
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[96] �
+[08] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[cb] �
+[12] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=v2
+[76] v
+[32] 2
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[da] �
+[12] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�(
+[d3] �
+[28] (
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+[7f] 
+[fb] �
+[da] �
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�"
+[bb] �
+[22] "
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=)I
+[29] )
+[49] I
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=K 
+[7f] 
+[4b] K
+[20]  
+[04] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�K
+[d7] �
+[4b] K
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=A
+[16] 
+[41] A
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=R
+[52] R
+[04] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=� 
+[b2] �
+[20]  
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+[7f] 
+[bb] �
+[82] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=��
+[b6] �
+[92] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=��
+[b6] �
+[13] 
+[81] �
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[b7] �
+[00] 
+[20]  
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf==ۚ
+[db] �
+[9a] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=nA
+[6e] n
+[41] A
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=k�
+[6b] k
+[b4] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[ef] �
+[aa] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�[H
+[db] �
+[5b] [
+[48] H
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=כ�
+[d7] �
+[9b] �
+[11] 
+[82] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[b2] �
+[05] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+
+[fa] �
+[8a] �
+[0a] 
+
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[96] �
+[84] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[a9] �
+[11] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[95] �
+[14] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[8C
+[bb] �
+[0a] 
+
+[09]    
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=K)
+[4b] K
+[29] )
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=Z)
+[5a] Z
+[29] )
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=߉
+[df] �
+[89] �
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[fb] �
+[02] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�o[6C
+[db] �
+[6f] o
+[09]    
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�$
+[de] �
+[24] $
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=7[7C
+[37] 7
+[09]    
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[9a] �
+[02] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�G
+[ff] �
+[47] G
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[af] �
+[fb] �
+[04] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=���
+[b3] �
+[92] �
+[92] �
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�+
+[9f] �
+[2b] +
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=ךJ
+[d7] �
+[9a] �
+[4a] J
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=
+[05] 
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�Z
+[ff] �
+[5a] Z
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=Β
+[ce] �
+[92] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[d7] �
+[08] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�@
+[ff] �
+[12] 
+[40] @
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[92] �
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[96] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[b6] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=Vi
+[56] V
+[69] i
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�(
+[d6] �
+[28] (
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[d3] �
+[0b] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�B
+[d6] �
+[42] B
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[92] �
+[a5] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�I�
+[df] �
+[49] I
+[80] �
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=s
+[73] s
+[12] 
+[01] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=&
+[26] &
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=U
+[55] U
+[14] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�K�
+[df] �
+[4b] K
+[90] �
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[96] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+[bf] �
+[9b] �
+[10] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=T
+[54] T
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=c�
+[63] c
+[8b] �
+[12] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[96] �
+[0b] 
+[01] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=
+[04] 
+[08] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[b7] �
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=���
+[ff] �
+[d7] �
+[f2] �
+[82] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf="
+[22] "
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+
+[ff] �
+[ab] �
+[0a] 
+
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�$
+[bf] �
+[24] $
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=OA
+[4f] O
+[41] A
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��S
+[fb] �
+[de] �
+[53] S
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=IO
+[49] I
+[4f] O
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�V[6C
+[df] �
+[56] V
+[09]    
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=
+[16] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=wI[6C
+[77] w
+[49] I
+[09]    
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=��
+[fb] �
+[ca] �
+[12] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[9b] �
+[00] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�{)
+[ef] �
+[7b] {
+[29] )
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[92] �
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�(@
+[b6] �
+[28] (
+[40] @
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[cb] �
+[06] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[9b] �
+[08] 
+[01] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=v
+[76] v
+[00] 
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[93] �
+[02] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�(
+[fb] �
+[b6] �
+[28] (
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=}�
+[7d] }
+[dd] �
+[13] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=��
+[b2] �
+[80] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[aa] �
+[12] 
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=[�
+
+[5b] [
+[99] �
+[0a] 
+
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[9f] �
+[08] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=%
+[25] %
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=I
+[49] I
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[b2] �
+[88] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[ff] �
+[0e] 
+[06] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=?
+[3f] ?
+[11] 
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=
+[7f] 
+[0d] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[e7] �
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=~�
+[7e] ~
+[92] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[fe] �
+[f0] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=e[7C
+[65] e
+[09]    
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[9b] �
+[97] �
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�2
+[96] �
+[32] 2
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=2
+[32] 2
+[04] 
+[02] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[ae] �
+[06] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[ff] �
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[1b] 
+[92] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[ff] �
+[96] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[be] �
+[97] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[81] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[b6] �
+[0e] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=
+[05] 
+[18] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�R
+[fd] �
+[a3] �
+[52] R
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[fb] �
+[89] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=w��
+[77] w
+[aa] �
+[82] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=k�
+[6b] k
+[ca] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[fe] �
+[93] �
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�2
+[fb] �
+[32] 2
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�$
+[96] �
+[24] $
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[df] �
+[13] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=
+[12] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=7-A
+[37] 7
+[2d] -
+[41] A
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=
+[7f] 
+[02] 
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf={
+
+[7b] {
+[0a] 
+
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[df] �
+[12] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=��
+[9b] �
+[92] �
+[02] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=ߛ�
+[df] �
+[9b] �
+[88] �
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�7�
+[97] �
+[37] 7
+[9a] �
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[9a] �
+[16] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�
+[9b] �
+[19] 
+[02] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=4, buf=�
+[b7] �
+[05] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[9f] �
+[c6] �
+[08] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��  
+[fb] �
+[db] �
+[20]  
+[20]  
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=�\
+[ff] �
+[5c] \
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[b7] �
+[92] �
+[10] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=5, buf=��
+[ff] �
+[9b] �
+[01] 
+[00] 
+[00] 
+Write command: nbytes=15
+Response: nbytes=6, buf=�+
+[ff] �
+[2b] +
+[01] 
+[00] 
+[00] 
+[00] 
+Write command: nbytes=15
+
+Script done on Sat Apr 22 16:59:10 2023
 
 */
