@@ -73,7 +73,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Sat Apr 22 22:33:54 2023
+Script started on Sat Apr 22 22:37:02 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;66r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -101,10 +101,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347027 bytes read in 20 ms (16.5 MiB/s)
+346921 bytes read in 20 ms (16.5 MiB/s)
 Uncompressed size: 10514432 = 0xA07000
 36162 bytes read in 4 ms (8.6 MiB/s)
-1078500 bytes read in 50 ms (20.6 MiB/s)
+1078500 bytes read in 51 ms (20.2 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -156,15 +156,6 @@ a64_pio_config: port=7, pin=0, ext=2, cfgaddr=0x1c208fc, value=2, shift=0
 a64_pio_config: port=7, pin=1, ext=2, cfgaddr=0x1c208fc, value=2, shift=4
 pinephone_modem_init: Configure STATUS (PH9) for Input
 a64_pio_config: port=7, pin=9, ext=2, cfgaddr=0x1c20900, value=0, shift=4
-pinephone_modem_init: Status=0
-pinephone_pmic_usb_init: Set DCDC1 Voltage to 3.3V
-pmic_write: reg=0x20, val=0x11
-a64_rsb_write: rt_addr=0x2d, reg_addr=0x20, value=0x11
-pmic_clrsetbits: reg=0x10, clr_mask=0x0, set_mask=0x1
-a64_rsb_read: rt_addr=0x2d, reg_addr=0x10
-a64_rsb_write: rt_addr=0x2d, reg_addr=0x10, value=0x37
-pinephone_modem_init: Status=0
-pinephone_modem_init: Wait 2000 ms
 pinephone_modem_init: Status=0
 pinephone_modem_init: Configure PWR_BAT (PL7) for Output
 a64_pio_config: port=8, pin=7, ext=-1, cfgaddr=0x1f02c00, value=1, shift=28
@@ -537,12 +528,34 @@ ERROR
 [0a] 
 
 Write command: nbytes=15
-Response: nbytes=30, buf=
-+CFUN: 1
-AT
+Response: nbytes=30, buf=AT
 AT
 AT
 ERROR
+
++CFUN: 1
+
+[41] A
+[54] T
+[0a] 
+
+[41] A
+[54] T
+[0a] 
+
+[41] A
+[54] T
+[0d] 
+[0d] 
+[0a] 
+
+[45] E
+[52] R
+[52] R
+[4f] O
+[52] R
+[0d] 
+[0a] 
 
 [0d] 
 [0a] 
@@ -558,28 +571,6 @@ ERROR
 [0d] 
 [0a] 
 
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
 Write command: nbytes=15
 Response: nbytes=18, buf=AT
 AT
@@ -1533,34 +1524,40 @@ ERROR
 [0a] 
 
 Write command: nbytes=15
-Response: nbytes=41, buf=AT
+Response: nbytes=18, buf=AT
 AT
 AT
 ERROR
 
+[41] A
+[54] T
+[0a] 
+
+[41] A
+[54] T
+[0a] 
+
+[41] A
+[54] T
+[0d] 
+[0d] 
+[0a] 
+
+[45] E
+[52] R
+[52] R
+[4f] O
+[52] R
+[0d] 
+[0a] 
+
+Write command: nbytes=15
+Response: nbytes=41, buf=
 +CPIN: NOT INSERTED
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
+AT
+AT
+AT
+ERROR
 
 [0d] 
 [0a] 
@@ -1587,404 +1584,6 @@ ERROR
 [0d] 
 [0a] 
 
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0a] 
-
-[41] A
-[54] T
-[0d] 
-[0d] 
-[0a] 
-
-[45] E
-[52] R
-[52] R
-[4f] O
-[52] R
-[0d] 
-[0a] 
-
-Write command: nbytes=15
-Response: nbytes=18, buf=AT
-AT
-AT
-ERROR
-
 [41] A
 [54] T
 [0a] 
@@ -5140,7 +4739,7 @@ ERROR
 [52] R
 [4f] O
 [52] R
-[0
-Script done on Sat Apr 22 22:34:25 2023
+[
+Script done on Sat Apr 22 22:37:26 2023
 
 */
