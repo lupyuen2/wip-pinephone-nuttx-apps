@@ -57,7 +57,7 @@ int main(int argc, FAR char *argv[])
       static char buf[1024];
       nbytes = read(fd, buf, sizeof(buf) - 1);
       if (nbytes >= 0) { buf[nbytes] = 0; }
-      printf("Response: nbytes=%ld, buf=%s\n", nbytes, buf);
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
       // Wait a while
       sleep(2);
@@ -71,7 +71,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Sat Apr 22 23:13:36 2023
+Script started on Sat Apr 22 23:18:50 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;66r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -99,10 +99,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-346911 bytes read in 20 ms (16.5 MiB/s)
+346915 bytes read in 20 ms (16.5 MiB/s)
 Uncompressed size: 10514432 = 0xA07000
-36162 bytes read in 4 ms (8.6 MiB/s)
-1078500 bytes read in 51 ms (20.2 MiB/s)
+36162 bytes read in 5 ms (6.9 MiB/s)
+1078500 bytes read in 50 ms (20.6 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -203,25 +203,30 @@ up_setup: Configure the FIFOs
 Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=4
-Response: nbytes=7, buf=
+Response: nbytes=7
+
 RDY
 
 Write command: nbytes=4
-Response: nbytes=35, buf=
+Response: nbytes=35
+
 +CFUN: 1
 
 +CPIN: NOT INSERTED
 
 Write command: nbytes=4
-Response: nbytes=9, buf=AT
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=4
-Response: nbytes=9, buf=AT
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=4
-Response: nbytes=9, buf=AT
+Response: nbytes=9
+AT
 OK
 
 nsh> [Khello
@@ -232,26 +237,31 @@ up_setup: Configure the FIFOs
 Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=4
-Response: nbytes=9, buf=AT
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=4
-Response: nbytes=9, buf=AT
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=4
-Response: nbytes=9, buf=AT
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=4
-Response: nbytes=9, buf=AT
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=4
-Response: nbytes=9, buf=AT
+Response: nbytes=9
+AT
 OK
 
 nsh> [K
-Script done on Sat Apr 22 23:14:43 2023
+Script done on Sat Apr 22 23:19:41 2023
 
 */
