@@ -71,7 +71,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Sat Apr 22 23:18:50 2023
+Script started on Sun Apr 23 13:16:00 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;66r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -99,7 +99,7 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-346915 bytes read in 20 ms (16.5 MiB/s)
+346949 bytes read in 20 ms (16.5 MiB/s)
 Uncompressed size: 10514432 = 0xA07000
 36162 bytes read in 5 ms (6.9 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
@@ -192,10 +192,40 @@ a64_pio_config: port=3, pin=4, ext=-1, cfgaddr=0x1c2086c, value=1, shift=16
 pinephone_modem_init: Set RTS (PD4) to Low
 pinephone_modem_init: CTS=1
 pinephone_modem_init: Status=1
+pinephone_modem_init: Status=1
+pinephone_modem_init: Status=1
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
+pinephone_modem_init: Status=0
 nsh: mkfatfs: command not found
 
 NuttShell (NSH) NuttX-12.0.3
-nsh> [Khello
+nsh> [Khello9[K
 up_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
 up_setup: addr=0x1c28c00, before=0x0, after=0xd
@@ -203,47 +233,11 @@ up_setup: Configure the FIFOs
 Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=4
-Response: nbytes=7
-
-RDY
-
-Write command: nbytes=4
-Response: nbytes=35
-
-+CFUN: 1
-
-+CPIN: NOT INSERTED
-
-Write command: nbytes=4
-Response: nbytes=9
+Response: nbytes=3
 AT
-OK
-
 Write command: nbytes=4
-Response: nbytes=9
-AT
-OK
+Response: nbytes=6
 
-Write command: nbytes=4
-Response: nbytes=9
-AT
-OK
-
-nsh> [Khello
-up_setup: Clear DLAB
-up_setup: addr=0x1c28c04, before=0x0, after=0x0
-up_setup: addr=0x1c28c00, before=0xd, after=0xd
-up_setup: Configure the FIFOs
-Hello, World!!
-Open /dev/ttyS1: fd=3
-Write command: nbytes=4
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=4
-Response: nbytes=9
-AT
 OK
 
 Write command: nbytes=4
@@ -262,6 +256,6 @@ AT
 OK
 
 nsh> [K
-Script done on Sat Apr 22 23:19:41 2023
+Script done on Sun Apr 23 13:17:39 2023
 
 */
