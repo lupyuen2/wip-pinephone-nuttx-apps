@@ -71,7 +71,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Sun Apr 23 13:16:00 2023
+Script started on Sun Apr 23 13:23:32 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;66r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -99,10 +99,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-346949 bytes read in 20 ms (16.5 MiB/s)
+346942 bytes read in 19 ms (17.4 MiB/s)
 Uncompressed size: 10514432 = 0xA07000
-36162 bytes read in 5 ms (6.9 MiB/s)
-1078500 bytes read in 50 ms (20.6 MiB/s)
+36162 bytes read in 4 ms (8.6 MiB/s)
+1078500 bytes read in 51 ms (20.2 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -185,47 +185,20 @@ pinephone_modem_init: Configure W_DISABLE (PH8) for Output
 a64_pio_config: port=7, pin=8, ext=2, cfgaddr=0x1c20900, value=1, shift=0
 pinephone_modem_init: Set W_DISABLE (PH8) to High
 pinephone_modem_init: Status=1
+pinephone_modem_init: Status=1
+pinephone_modem_init: Status=1
+pinephone_modem_init: Status=0
 a64_pio_config: port=3, pin=5, ext=-1, cfgaddr=0x1c2086c, value=0, shift=20
 pinephone_modem_init: CTS=1
 pinephone_modem_init: Configure RTS (PD4) for Output
 a64_pio_config: port=3, pin=4, ext=-1, cfgaddr=0x1c2086c, value=1, shift=16
 pinephone_modem_init: Set RTS (PD4) to Low
 pinephone_modem_init: CTS=1
-pinephone_modem_init: Status=1
-pinephone_modem_init: Status=1
-pinephone_modem_init: Status=1
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
-pinephone_modem_init: Status=0
 pinephone_modem_init: Status=0
 nsh: mkfatfs: command not found
 
 NuttShell (NSH) NuttX-12.0.3
-nsh> [Khello9[K
+nsh> [Khello
 up_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
 up_setup: addr=0x1c28c00, before=0x0, after=0xd
@@ -233,11 +206,47 @@ up_setup: Configure the FIFOs
 Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=4
-Response: nbytes=3
-AT
-Write command: nbytes=4
-Response: nbytes=6
+Response: nbytes=7
 
+RDY
+
+Write command: nbytes=4
+Response: nbytes=35
+
++CFUN: 1
+
++CPIN: NOT INSERTED
+
+Write command: nbytes=4
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=4
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=4
+Response: nbytes=9
+AT
+OK
+
+nsh> [Khello
+up_setup: Clear DLAB
+up_setup: addr=0x1c28c04, before=0x0, after=0x0
+up_setup: addr=0x1c28c00, before=0xd, after=0xd
+up_setup: Configure the FIFOs
+Hello, World!!
+Open /dev/ttyS1: fd=3
+Write command: nbytes=4
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=4
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=4
@@ -256,6 +265,6 @@ AT
 OK
 
 nsh> [K
-Script done on Sun Apr 23 13:17:39 2023
+Script done on Sun Apr 23 13:24:20 2023
 
 */
