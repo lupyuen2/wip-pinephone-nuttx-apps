@@ -67,12 +67,12 @@ int main(int argc, FAR char *argv[])
   // Enter the PIN for the SIM card:
   //  AT+CPIN=1234
   //  > OK
-  // Check the connection status:
 
+  // Check the connection status:
   //  AT+CREG?
   //  > CGREG: 0,1
   //  > OK
-  // This means the modem is connected to the home network. Issue a call:
+  // This means the modem is connected to the home network.
     {
       // Write command
       const char cmd[] = "AT+CREG?\r";
@@ -91,6 +91,27 @@ int main(int argc, FAR char *argv[])
       sleep(2);
     }
 
+  // Show operator:
+  //  AT+COPS?
+    {
+      // Write command
+      const char cmd[] = "AT+COPS?\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(2);
+    }
+
+  // Issue a call:
   //  ATD1711;
   //  > OK
 
@@ -106,7 +127,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Tue Apr 25 07:49:36 2023
+Script started on Tue Apr 25 07:57:22 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;64r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -134,10 +155,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347019 bytes read in 19 ms (17.4 MiB/s)
+347112 bytes read in 19 ms (17.4 MiB/s)
 Uncompressed size: 10514432 = 0xA07000
-36162 bytes read in 5 ms (6.9 MiB/s)
-1078500 bytes read in 50 ms (20.6 MiB/s)
+36162 bytes read in 4 ms (8.6 MiB/s)
+1078500 bytes read in 51 ms (20.2 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -260,19 +281,19 @@ OK
 
 Write command: nbytes=3
 AT
-Response: nbytes=38
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=57
 AT
 OK
 
 +CPIN: READY
 
 +QUSIM: 1
-
-Write command: nbytes=3
-AT
-Response: nbytes=28
-AT
-OK
 
 +QIND: SMS DONE
 
@@ -282,6 +303,16 @@ Response: nbytes=9
 AT
 OK
 
+Write command: nbytes=9
+AT+COPS?
+Response: nbytes=47
+AT+CREG?
++CREG: 0,1
+
+OK
+
++QIND: PB DONE
+
 nsh> [Khello
 up_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
@@ -291,11 +322,9 @@ Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=3
 AT
-Response: nbytes=47
-
-+QIND: PB DONE
-AT+CREG?
-+CREG: 0,1
+Response: nbytes=40
+AT+COPS?
++COPS: 0,0,"SGP-M1",7
 
 OK
 
@@ -329,21 +358,29 @@ Response: nbytes=9
 AT
 OK
 
-nsh> [Khello
-up_setup: Clear DLAB
-up_setup: addr=0x1c28c04, before=0x0, after=0x0
-up_setup: addr=0x1c28c00, before=0xd, after=0xd
-up_setup: Configure the FIFOs
-Hello, World!!
-Open /dev/ttyS1: fd=3
-Write command: nbytes=3
-AT
+Write command: nbytes=9
+AT+COPS?
 Response: nbytes=29
 AT+CREG?
 +CREG: 0,1
 
 OK
 
+nsh> [Khello
+up_setup: Clear DLAB
+up_setup: addr=0x1c28c04, before=0x0, after=0x0
+up_setup: addr=0x1c28c00, before=0xd, after=0xd
+up_setup: Configure the FIFOs
+Hello, World!!
+Open /dev/ttyS1: fd=3
+Write command: nbytes=3
+AT
+Response: nbytes=40
+AT+COPS?
++COPS: 0,0,"SGP-M1",7
+
+OK
+
 Write command: nbytes=3
 AT
 Response: nbytes=9
@@ -374,7 +411,15 @@ Response: nbytes=9
 AT
 OK
 
+Write command: nbytes=9
+AT+COPS?
+Response: nbytes=29
+AT+CREG?
++CREG: 0,1
+
+OK
+
 nsh> [K
-Script done on Tue Apr 25 07:51:18 2023
+Script done on Tue Apr 25 07:58:36 2023
 
 */
