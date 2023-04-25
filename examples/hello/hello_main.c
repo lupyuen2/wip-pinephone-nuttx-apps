@@ -228,20 +228,23 @@ static void send_sms(int fd)
     ssize_t nbytes = write(fd, cmd, strlen(cmd));
     printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
     assert(nbytes == strlen(cmd));
-
-    // Read response
-    static char buf[1024];
-    nbytes = read(fd, buf, sizeof(buf) - 1);
-    if (nbytes >= 0) { buf[nbytes] = 0; }
-    else { buf[0] = 0; }
-    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-    // Wait a while
-    sleep(2);
   }
+  // Wait for ">"
+  for (;;)
+    {
+      // Read response
+      static char buf[1024];
+      ssize_t nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Stop if we find ">"
+      if (strchr(buf, '>') != NULL) { break; }
+    }
   {
     // Write message
-    const char cmd[] = "Hello from Apache NuttX RTOS on PinePhone!\x1A";
+    const char cmd[] = "Hello from Apache NuttX RTOS on PinePhone! (SMS Text Mode)\x1A";
     ssize_t nbytes = write(fd, cmd, strlen(cmd));
     printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
     assert(nbytes == strlen(cmd));
@@ -349,7 +352,7 @@ static void dial_number(int fd)
 
 /* Output Log
 
-Script started on Tue Apr 25 14:54:39 2023
+Script started on Tue Apr 25 17:47:59 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;64r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -377,10 +380,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347519 bytes read in 20 ms (16.6 MiB/s)
-Uncompressed size: 10526720 = 0xA0A000
-36162 bytes read in 5 ms (6.9 MiB/s)
-1078500 bytes read in 50 ms (20.6 MiB/s)
+347766 bytes read in 20 ms (16.6 MiB/s)
+Uncompressed size: 10530816 = 0xA0B000
+36162 bytes read in 4 ms (8.6 MiB/s)
+1078500 bytes read in 51 ms (20.2 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -563,45 +566,43 @@ Response: nbytes=20
 AT+CSCS="GSM"
 OK
 
-Write command: nbytes=43
-Hello from Apache NuttX RTOS on PinePhone!
-Response: nbytes=26
+Response: nbytes=22
 AT+CMGS="yourphonenumber"
+Response: nbytes=4
+
 > 
-Write command: nbytes=3
-AT
-Response: nbytes=60
-Hello from Apache NuttX RTOS on PinePhone!
-+CMGS: 4
+Write command: nbytes=59
+Hello from Apache NuttX RTOS on PinePhone! (SMS Text Mode)
+Response: nbytes=32
+Hello from Apache NuttX RTOS on 
+Write command: nbytes=10
+AT+QDAI=?
+Response: nbytes=44
+PinePhone! (SMS Text Mode)
++CMGS: 7
 
 OK
 
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
+Write command: nbytes=9
+AT+QDAI?
+Response: nbytes=71
+AT+QDAI=?
++QDAI: (1-4),(0,1),(0,1),(0-5),(0-2),(0,1)(1)(1-16)
 
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
 OK
 
 Write command: nbytes=16
 ATDyourphonenumber;
-Response: nbytes=16
-ATDyourphonenumber;
+Response: nbytes=41
+AT+QDAI?
++QDAI: 1,1,0,1,0,0,1,1
+
+OK
+
 Write command: nbytes=4
 ATH
-Response: nbytes=20
-
+Response: nbytes=36
+ATDyourphonenumber;
 OK
 
 NO CARRIER
@@ -636,5 +637,7 @@ Response: nbytes=9
 AT
 OK
 
-nsh> 
+nsh> [K
+Script done on Tue Apr 25 17:49:23 2023
+
 */
