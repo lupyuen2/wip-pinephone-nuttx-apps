@@ -29,9 +29,11 @@
 
 // Define the Phone Number in this include file:
 // #define PHONE_NUMBER "1711"
+// #define PHONE_NUMBER_PDU "7111"
 #include "../../../phone_number.h"
 
-static void send_sms(int fd);
+static void send_sms_text(int fd);
+static void send_sms_pdu(int fd);
 static void dial_number(int fd);
 
 /****************************************************************************
@@ -118,11 +120,14 @@ int main(int argc, FAR char *argv[])
     sleep(2);
   }
 
-  // Send an SMS Text Message
-  send_sms(fd);
+  // Send an SMS Message in Text Mode
+  // send_sms_text(fd);
+
+  // Send an SMS Message in PDU Mode
+  send_sms_pdu(fd);
 
   // Make an Outgoing Phone Call
-  dial_number(fd);
+  // dial_number(fd);
 
   // Repeat 5 times: Write AT command and read response
   for (int i = 0; i < 5; i++)
@@ -147,33 +152,16 @@ int main(int argc, FAR char *argv[])
   // Close the device
   close(fd);
 
-  UNUSED(send_sms);
+  UNUSED(send_sms_text);
+  UNUSED(send_sms_pdu);
   UNUSED(dial_number);
   return 0;
 }
 
-// Send an SMS Text Message
-static void send_sms(int fd)
+// Send an SMS Message in Text Mode
+static void send_sms_text(int fd)
 {
-  // Get Message Format: 0 for PDU Mode, 1 for Text Mode
-  // AT+CMGF?
-  {
-    // Write command
-    const char cmd[] = "AT+CMGF?\r";
-    ssize_t nbytes = write(fd, cmd, strlen(cmd));
-    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
-    assert(nbytes == strlen(cmd));
-
-    // Read response
-    static char buf[1024];
-    nbytes = read(fd, buf, sizeof(buf) - 1);
-    if (nbytes >= 0) { buf[nbytes] = 0; }
-    else { buf[0] = 0; }
-    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-    // Wait a while
-    sleep(2);
-  }
+  puts("send_sms_text");
 
   // Set Message Format to Text Mode
   // AT+CMGF=1
@@ -244,7 +232,94 @@ static void send_sms(int fd)
     }
   {
     // Write message
-    const char cmd[] = "Hello from Apache NuttX RTOS on PinePhone! (SMS Text Mode)\x1A";
+    const char cmd[] = 
+      "Hello from Apache NuttX RTOS on PinePhone! (SMS Text Mode)"
+      "\x1A";  // End of Message (Ctrl-Z)
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+}
+
+// Send an SMS Message in PDU Mode. Based on
+// https://www.gsmfavorites.com/documents/sms/pdutext/
+// https://en.m.wikipedia.org/wiki/GSM_03.40
+static void send_sms_pdu(int fd)
+{
+  puts("send_sms_pdu");
+
+  // Set Message Format to PDU Mode
+  // AT+CMGF=0
+  {
+    // Write command
+    const char cmd[] = "AT+CMGF=0\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
+  // Send SMS Text Message, assuming Message Format is PDU Mode
+  // AT+CMGS="yourphonenumber"\r
+  // text is entered
+  // <Ctrl+Z>
+  {
+    // Write command
+    const char cmd[] = 
+      "AT+CMGS="
+      "22"  // TODO: PDU Length in Octets, excluding the Length of SMSC
+      "\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+  }
+  // Wait for ">"
+  for (;;)
+    {
+      // Read response
+      static char buf[1024];
+      ssize_t nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Stop if we find ">"
+      if (strchr(buf, '>') != NULL) { break; }
+    }
+  {
+    // Write message
+    const char cmd[] = 
+      "00"  // Length of SMSC information. Here the length is 0, which means that the SMSC stored in the phone should be used. Note: This octet is optional. On some  phones this octet should be omitted! (Using the SMSC stored in phone is thus implicit)
+      "11"  // First octet of the SMS-SUBMIT message.
+      "00"  // TP-Message-Reference. The "00" value here lets the phone set the message  reference number itself.
+      "0A"  // Address-Length. Length of phone number
+      "91"  // Type-of-Address. (91 indicates international format of the phone number).
+      PHONE_NUMBER_PDU  // The phone number in semi octets
+      "00"  // TP-PID. Protocol identifier
+      "00"  // TP-DCS. Data coding scheme.This message is coded according to the 7bit default alphabet. Having "02" instead of "00" here, would indicate that the TP-User-Data field of this message should be interpreted as 8bit rather than 7bit (used in e.g. smart messaging, OTA provisioning etc).
+      "AA"  // TP-Validity-Period. "AA" means 4 days. Note: This octet is optional, see bits 4 and 3 of the first  octet
+      "0A"  // TP-User-Data-Length. Length of message. The TP-DCS field indicated 7-bit  data, so the length here is the number of septets (10). If the TP-DCS field were  set to 8-bit data or Unicode, the length would be the number of octets.
+      "E8329BFD4697D9EC37"  // TP-User-Data. These octets represent the message "hellohello".
+      "\x1A";  // End of Message (Ctrl-Z)
     ssize_t nbytes = write(fd, cmd, strlen(cmd));
     printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
     assert(nbytes == strlen(cmd));
@@ -264,6 +339,8 @@ static void send_sms(int fd)
 // Make an Outgoing Phone Call
 static void dial_number(int fd)
 {
+  puts("dial_number");
+
   // Digital Audio Interface Configuration: Query the range
   //  AT+QDAI=?
   {
