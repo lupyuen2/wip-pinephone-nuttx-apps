@@ -252,6 +252,7 @@ static void send_sms_text(int fd)
 }
 
 // Send an SMS Message in PDU Mode. Based on
+// https://www.sparkfun.com/datasheets/CellularShield/SM5100B%20SMS%20App%20Note.pdf
 // https://www.gsmfavorites.com/documents/sms/pdutext/
 // https://en.m.wikipedia.org/wiki/GSM_03.40
 static void send_sms_pdu(int fd)
@@ -286,7 +287,8 @@ static void send_sms_pdu(int fd)
     // Write command
     const char cmd[] = 
       "AT+CMGS="
-      "22"  // TODO: PDU Length in Octets, excluding the Length of SMSC
+      "15"  // TODO: PDU length is the sum of the receiver number length and TP-User-Data-Length (in bytes). 
+      // Previously: "22"  // TODO: PDU Length in Octets, excluding the Length of SMSC
       "\r";
     ssize_t nbytes = write(fd, cmd, strlen(cmd));
     printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
@@ -311,14 +313,27 @@ static void send_sms_pdu(int fd)
       "00"  // Length of SMSC information. Here the length is 0, which means that the SMSC stored in the phone should be used. Note: This octet is optional. On some  phones this octet should be omitted! (Using the SMSC stored in phone is thus implicit)
       "11"  // First octet of the SMS-SUBMIT message.
       "00"  // TP-Message-Reference. The "00" value here lets the phone set the message  reference number itself.
-      "0A"  // Address-Length. Length of phone number
-      "91"  // Type-of-Address. (91 indicates international format of the phone number).
+      "0A"  // TODO: Address-Length. Length of phone number
+
+      "80"  // Type-of-Address
+      // Previously: "91"  // Type-of-Address. (91 indicates international format of the phone number).
+
       PHONE_NUMBER_PDU  // The phone number in semi octets
+
       "00"  // TP-PID. Protocol identifier
-      "00"  // TP-DCS. Data coding scheme.This message is coded according to the 7bit default alphabet. Having "02" instead of "00" here, would indicate that the TP-User-Data field of this message should be interpreted as 8bit rather than 7bit (used in e.g. smart messaging, OTA provisioning etc).
-      "AA"  // TP-Validity-Period. "AA" means 4 days. Note: This octet is optional, see bits 4 and 3 of the first  octet
-      "0A"  // TP-User-Data-Length. Length of message. The TP-DCS field indicated 7-bit  data, so the length here is the number of septets (10). If the TP-DCS field were  set to 8-bit data or Unicode, the length would be the number of octets.
-      "E8329BFD4697D9EC37"  // TP-User-Data. These octets represent the message "hellohello".
+
+      "08"  // TP-DCS. Data coding scheme
+      // Previously: "00"  // TP-DCS. Data coding scheme.This message is coded according to the 7bit default alphabet. Having "02" instead of "00" here, would indicate that the TP-User-Data field of this message should be interpreted as 8bit rather than 7bit (used in e.g. smart messaging, OTA provisioning etc).
+
+      "00"  // TP-Validity-Period.
+      "0A"  // TP-User-Data-Length. Length of message.
+      "00680065006C006C006F"  // TP-User-Data. 
+
+      // Previously:
+      // "AA"  // TP-Validity-Period. "AA" means 4 days. Note: This octet is optional, see bits 4 and 3 of the first  octet
+      // "0A"  // TP-User-Data-Length. Length of message. The TP-DCS field indicated 7-bit  data, so the length here is the number of septets (10). If the TP-DCS field were  set to 8-bit data or Unicode, the length would be the number of octets.
+      // "E8329BFD4697D9EC37"  // TP-User-Data. These octets represent the message "hellohello".
+
       "\x1A";  // End of Message (Ctrl-Z)
     ssize_t nbytes = write(fd, cmd, strlen(cmd));
     printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
