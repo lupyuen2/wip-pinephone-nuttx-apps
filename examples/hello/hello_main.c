@@ -224,7 +224,24 @@ static void send_sms(int fd)
     const char cmd[] = 
       "AT+CMGS=\""
       PHONE_NUMBER
-      "\"\rHello from Apache NuttX RTOS on PinePhone!\x1A";
+      "\"\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+  {
+    // Write message
+    const char cmd[] = "Hello from Apache NuttX RTOS on PinePhone!\x1A";
     ssize_t nbytes = write(fd, cmd, strlen(cmd));
     printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
     assert(nbytes == strlen(cmd));
@@ -332,7 +349,7 @@ static void dial_number(int fd)
 
 /* Output Log
 
-Script started on Tue Apr 25 14:47:04 2023
+Script started on Tue Apr 25 14:54:39 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;64r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -360,7 +377,7 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347652 bytes read in 20 ms (16.6 MiB/s)
+347519 bytes read in 20 ms (16.6 MiB/s)
 Uncompressed size: 10526720 = 0xA0A000
 36162 bytes read in 5 ms (6.9 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
@@ -486,13 +503,7 @@ OK
 
 Write command: nbytes=3
 AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=57
+Response: nbytes=38
 AT
 OK
 
@@ -500,23 +511,29 @@ OK
 
 +QUSIM: 1
 
+Write command: nbytes=3
+AT
+Response: nbytes=28
+AT
+OK
+
 +QIND: SMS DONE
 
 Write command: nbytes=9
 AT+CREG?
-Response: nbytes=9
+Response: nbytes=27
 AT
 OK
 
++QIND: PB DONE
+
 Write command: nbytes=9
 AT+COPS?
-Response: nbytes=47
+Response: nbytes=29
 AT+CREG?
 +CREG: 0,1
 
 OK
-
-+QIND: PB DONE
 
 Write command: nbytes=9
 AT+CMGF?
@@ -540,59 +557,84 @@ Response: nbytes=16
 AT+CMGF=1
 OK
 
-Write command: nbytes=65
+Write command: nbytes=22
 AT+CMGS="yourphonenumber"
-Hello from Apache NuttX RTOS on PinePhone!
 Response: nbytes=20
 AT+CSCS="GSM"
 OK
 
-Write command: nbytes=10
-AT+QDAI=?
+Write command: nbytes=43
+Hello from Apache NuttX RTOS on PinePhone!
 Response: nbytes=26
 AT+CMGS="yourphonenumber"
 > 
-Write command: nbytes=9
-AT+QDAI?
-Response: nbytes=13
-AT+QDAI=?
-> 
+Write command: nbytes=3
+AT
+Response: nbytes=60
+Hello from Apache NuttX RTOS on PinePhone!
++CMGS: 4
+
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
 Write command: nbytes=16
 ATDyourphonenumber;
-Response: nbytes=12
-AT+QDAI?
-> 
+Response: nbytes=16
+ATDyourphonenumber;
 Write command: nbytes=4
 ATH
-Response: nbytes=19
-ATDyourphonenumber;
-> 
-Write command: nbytes=3
-AT
-Response: nbytes=7
-ATH
-> 
-Write command: nbytes=3
-AT
-Response: nbytes=6
-AT
-> 
-Write command: nbytes=3
-AT
-Response: nbytes=6
-AT
-> 
-Write command: nbytes=3
-AT
-Response: nbytes=6
-AT
-> 
-Write command: nbytes=3
-AT
-Response: nbytes=6
-AT
-> 
-nsh> [K
-Script done on Tue Apr 25 14:48:36 2023
+Response: nbytes=20
 
+OK
+
+NO CARRIER
+
+Write command: nbytes=3
+AT
+Response: nbytes=10
+ATH
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+nsh> 
 */
