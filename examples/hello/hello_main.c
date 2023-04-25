@@ -27,6 +27,13 @@
 #include <fcntl.h>
 #include <assert.h>
 
+// Define the Phone Number in this include file:
+// #define PHONE_NUMBER "1711"
+#include "../../../phone_number.h"
+
+static void send_sms(int fd);
+static void dial_number(int fd);
+
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
@@ -64,7 +71,7 @@ int main(int argc, FAR char *argv[])
       sleep(2);
     }
 
-  // Enter the PIN for the SIM card:
+  // TODO: Enter the PIN for the SIM card:
   //  AT+CPIN=1234
   //  > OK
 
@@ -73,125 +80,49 @@ int main(int argc, FAR char *argv[])
   //  > CGREG: 0,1
   //  > OK
   // This means the modem is connected to the home network.
-    {
-      // Write command
-      const char cmd[] = "AT+CREG?\r";
-      ssize_t nbytes = write(fd, cmd, strlen(cmd));
-      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
-      assert(nbytes == strlen(cmd));
+  {
+    // Write command
+    const char cmd[] = "AT+CREG?\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
 
-      // Read response
-      static char buf[1024];
-      nbytes = read(fd, buf, sizeof(buf) - 1);
-      if (nbytes >= 0) { buf[nbytes] = 0; }
-      else { buf[0] = 0; }
-      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
-      // Wait a while
-      sleep(2);
-    }
+    // Wait a while
+    sleep(2);
+  }
 
   // Show operator:
   //  AT+COPS?
-    {
-      // Write command
-      const char cmd[] = "AT+COPS?\r";
-      ssize_t nbytes = write(fd, cmd, strlen(cmd));
-      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
-      assert(nbytes == strlen(cmd));
+  {
+    // Write command
+    const char cmd[] = "AT+COPS?\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
 
-      // Read response
-      static char buf[1024];
-      nbytes = read(fd, buf, sizeof(buf) - 1);
-      if (nbytes >= 0) { buf[nbytes] = 0; }
-      else { buf[0] = 0; }
-      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
-      // Wait a while
-      sleep(2);
-    }
+    // Wait a while
+    sleep(2);
+  }
 
-  // Digital Audio Interface Configuration: Query the range
-  //  AT+QDAI=?
-    {
-      // Write command
-      const char cmd[] = "AT+QDAI=?\r";
-      ssize_t nbytes = write(fd, cmd, strlen(cmd));
-      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
-      assert(nbytes == strlen(cmd));
+  // Send an SMS Text Message
+  send_sms(fd);
 
-      // Read response
-      static char buf[1024];
-      nbytes = read(fd, buf, sizeof(buf) - 1);
-      if (nbytes >= 0) { buf[nbytes] = 0; }
-      else { buf[0] = 0; }
-      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-      // Wait a while
-      sleep(2);
-    }
-
-  // Digital Audio Interface Configuration: Query the current interface configuration
-  //  AT+QDAI?
-    {
-      // Write command
-      const char cmd[] = "AT+QDAI?\r";
-      ssize_t nbytes = write(fd, cmd, strlen(cmd));
-      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
-      assert(nbytes == strlen(cmd));
-
-      // Read response
-      static char buf[1024];
-      nbytes = read(fd, buf, sizeof(buf) - 1);
-      if (nbytes >= 0) { buf[nbytes] = 0; }
-      else { buf[0] = 0; }
-      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-      // Wait a while
-      sleep(2);
-    }
-
-  // Issue a call:
-  //  ATD1711;
-  //  > OK
-    {
-      // Write command
-      const char cmd[] = "ATDyourphonenumber;\r";
-      ssize_t nbytes = write(fd, cmd, strlen(cmd));
-      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
-      assert(nbytes == strlen(cmd));
-
-      // Read response
-      static char buf[1024];
-      nbytes = read(fd, buf, sizeof(buf) - 1);
-      if (nbytes >= 0) { buf[nbytes] = 0; }
-      else { buf[0] = 0; }
-      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-      // Wait a while
-      sleep(20);
-    }
-
-  // Hang up:
-  //  ATH
-  //  > OK
-    {
-      // Write command
-      const char cmd[] = "ATH\r";
-      ssize_t nbytes = write(fd, cmd, strlen(cmd));
-      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
-      assert(nbytes == strlen(cmd));
-
-      // Read response
-      static char buf[1024];
-      nbytes = read(fd, buf, sizeof(buf) - 1);
-      if (nbytes >= 0) { buf[nbytes] = 0; }
-      else { buf[0] = 0; }
-      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-      // Wait a while
-      sleep(2);
-    }
+  // Make an Outgoing Phone Call
+  dial_number(fd);
 
   // Repeat 5 times: Write AT command and read response
   for (int i = 0; i < 5; i++)
@@ -216,12 +147,192 @@ int main(int argc, FAR char *argv[])
   // Close the device
   close(fd);
 
+  UNUSED(send_sms);
+  UNUSED(dial_number);
   return 0;
+}
+
+// Send an SMS Text Message
+static void send_sms(int fd)
+{
+  // Get Message Format: 0 for PDU Mode, 1 for Text Mode
+  // AT+CMGF?
+  {
+    // Write command
+    const char cmd[] = "AT+CMGF?\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
+  // Set Message Format to Text Mode
+  // AT+CMGF=1
+  {
+    // Write command
+    const char cmd[] = "AT+CMGF=1\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
+  // Set Character Set to GSM
+  // AT+CSCS="GSM"
+  {
+    // Write command
+    const char cmd[] = "AT+CSCS=\"GSM\"\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
+  // Send SMS Text Message, assuming Message Format is Text Mode
+  // AT+CMGS="yourphonenumber"\r
+  // text is entered
+  // <Ctrl+Z>
+  {
+    // Write command
+    const char cmd[] = 
+      "AT+CMGS=\""
+      PHONE_NUMBER
+      "\"\rHello from Apache NuttX RTOS on PinePhone!\x1A";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+}
+
+// Make an Outgoing Phone Call
+static void dial_number(int fd)
+{
+  // Digital Audio Interface Configuration: Query the range
+  //  AT+QDAI=?
+  {
+    // Write command
+    const char cmd[] = "AT+QDAI=?\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
+  // Digital Audio Interface Configuration: Query the current interface configuration
+  //  AT+QDAI?
+  {
+    // Write command
+    const char cmd[] = "AT+QDAI?\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
+  // Issue a call:
+  //  ATD1711;
+  //  > OK
+  {
+    // Write command
+    const char cmd[] = 
+      "ATD"
+      PHONE_NUMBER
+      ";\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(20);
+  }
+
+  // Hang up:
+  //  ATH
+  //  > OK
+  {
+    // Write command
+    const char cmd[] = "ATH\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
 }
 
 /* Output Log
 
-Script started on Tue Apr 25 10:33:41 2023
+Script started on Tue Apr 25 14:47:04 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;64r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -249,9 +360,9 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347425 bytes read in 19 ms (17.4 MiB/s)
-Uncompressed size: 10522624 = 0xA09000
-36162 bytes read in 4 ms (8.6 MiB/s)
+347652 bytes read in 20 ms (16.6 MiB/s)
+Uncompressed size: 10526720 = 0xA0A000
+36162 bytes read in 5 ms (6.9 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
@@ -407,180 +518,81 @@ OK
 
 +QIND: PB DONE
 
-Write command: nbytes=10
-AT+QDAI=?
+Write command: nbytes=9
+AT+CMGF?
 Response: nbytes=40
 AT+COPS?
 +COPS: 0,0,"SGP-M1",7
 
 OK
 
-Write command: nbytes=9
-AT+QDAI?
-Response: nbytes=71
-AT+QDAI=?
-+QDAI: (1-4),(0,1),(0,1),(0-5),(0-2),(0,1)(1)(1-16)
+Write command: nbytes=10
+AT+CMGF=1
+Response: nbytes=27
+AT+CMGF?
++CMGF: 0
 
 OK
 
-Write command: nbytes=13
-ATDyourphonenumber;
-Response: nbytes=41
-AT+QDAI?
-+QDAI: 1,1,0,1,0,0,1,1
-
+Write command: nbytes=14
+AT+CSCS="GSM"
+Response: nbytes=16
+AT+CMGF=1
 OK
 
-Write command: nbytes=4
-ATH
-Response: nbytes=33
-ATDyourphonenumber;
-OK
-
-NO CARRIER
-
-Write command: nbytes=3
-AT
-Response: nbytes=10
-ATH
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-nsh> [Khello
-up_setup: Clear DLAB
-up_setup: addr=0x1c28c04, before=0x0, after=0x0
-up_setup: addr=0x1c28c00, before=0xd, after=0xd
-up_setup: Configure the FIFOs
-Hello, World!!
-Open /dev/ttyS1: fd=3
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=9
-AT+CREG?
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=9
-AT+COPS?
-Response: nbytes=29
-AT+CREG?
-+CREG: 0,1
-
+Write command: nbytes=65
+AT+CMGS="yourphonenumber"
+Hello from Apache NuttX RTOS on PinePhone!
+Response: nbytes=20
+AT+CSCS="GSM"
 OK
 
 Write command: nbytes=10
 AT+QDAI=?
-Response: nbytes=40
-AT+COPS?
-+COPS: 0,0,"SGP-M1",7
-
-OK
-
+Response: nbytes=26
+AT+CMGS="yourphonenumber"
+> 
 Write command: nbytes=9
 AT+QDAI?
-Response: nbytes=71
+Response: nbytes=13
 AT+QDAI=?
-+QDAI: (1-4),(0,1),(0,1),(0-5),(0-2),(0,1)(1)(1-16)
-
-OK
-
-Write command: nbytes=13
+> 
+Write command: nbytes=16
 ATDyourphonenumber;
-Response: nbytes=41
+Response: nbytes=12
 AT+QDAI?
-+QDAI: 1,1,0,1,0,0,1,1
-
-OK
-
+> 
 Write command: nbytes=4
 ATH
 Response: nbytes=19
 ATDyourphonenumber;
-OK
-
+> 
 Write command: nbytes=3
 AT
-Response: nbytes=10
+Response: nbytes=7
 ATH
-OK
-
+> 
 Write command: nbytes=3
 AT
-Response: nbytes=9
+Response: nbytes=6
 AT
-OK
-
+> 
 Write command: nbytes=3
 AT
-Response: nbytes=9
+Response: nbytes=6
 AT
-OK
-
+> 
 Write command: nbytes=3
 AT
-Response: nbytes=9
+Response: nbytes=6
 AT
-OK
-
+> 
 Write command: nbytes=3
 AT
-Response: nbytes=9
+Response: nbytes=6
 AT
-OK
-
+> 
 nsh> [K
-Script done on Tue Apr 25 10:35:59 2023
+Script done on Tue Apr 25 14:48:36 2023
 
 */
