@@ -44,7 +44,7 @@ int main(int argc, FAR char *argv[])
   printf("Open /dev/ttyS1: fd=%d\n", fd);
   assert(fd > 0);
 
-  // Repeat 5 times: Write command and read response
+  // Repeat 5 times: Write AT command and read response
   for (int i = 0; i < 5; i++)
     {
       // Write command
@@ -154,10 +154,64 @@ int main(int argc, FAR char *argv[])
   // Issue a call:
   //  ATD1711;
   //  > OK
+    {
+      // Write command
+      const char cmd[] = "ATDyourphonenumber;\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(20);
+    }
 
   // Hang up:
   //  ATH
   //  > OK
+    {
+      // Write command
+      const char cmd[] = "ATH\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(2);
+    }
+
+  // Repeat 5 times: Write AT command and read response
+  for (int i = 0; i < 5; i++)
+    {
+      // Write command
+      const char cmd[] = "AT\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(2);
+    }
 
   // Close the device
   close(fd);
@@ -167,7 +221,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Tue Apr 25 08:12:48 2023
+Script started on Tue Apr 25 10:33:41 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;64r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -195,7 +249,7 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347228 bytes read in 20 ms (16.6 MiB/s)
+347425 bytes read in 19 ms (17.4 MiB/s)
 Uncompressed size: 10522624 = 0xA09000
 36162 bytes read in 4 ms (8.6 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
@@ -295,11 +349,11 @@ nsh: mkfatfs: command not found
 
 NuttShell (NSH) NuttX-12.0.3
 nsh> [Khello
-Hup_setup: Clear DLAB
+up_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
 up_setup: addr=0x1c28c00, before=0x0, after=0xd
 up_setup: Configure the FIFOs
-ello, World!!
+Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=3
 AT
@@ -321,19 +375,19 @@ OK
 
 Write command: nbytes=3
 AT
-Response: nbytes=38
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=57
 AT
 OK
 
 +CPIN: READY
 
 +QUSIM: 1
-
-Write command: nbytes=3
-AT
-Response: nbytes=28
-AT
-OK
 
 +QIND: SMS DONE
 
@@ -369,6 +423,52 @@ AT+QDAI=?
 
 OK
 
+Write command: nbytes=13
+ATDyourphonenumber;
+Response: nbytes=41
+AT+QDAI?
++QDAI: 1,1,0,1,0,0,1,1
+
+OK
+
+Write command: nbytes=4
+ATH
+Response: nbytes=33
+ATDyourphonenumber;
+OK
+
+NO CARRIER
+
+Write command: nbytes=3
+AT
+Response: nbytes=10
+ATH
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
 nsh> [Khello
 up_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
@@ -378,10 +478,8 @@ Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=3
 AT
-Response: nbytes=41
-AT+QDAI?
-+QDAI: 1,1,0,1,0,0,1,1
-
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=3
@@ -438,21 +536,26 @@ AT+QDAI=?
 
 OK
 
-nsh> [Khello
-up_setup: Clear DLAB
-up_setup: addr=0x1c28c04, before=0x0, after=0x0
-up_setup: addr=0x1c28c00, before=0xd, after=0xd
-up_setup: Configure the FIFOs
-Hello, World!!
-Open /dev/ttyS1: fd=3
-Write command: nbytes=3
-AT
+Write command: nbytes=13
+ATDyourphonenumber;
 Response: nbytes=41
 AT+QDAI?
 +QDAI: 1,1,0,1,0,0,1,1
 
 OK
 
+Write command: nbytes=4
+ATH
+Response: nbytes=19
+ATDyourphonenumber;
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=10
+ATH
+OK
+
 Write command: nbytes=3
 AT
 Response: nbytes=9
@@ -475,39 +578,9 @@ Write command: nbytes=3
 AT
 Response: nbytes=9
 AT
-OK
-
-Write command: nbytes=9
-AT+CREG?
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=9
-AT+COPS?
-Response: nbytes=29
-AT+CREG?
-+CREG: 0,1
-
-OK
-
-Write command: nbytes=10
-AT+QDAI=?
-Response: nbytes=40
-AT+COPS?
-+COPS: 0,0,"SGP-M1",7
-
-OK
-
-Write command: nbytes=9
-AT+QDAI?
-Response: nbytes=71
-AT+QDAI=?
-+QDAI: (1-4),(0,1),(0,1),(0-5),(0-2),(0,1)(1)(1-16)
-
 OK
 
 nsh> [K
-Script done on Tue Apr 25 08:14:13 2023
+Script done on Tue Apr 25 10:35:59 2023
 
 */
