@@ -111,6 +111,46 @@ int main(int argc, FAR char *argv[])
       sleep(2);
     }
 
+  // Digital Audio Interface Configuration: Query the range
+  //  AT+QDAI=?
+    {
+      // Write command
+      const char cmd[] = "AT+QDAI=?\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(2);
+    }
+
+  // Digital Audio Interface Configuration: Query the current interface configuration
+  //  AT+QDAI?
+    {
+      // Write command
+      const char cmd[] = "AT+QDAI?\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(2);
+    }
+
   // Issue a call:
   //  ATD1711;
   //  > OK
@@ -127,7 +167,7 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
-Script started on Tue Apr 25 07:57:22 2023
+Script started on Tue Apr 25 08:12:48 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;64r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -155,10 +195,10 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-347112 bytes read in 19 ms (17.4 MiB/s)
-Uncompressed size: 10514432 = 0xA07000
+347228 bytes read in 20 ms (16.6 MiB/s)
+Uncompressed size: 10522624 = 0xA09000
 36162 bytes read in 4 ms (8.6 MiB/s)
-1078500 bytes read in 51 ms (20.2 MiB/s)
+1078500 bytes read in 50 ms (20.6 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
    Loading Ramdisk to 49ef8000, end 49fff4e4 ... OK
@@ -255,11 +295,11 @@ nsh: mkfatfs: command not found
 
 NuttShell (NSH) NuttX-12.0.3
 nsh> [Khello
-up_setup: Clear DLAB
+Hup_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
 up_setup: addr=0x1c28c00, before=0x0, after=0xd
 up_setup: Configure the FIFOs
-Hello, World!!
+ello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=3
 AT
@@ -281,19 +321,19 @@ OK
 
 Write command: nbytes=3
 AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=57
+Response: nbytes=38
 AT
 OK
 
 +CPIN: READY
 
 +QUSIM: 1
+
+Write command: nbytes=3
+AT
+Response: nbytes=28
+AT
+OK
 
 +QIND: SMS DONE
 
@@ -313,6 +353,22 @@ OK
 
 +QIND: PB DONE
 
+Write command: nbytes=10
+AT+QDAI=?
+Response: nbytes=40
+AT+COPS?
++COPS: 0,0,"SGP-M1",7
+
+OK
+
+Write command: nbytes=9
+AT+QDAI?
+Response: nbytes=71
+AT+QDAI=?
++QDAI: (1-4),(0,1),(0,1),(0-5),(0-2),(0,1)(1)(1-16)
+
+OK
+
 nsh> [Khello
 up_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
@@ -322,9 +378,9 @@ Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=3
 AT
-Response: nbytes=40
-AT+COPS?
-+COPS: 0,0,"SGP-M1",7
+Response: nbytes=41
+AT+QDAI?
++QDAI: 1,1,0,1,0,0,1,1
 
 OK
 
@@ -366,6 +422,22 @@ AT+CREG?
 
 OK
 
+Write command: nbytes=10
+AT+QDAI=?
+Response: nbytes=40
+AT+COPS?
++COPS: 0,0,"SGP-M1",7
+
+OK
+
+Write command: nbytes=9
+AT+QDAI?
+Response: nbytes=71
+AT+QDAI=?
++QDAI: (1-4),(0,1),(0,1),(0-5),(0-2),(0,1)(1)(1-16)
+
+OK
+
 nsh> [Khello
 up_setup: Clear DLAB
 up_setup: addr=0x1c28c04, before=0x0, after=0x0
@@ -375,9 +447,9 @@ Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=3
 AT
-Response: nbytes=40
-AT+COPS?
-+COPS: 0,0,"SGP-M1",7
+Response: nbytes=41
+AT+QDAI?
++QDAI: 1,1,0,1,0,0,1,1
 
 OK
 
@@ -416,10 +488,26 @@ AT+COPS?
 Response: nbytes=29
 AT+CREG?
 +CREG: 0,1
+
+OK
+
+Write command: nbytes=10
+AT+QDAI=?
+Response: nbytes=40
+AT+COPS?
++COPS: 0,0,"SGP-M1",7
+
+OK
+
+Write command: nbytes=9
+AT+QDAI?
+Response: nbytes=71
+AT+QDAI=?
++QDAI: (1-4),(0,1),(0,1),(0-5),(0-2),(0,1)(1)(1-16)
 
 OK
 
 nsh> [K
-Script done on Tue Apr 25 07:58:36 2023
+Script done on Tue Apr 25 08:14:13 2023
 
 */
