@@ -320,7 +320,7 @@ static void send_sms_pdu(int fd)
       "00"  // TP-PID: Protocol identifier
       "08"  // TP-DCS: Data coding scheme
       "01"  // TP-Validity-Period
-      "1C"  // TP-User-Data-Length: Length of message in bytes
+      "1C"  // TP-User-Data-Length: Length of Encoded Message Text in bytes
       // TP-User-Data: Encoded Message Text "Hello,Quectel!"
       "00480065006C006C006F002C005100750065006300740065006C0021"
       "\x1A";  // End of Message (Ctrl-Z)
