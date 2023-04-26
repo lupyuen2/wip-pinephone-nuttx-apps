@@ -28,9 +28,12 @@
 #include <assert.h>
 
 // In this include file: Define the Phone Number in International Format
-// and in PDU Format (nibbles are flipped, append nibble "F" for odd number of nibbles)
-// #define PHONE_NUMBER    "+651711"
-// #define PHONE_NUMBER_PDU "567111"
+// and in PDU Format (nibbles are flipped)
+//   #define PHONE_NUMBER    "+1234567890"
+//   #define PHONE_NUMBER_PDU "2143658709"
+// If the number of nibbles (half-bytes) is odd, insert "F" into the PDU Phone Number like this:
+//   #define PHONE_NUMBER    "+123456789"
+//   #define PHONE_NUMBER_PDU "214365870F9"
 #include "../../../phone_number.h"
 
 static void send_sms_text(int fd);
