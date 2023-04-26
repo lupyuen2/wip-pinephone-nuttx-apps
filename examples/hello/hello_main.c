@@ -124,6 +124,26 @@ int main(int argc, FAR char *argv[])
     sleep(2);
   }
 
+  // Show SMS Center Address:
+  //  AT+CSCA?
+  {
+    // Write command
+    const char cmd[] = "AT+CSCA?\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
   // Send an SMS Message in Text Mode
   send_sms_text(fd);
 
@@ -132,26 +152,6 @@ int main(int argc, FAR char *argv[])
 
   // Make an Outgoing Phone Call
   dial_number(fd);
-
-  // Repeat 5 times: Write AT command and read response
-  for (int i = 0; i < 5; i++)
-    {
-      // Write command
-      const char cmd[] = "AT\r";
-      ssize_t nbytes = write(fd, cmd, strlen(cmd));
-      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
-      assert(nbytes == strlen(cmd));
-
-      // Read response
-      static char buf[1024];
-      nbytes = read(fd, buf, sizeof(buf) - 1);
-      if (nbytes >= 0) { buf[nbytes] = 0; }
-      else { buf[0] = 0; }
-      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-      // Wait a while
-      sleep(2);
-    }
 
   // Close the device
   close(fd);
@@ -253,6 +253,26 @@ static void send_sms_text(int fd)
     // Wait a while
     sleep(2);
   }
+
+  // Clean up the Log: Repeat 5 times: Write AT command and read response
+  for (int i = 0; i < 5; i++)
+    {
+      // Write command
+      const char cmd[] = "AT\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(2);
+    }
 }
 
 // Send an SMS Message in PDU Mode. Based on
@@ -341,6 +361,26 @@ static void send_sms_pdu(int fd)
     // Wait a while
     sleep(2);
   }
+
+  // Clean up the Log: Repeat 5 times: Write AT command and read response
+  for (int i = 0; i < 5; i++)
+    {
+      // Write command
+      const char cmd[] = "AT\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(2);
+    }
 }
 
 // Make an Outgoing Phone Call
@@ -432,6 +472,25 @@ static void dial_number(int fd)
     // Wait a while
     sleep(2);
   }
+  // Clean up the Log: Repeat 5 times: Write AT command and read response
+  for (int i = 0; i < 5; i++)
+    {
+      // Write command
+      const char cmd[] = "AT\r";
+      ssize_t nbytes = write(fd, cmd, strlen(cmd));
+      printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+      assert(nbytes == strlen(cmd));
+
+      // Read response
+      static char buf[1024];
+      nbytes = read(fd, buf, sizeof(buf) - 1);
+      if (nbytes >= 0) { buf[nbytes] = 0; }
+      else { buf[0] = 0; }
+      printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+      // Wait a while
+      sleep(2);
+    }
 }
 
 /* Output Log
