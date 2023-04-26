@@ -28,7 +28,7 @@
 #include <assert.h>
 
 // In this include file: Define the Phone Number in International Format
-// and in PDU Format (nibbles are flipped)
+// and in PDU Format (nibbles are flipped, append nibble "F" for odd number of nibbles)
 // #define PHONE_NUMBER    "+651711"
 // #define PHONE_NUMBER_PDU "567111"
 #include "../../../phone_number.h"
@@ -288,7 +288,7 @@ static void send_sms_pdu(int fd)
     // Write command
     const char cmd[] = 
       "AT+CMGS="
-      "41"  // TODO: PDU Length in Octets, excluding the Length of SMSC
+      "41"  // TODO: PDU Length in bytes, excluding the Length of SMSC
       "\r";
     ssize_t nbytes = write(fd, cmd, strlen(cmd));
     printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
@@ -313,13 +313,13 @@ static void send_sms_pdu(int fd)
       "00"  // Length of SMSC information (None)
       "11"  // SMS-SUBMIT message
       "00"  // TP-Message-Reference: 00 to let the phone set the message reference number itself
-      "0A"  // TODO: Address-Length: Length of phone number
+      "0A"  // TODO: Address-Length: Length of phone number (Number of Decimal Digits in Phone Number)
       "91"  // Type-of-Address: 91 for International Format of phone number
       PHONE_NUMBER_PDU  // TODO: Phone Number
       "00"  // TP-PID: Protocol identifier
       "08"  // TP-DCS: Data coding scheme
       "01"  // TP-Validity-Period
-      "1C"  // TP-User-Data-Length: Length of message
+      "1C"  // TP-User-Data-Length: Length of message in bytes
       // TP-User-Data: Encoded Message Text "Hello,Quectel!"
       "00480065006C006C006F002C005100750065006300740065006C0021"
       "\x1A";  // End of Message (Ctrl-Z)
