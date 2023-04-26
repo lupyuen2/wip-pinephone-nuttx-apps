@@ -316,7 +316,7 @@ static void send_sms_pdu(int fd)
       "00"  // TP-Message-Reference: 00 to let the phone set the message reference number itself
       "0A"  // TODO: Address-Length: Length of phone number (Number of Decimal Digits in Phone Number)
       "91"  // Type-of-Address: 91 for International Format of phone number
-      PHONE_NUMBER_PDU  // TODO: Phone Number
+      PHONE_NUMBER_PDU  // TODO: Phone Number in PDU Format
       "00"  // TP-PID: Protocol identifier
       "08"  // TP-DCS: Data coding scheme
       "01"  // TP-Validity-Period
