@@ -27,9 +27,10 @@
 #include <fcntl.h>
 #include <assert.h>
 
-// Define the Phone Number in this include file:
-// #define PHONE_NUMBER "1711"
-// #define PHONE_NUMBER_PDU "7111"
+// In this include file: Define the Phone Number in International Format
+// and in PDU Format (nibbles are flipped)
+// #define PHONE_NUMBER    "+651711"
+// #define PHONE_NUMBER_PDU "567111"
 #include "../../../phone_number.h"
 
 static void send_sms_text(int fd);
@@ -253,6 +254,7 @@ static void send_sms_text(int fd)
 
 // Send an SMS Message in PDU Mode. Based on
 // https://www.cika.com/soporte/Information/GSMmodules/Quectel/AppNotes/Quectel_GSM_ATC_Application_Note.pdf
+// https://www.etsi.org/deliver/etsi_gts/07/0705/05.01.00_60/gsmts_0705v050100p.pdf
 // https://en.m.wikipedia.org/wiki/GSM_03.40
 static void send_sms_pdu(int fd)
 {
@@ -318,7 +320,8 @@ static void send_sms_pdu(int fd)
       "08"  // TP-DCS: Data coding scheme
       "01"  // TP-Validity-Period
       "1C"  // TP-User-Data-Length: Length of message
-      "00480065006C006C006F002C005100750065006300740065006C0021"  // TP-User-Data: Encoded Message Text
+      // TP-User-Data: Encoded Message Text "Hello,Quectel!"
+      "00480065006C006C006F002C005100750065006300740065006C0021"
       "\x1A";  // End of Message (Ctrl-Z)
     ssize_t nbytes = write(fd, cmd, strlen(cmd));
     printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
