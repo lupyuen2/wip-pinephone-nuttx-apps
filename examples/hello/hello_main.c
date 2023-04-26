@@ -144,14 +144,14 @@ int main(int argc, FAR char *argv[])
     sleep(2);
   }
 
+  // Make an Outgoing Phone Call
+  dial_number(fd);
+
   // Send an SMS Message in Text Mode
   send_sms_text(fd);
 
   // Send an SMS Message in PDU Mode
   send_sms_pdu(fd);
-
-  // Make an Outgoing Phone Call
-  dial_number(fd);
 
   // Close the device
   close(fd);
