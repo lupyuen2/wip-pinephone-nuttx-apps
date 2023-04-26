@@ -279,7 +279,7 @@ static void send_sms_text(int fd)
 // Quectel GSM AT Commands Application Note, Section 9.3.2 "Send SMS in PDU mode", Page 26:
 // https://www.cika.com/soporte/Information/GSMmodules/Quectel/AppNotes/Quectel_GSM_ATC_Application_Note.pdf
 // ETSI GSM 07.05 Spec (AT Commands): https://www.etsi.org/deliver/etsi_gts/07/0705/05.01.00_60/gsmts_0705v050100p.pdf
-// ETSI GSM 03.40 Spec (PDU Format): https://en.m.wikipedia.org/wiki/GSM_03.40
+// ETSI GSM 03.40 Spec (PDU Format): https://en.wikipedia.org/wiki/GSM_03.40
 static void send_sms_pdu(int fd)
 {
   puts("send_sms_pdu");
