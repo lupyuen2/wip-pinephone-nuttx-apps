@@ -535,7 +535,7 @@ static void dial_number(int fd)
 
 /* Output Log
 
-Script started on Wed Apr 26 08:45:45 2023
+Script started on Thu Apr 27 11:16:37 2023
 command: screen /dev/tty.usbserial-1410 115200
 [?1049h[!p[?3;4l[4l>[4l[?1h=[0m(B[1;64r[H[2J[H[2JDRAM: 2048 MiB
 Trying to boot from MMC1
@@ -563,8 +563,8 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-348143 bytes read in 20 ms (16.6 MiB/s)
-Uncompressed size: 10530816 = 0xA0B000
+348433 bytes read in 21 ms (15.8 MiB/s)
+Uncompressed size: 10534912 = 0xA0C000
 36162 bytes read in 5 ms (6.9 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
@@ -677,33 +677,35 @@ RDY
 
 Write command: nbytes=3
 AT
-Response: nbytes=12
-
-+CFUN: 1
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=9
-AT
-OK
-
-Write command: nbytes=3
-AT
-Response: nbytes=57
-AT
-OK
+Response: nbytes=78
 
 +CPIN: READY
 
 +QUSIM: 1
 
++CFUN: 1
+
 +QIND: SMS DONE
+
++QIND: PB DONE
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
 
 Write command: nbytes=9
 AT+CREG?
@@ -713,72 +715,42 @@ OK
 
 Write command: nbytes=9
 AT+COPS?
-Response: nbytes=47
+Response: nbytes=29
 AT+CREG?
 +CREG: 0,1
 
 OK
 
-+QIND: PB DONE
-
-send_sms_text
-Write command: nbytes=10
-AT+CMGF=1
-Response: nbytes=40
-AT+COPS?
-+COPS: 0,0,"SGP-M1",7
-
-OK
-
-Write command: nbytes=14
-AT+CSCS="GSM"
-Response: nbytes=16
-AT+CMGF=1
-OK
-
-Write command: nbytes=22
-AT+CMGS="yourphonenumber"
-Response: nbytes=20
-AT+CSCS="GSM"
-OK
-
-Response: nbytes=22
-AT+CMGS="yourphonenumber"
-Response: nbytes=4
-
-> 
-Write command: nbytes=59
-Hello from Apache NuttX RTOS on PinePhone! (SMS Text Mode)
-Response: nbytes=32
-Hello from Apache NuttX RTOS on 
-send_sms_pdu
-Write command: nbytes=10
-AT+CMGF=0
+Write command: nbytes=9
+AT+CSCA?
 Response: nbytes=45
-PinePhone! (SMS Text Mode)
-+CMGS: 13
+AT+COPS?
++COPS: 0,0,"SIMBA SIMBA",7
 
 OK
 
-Write command: nbytes=11
-AT+CMGS=41
-Response: nbytes=16
-AT+CMGF=0
+Write command: nbytes=24
+AT+QCFG="servicedomain"
+Response: nbytes=43
+AT+CSCA?
++CSCA: "+6587614701",145
+
 OK
 
-Response: nbytes=15
-AT+CMGS=41
-> 
-Write command: nbytes=85
-0011000A91yourphonenumberpdu0008011C00480065006C006C006F002C005100750065006300740065006C0021
-Response: nbytes=32
-0011000A91yourphonenumberpdu0008011C0048
+Write command: nbytes=21
+AT+QCFG="nwscanmode"
+Response: nbytes=58
+AT+QCFG="servicedomain"
++QCFG: "servicedomain",2
+
+OK
+
 dial_number
 Write command: nbytes=10
 AT+QDAI=?
-Response: nbytes=71
-0065006C006C006F002C005100750065006300740065006C0021
-+CMGS: 14
+Response: nbytes=52
+AT+QCFG="nwscanmode"
++QCFG: "nwscanmode",0
 
 OK
 
@@ -836,7 +808,367 @@ Response: nbytes=9
 AT
 OK
 
+send_sms_text
+Write command: nbytes=10
+AT+CMGF=1
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=14
+AT+CSCS="GSM"
+Response: nbytes=16
+AT+CMGF=1
+OK
+
+Write command: nbytes=22
+AT+CMGS="yourphonenumber"
+Response: nbytes=20
+AT+CSCS="GSM"
+OK
+
+Response: nbytes=26
+AT+CMGS="yourphonenumber"
+> 
+Write command: nbytes=59
+Hello from Apache NuttX RTOS on PinePhone! (SMS Text Mode)
+Response: nbytes=32
+Hello from Apache NuttX RTOS on 
+Write command: nbytes=3
+AT
+Response: nbytes=45
+PinePhone! (SMS Text Mode)
++CMGS: 95
+
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+send_sms_pdu
+Write command: nbytes=10
+AT+CMGF=0
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=11
+AT+CMGS=41
+Response: nbytes=16
+AT+CMGF=0
+OK
+
+Response: nbytes=15
+AT+CMGS=41
+> 
+Write command: nbytes=85
+0011000A91yourphonenumberpdu0008011C00480065006C006C006F002C005100750065006300740065006C0021
+Response: nbytes=32
+0011000A91yourphonenumberpdu0008011C0048
+Write command: nbytes=3
+AT
+Response: nbytes=71
+0065006C006C006F002C005100750065006300740065006C0021
++CMGS: 96
+
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+nsh> [Khello
+up_setup: Clear DLAB
+up_setup: addr=0x1c28c04, before=0x0, after=0x0
+up_setup: addr=0x1c28c00, before=0xd, after=0xd
+up_setup: Configure the FIFOs
+Hello, World!!
+Open /dev/ttyS1: fd=3
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=9
+AT+CREG?
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=9
+AT+COPS?
+Response: nbytes=29
+AT+CREG?
++CREG: 0,1
+
+OK
+
+Write command: nbytes=9
+AT+CSCA?
+Response: nbytes=45
+AT+COPS?
++COPS: 0,0,"SIMBA SIMBA",7
+
+OK
+
+Write command: nbytes=24
+AT+QCFG="servicedomain"
+Response: nbytes=43
+AT+CSCA?
++CSCA: "+6587614701",145
+
+OK
+
+Write command: nbytes=21
+AT+QCFG="nwscanmode"
+Response: nbytes=58
+AT+QCFG="servicedomain"
++QCFG: "servicedomain",2
+
+OK
+
+dial_number
+Write command: nbytes=10
+AT+QDAI=?
+Response: nbytes=52
+AT+QCFG="nwscanmode"
++QCFG: "nwscanmode",0
+
+OK
+
+Write command: nbytes=9
+AT+QDAI?
+Response: nbytes=71
+AT+QDAI=?
++QDAI: (1-4),(0,1),(0,1),(0-5),(0-2),(0,1)(1)(1-16)
+
+OK
+
+Write command: nbytes=16
+ATDyourphonenumber;
+Response: nbytes=41
+AT+QDAI?
++QDAI: 1,1,0,1,0,0,1,1
+
+OK
+
+Write command: nbytes=4
+ATH
+Response: nbytes=36
+ATDyourphonenumber;
+OK
+
+NO CARRIER
+
+Write command: nbytes=3
+AT
+Response: nbytes=10
+ATH
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+send_sms_text
+Write command: nbytes=10
+AT+CMGF=1
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=14
+AT+CSCS="GSM"
+Response: nbytes=16
+AT+CMGF=1
+OK
+
+Write command: nbytes=22
+AT+CMGS="yourphonenumber"
+Response: nbytes=20
+AT+CSCS="GSM"
+OK
+
+Response: nbytes=26
+AT+CMGS="yourphonenumber"
+> 
+Write command: nbytes=59
+Hello from Apache NuttX RTOS on PinePhone! (SMS Text Mode)
+Response: nbytes=32
+Hello from Apache NuttX RTOS on 
+Write command: nbytes=3
+AT
+Response: nbytes=45
+PinePhone! (SMS Text Mode)
++CMGS: 97
+
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+send_sms_pdu
+Write command: nbytes=10
+AT+CMGF=0
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=11
+AT+CMGS=41
+Response: nbytes=16
+AT+CMGF=0
+OK
+
+Response: nbytes=11
+AT+CMGS=41
+Response: nbytes=4
+
+> 
+Write command: nbytes=85
+0011000A91yourphonenumberpdu0008011C00480065006C006C006F002C005100750065006300740065006C0021
+Response: nbytes=32
+0011000A91yourphonenumberpdu0008011C0048
+Write command: nbytes=3
+AT
+Response: nbytes=71
+0065006C006C006F002C005100750065006300740065006C0021
++CMGS: 98
+
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
+Write command: nbytes=3
+AT
+Response: nbytes=9
+AT
+OK
+
 nsh> [K
-Script done on Wed Apr 26 08:47:10 2023
+Script done on Thu Apr 27 11:20:01 2023
 
 */
