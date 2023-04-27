@@ -144,6 +144,46 @@ int main(int argc, FAR char *argv[])
     sleep(2);
   }
 
+  // Check Service Domain, which should be 2
+  //  AT+QCFG="servicedomain"
+  {
+    // Write command
+    const char cmd[] = "AT+QCFG=\"servicedomain\"\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
+  // Check Network Scan Mode, which should be 0
+  //  AT+QCFG="nwscanmode"
+  {
+    // Write command
+    const char cmd[] = "AT+QCFG=\"nwscanmode\"\r";
+    ssize_t nbytes = write(fd, cmd, strlen(cmd));
+    printf("Write command: nbytes=%ld\n%s\n", nbytes, cmd);
+    assert(nbytes == strlen(cmd));
+
+    // Read response
+    static char buf[1024];
+    nbytes = read(fd, buf, sizeof(buf) - 1);
+    if (nbytes >= 0) { buf[nbytes] = 0; }
+    else { buf[0] = 0; }
+    printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
+
+    // Wait a while
+    sleep(2);
+  }
+
   // Make an Outgoing Phone Call
   dial_number(fd);
 
