@@ -36,6 +36,10 @@
 //   #define PHONE_NUMBER_PDU "214365870F9"
 #include "../../../phone_number.h"
 
+#ifndef CONFIG_A64_UART3
+#error UART3 should be enabled in menuconfig
+#endif
+
 static void send_sms_text(int fd);
 static void send_sms_pdu(int fd);
 static void dial_number(int fd);
