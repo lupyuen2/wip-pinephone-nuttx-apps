@@ -36,6 +36,7 @@
 //   #define PHONE_NUMBER_PDU "214365870F9"
 #include "../../../phone_number.h"
 
+// TODO: Handle CONFIG_A64_UART2 and /dev/ttyS2
 #ifndef CONFIG_A64_UART3
 #error UART3 should be enabled in menuconfig
 #endif
@@ -228,7 +229,7 @@ static void send_sms_text(int fd)
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Set Character Set to GSM
@@ -248,7 +249,7 @@ static void send_sms_text(int fd)
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Send SMS Text Message, assuming Message Format is Text Mode
@@ -295,7 +296,7 @@ static void send_sms_text(int fd)
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Clean up the Log: Repeat 5 times: Write AT command and read response
@@ -315,7 +316,7 @@ static void send_sms_text(int fd)
       printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
       // Wait a while
-      sleep(2);
+      sleep(1);
     }
 }
 
@@ -345,7 +346,7 @@ static void send_sms_pdu(int fd)
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Send SMS Text Message, assuming Message Format is PDU Mode
@@ -403,7 +404,7 @@ static void send_sms_pdu(int fd)
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Clean up the Log: Repeat 5 times: Write AT command and read response
@@ -423,7 +424,7 @@ static void send_sms_pdu(int fd)
       printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
       // Wait a while
-      sleep(2);
+      sleep(1);
     }
 }
 
@@ -449,7 +450,7 @@ static void dial_number(int fd)
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Digital Audio Interface Configuration: Query the current interface configuration
@@ -469,7 +470,7 @@ static void dial_number(int fd)
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Issue a call:
@@ -514,7 +515,7 @@ static void dial_number(int fd)
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
   // Clean up the Log: Repeat 5 times: Write AT command and read response
   for (int i = 0; i < 5; i++)
@@ -533,7 +534,7 @@ static void dial_number(int fd)
       printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
       // Wait a while
-      sleep(2);
+      sleep(1);
     }
 }
 
