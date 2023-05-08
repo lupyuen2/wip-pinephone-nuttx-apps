@@ -314,9 +314,6 @@ static void send_sms_text(int fd)
       if (nbytes >= 0) { buf[nbytes] = 0; }
       else { buf[0] = 0; }
       printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-      // Wait a while
-      sleep(1);
     }
 }
 
@@ -422,9 +419,6 @@ static void send_sms_pdu(int fd)
       if (nbytes >= 0) { buf[nbytes] = 0; }
       else { buf[0] = 0; }
       printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-      // Wait a while
-      sleep(1);
     }
 }
 
@@ -532,9 +526,6 @@ static void dial_number(int fd)
       if (nbytes >= 0) { buf[nbytes] = 0; }
       else { buf[0] = 0; }
       printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
-
-      // Wait a while
-      sleep(1);
     }
 }
 
