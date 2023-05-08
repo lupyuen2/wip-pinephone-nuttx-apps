@@ -79,7 +79,7 @@ int main(int argc, FAR char *argv[])
       printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
       // Wait a while
-      sleep(2);
+      sleep(1);
     }
 
   // TODO: Enter the PIN for the SIM card:
@@ -106,7 +106,7 @@ int main(int argc, FAR char *argv[])
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Show operator:
@@ -126,7 +126,7 @@ int main(int argc, FAR char *argv[])
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Show SMS Center Address:
@@ -146,7 +146,7 @@ int main(int argc, FAR char *argv[])
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Check Service Domain, which should be 2
@@ -166,7 +166,7 @@ int main(int argc, FAR char *argv[])
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Check Network Scan Mode, which should be 0
@@ -186,7 +186,7 @@ int main(int argc, FAR char *argv[])
     printf("Response: nbytes=%ld\n%s\n", nbytes, buf);
 
     // Wait a while
-    sleep(2);
+    sleep(1);
   }
 
   // Make an Outgoing Phone Call
