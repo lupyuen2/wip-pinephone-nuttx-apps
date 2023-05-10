@@ -36,9 +36,16 @@
 //   #define PHONE_NUMBER_PDU "214365870F9"
 #include "../../../phone_number.h"
 
+// We assume UART3 is at /dev/ttyS1
 // TODO: Handle CONFIG_A64_UART2 and /dev/ttyS2
+#ifdef CONFIG_A64_UART1
+#  error UART1 should be disabled in menuconfig
+#endif
+#ifdef CONFIG_A64_UART2
+#  error UART2 should be disabled in menuconfig
+#endif
 #ifndef CONFIG_A64_UART3
-#error UART3 should be enabled in menuconfig
+#  error UART3 should be enabled in menuconfig
 #endif
 
 static void send_sms_text(int fd);
