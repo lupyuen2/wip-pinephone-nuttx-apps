@@ -18,6 +18,12 @@
  *
  ****************************************************************************/
 
+/* Reference:
+ *
+ * "NuttX RTOS for PinePhone: Phone Calls and Text Messages"
+ * https://lupyuen.github.io/articles/lte2
+ */
+
 /****************************************************************************
  * Included Files
  ****************************************************************************/
@@ -538,7 +544,7 @@ static void dial_number(int fd)
 
 /* Output Log
 
-Script started on Mon May 15 20:30:27 2023
+Script started on Tue May 16 11:30:00 2023
 command: screen /dev/tty.usbserial-1410 115200
 DRAM: 2048 MiB
 Trying to boot from MMC1
@@ -566,9 +572,9 @@ Found U-Boot script /boot.scr
 653 bytes read in 3 ms (211.9 KiB/s)
 ## Executing script at 4fc00000
 gpio: pin 114 (gpio 114) value is 1
-350735 bytes read in 19 ms (17.6 MiB/s)
-Uncompressed size: 10539008 = 0xA0D000
-36162 bytes read in 5 ms (6.9 MiB/s)
+109375 bytes read in 9 ms (11.6 MiB/s)
+Uncompressed size: 311296 = 0x4C000
+36162 bytes read in 4 ms (8.6 MiB/s)
 1078500 bytes read in 50 ms (20.6 MiB/s)
 ## Flattened Device Tree blob at 4fa00000
    Booting using the fdt blob at 0x4fa00000
@@ -577,51 +583,21 @@ Uncompressed size: 10539008 = 0xA0D000
 
 Starting kernel ...
 
-pinephone_modem_init: Configure PWR_BAT for Output
-pinephone_modem_init: Set PWR_BAT to High
-pinephone_modem_init: Configure RESET_N for Output
-pinephone_modem_init: Set RESET_N to Low
-pinephone_modem_init: Configure AP-READY for Output
-pinephone_modem_init: Set AP_READY to Low to wake up modem
-pinephone_modem_init: Configure DTR for Output
-pinephone_modem_init: Set DTR to Low to wake up modem
-pinephone_modem_init: Wait 30 ms
-pinephone_modem_init: Configure PWRKEY for Output
-pinephone_modem_init: Set PWRKEY to High
-pinephone_modem_init: Wait 600 ms
-pinephone_modem_init: Set PWRKEY to Low
-pinephone_modem_init: Configure W_DISABLE for Output
-pinephone_modem_init: Set W_DISABLE to High
-pinephone_modem_wait: Configure MODEM_STATUS for Input
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=1
-pinephone_modem_wait: Status=0
 nsh: mkfatfs: command not found
 
 NuttShell (NSH) NuttX-12.0.3
+nsh> uname -a
+NuttX 12.0.3 a3c1585 May 16 2023 11:29:05 arm64 pinephone
+nsh> ls /dev
+/dev:
+ console
+ null
+ ram0
+ ram2
+ ttyS0
+ ttyS1
+ userleds
+ zero
 nsh> hello
 Hello, World!!
 Open /dev/ttyS1: fd=3
@@ -825,10 +801,8 @@ Response: nbytes=6
 
 OK
 
-Response: nbytes=11
+Response: nbytes=15
 AT+CMGS=41
-Response: nbytes=4
-
 > 
 Write command: nbytes=85
 0011000A91yourphonenumberpdu0008011C00480065006C006C006F002C005100750065006300740065006C0021
@@ -867,12 +841,14 @@ Hello, World!!
 Open /dev/ttyS1: fd=3
 Write command: nbytes=3
 AT
-Response: nbytes=3
+Response: nbytes=9
 AT
+OK
+
 Write command: nbytes=3
 AT
-Response: nbytes=6
-
+Response: nbytes=9
+AT
 OK
 
 Write command: nbytes=3
@@ -896,13 +872,11 @@ OK
 Write command: nbytes=9
 AT+CREG?
 Response: nbytes=9
-AT
-OK
-
+AT+CREG?
 Write command: nbytes=9
 AT+COPS?
-Response: nbytes=29
-AT+CREG?
+Response: nbytes=20
+
 +CREG: 0,1
 
 OK
@@ -1091,6 +1065,6 @@ AT
 OK
 
 nsh> 
-Script done on Mon May 15 20:35:09 2023
+Script done on Tue May 16 11:34:35 2023
 
 */
