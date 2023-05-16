@@ -18,23 +18,55 @@
  *
  ****************************************************************************/
 
-/****************************************************************************
- * Included Files
- ****************************************************************************/
-
 #include <nuttx/config.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <assert.h>
 
-/****************************************************************************
- * Public Functions
- ****************************************************************************/
+// MPU-6050 Accelerometer Data Format (14 bytes)
+struct sensor_data_s
+{
+  int16_t x_accel;  // Accelerometer X
+  int16_t y_accel;  // Accelerometer Y
+  int16_t z_accel;  // Accelerometer Z
+  int16_t temp;     // Temperature
+  int16_t x_gyro;   // Gyroscope X
+  int16_t y_gyro;   // Gyroscope Y
+  int16_t z_gyro;   // Gyroscope Z
+};
 
-/****************************************************************************
- * hello_main
- ****************************************************************************/
-
+// Read the MPU-6050 Accelerometer Data from /dev/imu0 and interpret the data
 int main(int argc, FAR char *argv[])
 {
   printf("Hello, World!!\n");
+
+  // Open the MPU-6050 Accelerometer at /dev/imu0 for reading
+  int fd = open("/dev/imu0", O_RDONLY);
+  assert(fd > 0);  // Check that /dev/imu0 exists
+
+  // Accelerometer Data will have 14 bytes
+  struct sensor_data_s data;
+  assert(sizeof(data) == 14);  // We expect to read 14 bytes
+
+  // Read the Accelerometer Data (14 bytes)
+  int bytes_read = read(fd, &data, sizeof(data));
+  assert(bytes_read == sizeof(data));  // We expect 14 bytes read
+
+  // Print the Accelerometer Data
+  printf("Accelerometer X: %d\n", data.x_accel);
+  printf("Accelerometer Y: %d\n", data.y_accel);
+  printf("Accelerometer Z: %d\n", data.z_accel);
+  printf("Temperature:     %d\n", data.temp);
+  printf("Gyroscope X:     %d\n", data.x_gyro);
+  printf("Gyroscope Y:     %d\n", data.y_gyro);
+  printf("Gyroscope Z:     %d\n", data.z_gyro);
+
+  // Close the Accelerometer
+  close(fd);
   return 0;
 }
+
+/* Output Log
+
+
+*/
