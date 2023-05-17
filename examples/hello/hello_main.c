@@ -26,6 +26,7 @@
 
 // MPU-6050 Accelerometer Data Format
 // (14 bytes, big-endian)
+// Based on NuttX Kernel: https://github.com/apache/nuttx/blob/master/drivers/sensors/mpu60x0.c#L218-L233
 struct sensor_data_s
 {
   int16_t x_accel;  // Accelerometer X
