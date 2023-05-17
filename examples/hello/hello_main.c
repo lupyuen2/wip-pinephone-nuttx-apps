@@ -22,8 +22,10 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <arpa/inet.h>  // For ntohs()
 
-// MPU-6050 Accelerometer Data Format (14 bytes)
+// MPU-6050 Accelerometer Data Format
+// (14 bytes, big-endian)
 struct sensor_data_s
 {
   int16_t x_accel;  // Accelerometer X
@@ -52,14 +54,24 @@ int main(int argc, FAR char *argv[])
   int bytes_read = read(fd, &data, sizeof(data));
   assert(bytes_read == sizeof(data));  // We expect 14 bytes read
 
+  // Flip the bytes from Big-Endian to Little-Endian for PinePhone.
+  // ntohs() is explained here: https://developer.ibm.com/articles/au-endianc/
+  int16_t x_accel = ntohs(data.x_accel);
+  int16_t y_accel = ntohs(data.y_accel);
+  int16_t z_accel = ntohs(data.z_accel);
+  int16_t temp    = ntohs(data.temp);
+  int16_t x_gyro  = ntohs(data.x_gyro);
+  int16_t y_gyro  = ntohs(data.y_gyro);
+  int16_t z_gyro  = ntohs(data.z_gyro);
+
   // Print the Accelerometer Data
-  printf("Accelerometer X: %d\n", data.x_accel);
-  printf("Accelerometer Y: %d\n", data.y_accel);
-  printf("Accelerometer Z: %d\n", data.z_accel);
-  printf("Temperature:     %d\n", data.temp);
-  printf("Gyroscope X:     %d\n", data.x_gyro);
-  printf("Gyroscope Y:     %d\n", data.y_gyro);
-  printf("Gyroscope Z:     %d\n", data.z_gyro);
+  printf("Accelerometer X: %d\n", x_accel);
+  printf("Accelerometer Y: %d\n", y_accel);
+  printf("Accelerometer Z: %d\n", z_accel);
+  printf("Temperature:     %d\n", temp);
+  printf("Gyroscope X:     %d\n", x_gyro);
+  printf("Gyroscope Y:     %d\n", y_gyro);
+  printf("Gyroscope Z:     %d\n", z_gyro);
 
   // Close the Accelerometer
   close(fd);
@@ -68,5 +80,26 @@ int main(int argc, FAR char *argv[])
 
 /* Output Log
 
+Portrait Orientation:
+nsh> hello
+Hello, World!!
+Accelerometer X: 4137
+Accelerometer Y: -97
+Accelerometer Z: 208
+Temperature:     -1500
+Gyroscope X:     -29
+Gyroscope Y:     66
+Gyroscope Z:     12
+
+Landscape Orientation:
+nsh> hello
+Hello, World!!
+Accelerometer X: -143
+Accelerometer Y: -4007
+Accelerometer Z: -443
+Temperature:     -1418
+Gyroscope X:     -5
+Gyroscope Y:     118
+Gyroscope Z:     -56
 
 */
