@@ -50,6 +50,8 @@
 
 int main(int argc, FAR char *argv[])
 {
+  puts("***main");////
+  ////assert(false);////
   struct sched_param param;
   int ret = 0;
 
