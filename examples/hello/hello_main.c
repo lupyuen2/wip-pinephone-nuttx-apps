@@ -35,6 +35,16 @@
 
 int main(int argc, FAR char *argv[])
 {
+  int i;
   printf("Hello, World!!\n");
+
+  for (i = 0; ; i++)
+    {
+      void *p = malloc(8192);
+      if (p == NULL) { break; }
+      if (i % 10 == 0) { printf("i=%d\n", i); }
+    }
+  printf("malloc failed at i=%d\n", i);
+
   return 0;
 }
