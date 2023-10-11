@@ -35,6 +35,25 @@
 
 int main(int argc, FAR char *argv[])
 {
+  int i;
   printf("Hello, World!!\n");
+
+  for (i = 0; ; i++)
+    {
+      void *p = malloc(8192);
+      if (p == NULL) { break; }
+      if (i % 10 == 0) { printf("i=%d\n", i); }
+    }
+  printf("malloc failed at i=%d\n", i);
+
   return 0;
 }
+
+/*
+malloc failed at i=430
+nsh> free
+                   total       used       free    largest  nused  nfree
+        Kmem:    2069496      13736    2055760    2054128     41      3
+        Page:    4194304     606208    3588096    3588096
+nsh> 
+*/
