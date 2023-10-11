@@ -55,5 +55,6 @@ nsh> free
                    total       used       free    largest  nused  nfree
         Kmem:    2069496      13736    2055760    2054128     41      3
         Page:    4194304     606208    3588096    3588096
-nsh> 
+
+430 * 8192 = 3.5 MB
 */
