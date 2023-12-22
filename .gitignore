@@ -39,3 +39,5 @@ Make.dep
 .dirlinks
 .vscode
 .DS_Store
+.nimcache
+
