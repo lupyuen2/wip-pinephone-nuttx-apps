@@ -65,11 +65,13 @@ proc read_config(cfg: string): DotConfig =
       continue
     case keyval[0]
     of "ARCH":
+      echo "keyval=" & keyval ####
+      echo "keyval[1]=" & keyval[1] ####
       let arch = keyval[1].strip(chars = {'"'})
       case arch
       of "arm", "arm64":
         result.arch = arch
-      of "riscv":
+      of "risc-v":
         result.arch = "riscv32"
       of "sim":
         if defined(amd64):
