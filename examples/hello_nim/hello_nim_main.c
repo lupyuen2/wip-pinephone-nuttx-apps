@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include <nuttx/config.h>
-#include "hello_nim_async.h"
+////#include "hello_nim_async.h"
 
 /****************************************************************************
  * Public Functions
@@ -33,7 +33,7 @@
  * hello_main
  ****************************************************************************/
 
-int main(int argc, FAR char *argv[])
+int main(int argc, char *argv[])
 {
   NimMain();
   hello_nim();
