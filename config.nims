@@ -72,7 +72,7 @@ proc read_config(cfg: string): DotConfig =
       of "arm", "arm64":
         result.arch = arch
       of "risc-v":
-        result.arch = "riscv32"
+        result.arch = "riscv64"
       of "sim":
         if defined(amd64):
           result.arch = "amd64"
