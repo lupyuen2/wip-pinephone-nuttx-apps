@@ -38,7 +38,7 @@ switch "d", "nimAllocPagesViaMalloc"
 switch "d", "noSignalHandler"
 switch "threads", "off"
 switch "noMain", "on"
-####switch "compileOnly", "on"
+switch "compileOnly", "on"
 switch "noLinking", "on"
 # TODO: need OpenSSL-mbedTLS wrapper library.
 #switch "d", "ssl"
@@ -79,9 +79,9 @@ proc read_config(cfg: string): DotConfig =
         #### TODO: Check for riscv32 or riscv3
         #### CONFIG_ARCH_RV32=y or CONFIG_ARCH_RV64=y
         result.arch = "riscv64"
-        switch("passC", "-mcmodel=medany")  #### TODO
-        switch("passC", "-march=rv64imafdc_zicsr_zifencei") #### TODO
-        switch("passC", "-mabi=lp64d") #### TODO
+        # switch("passC", "-mcmodel=medany")  #### TODO
+        # switch("passC", "-march=rv64imafdc_zicsr_zifencei") #### TODO
+        # switch("passC", "-mabi=lp64d") #### TODO
       of "sim":
         if defined(amd64):
           result.arch = "amd64"
