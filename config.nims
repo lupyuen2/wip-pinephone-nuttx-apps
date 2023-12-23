@@ -59,6 +59,7 @@ proc killoBytes(bytes: int): int =
   result = (bytes / 1024).int
 
 proc read_config(cfg: string): DotConfig =
+  echo "read_config: " & cfg ####
   for line in cfg.readFile.splitLines:
     if not line.startsWith("CONFIG_"):
       continue
@@ -93,6 +94,7 @@ proc read_config(cfg: string): DotConfig =
   echo "* opt:     " & $result.opt
   echo "* debug:   " & $result.debugSymbols
   echo "* ramSize: " & $result.ramSize
+  echo "* isSim:   " & $result.isSim
 
 func bool2onoff(b: bool): string =
   result = if b: "on" else: "off"
