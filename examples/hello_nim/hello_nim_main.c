@@ -39,3 +39,6 @@ int main(int argc, char *argv[])
   hello_nim();
   return 0;
 }
+
+////TODO
+void riscv_netinitialize(void) {} ////TODO
