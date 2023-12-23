@@ -17,6 +17,12 @@ proc hello_nim() {.exportc, cdecl.} =
   waitFor launch()
   GC_runOrc()
 
+# Compile on NuttX:
+# export TOPDIR=/workspaces/bookworm/nuttx
+# cd /workspaces/bookworm/apps/examples/hello_nim
+# nim c --header hello_nim_async.nim 
+
+# Test in Linux:
 # hello_nim() ####
 # Output:
 # $ ./hello_nim_async 

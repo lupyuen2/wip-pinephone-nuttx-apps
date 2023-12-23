@@ -68,6 +68,7 @@ proc read_config(cfg: string): DotConfig =
       continue
     case keyval[0]
     of "ARCH":
+      echo "line=" & line ####
       echo "keyval=" & keyval ####
       echo "keyval[1]=" & keyval[1] ####
       let arch = keyval[1].strip(chars = {'"'})
@@ -75,6 +76,8 @@ proc read_config(cfg: string): DotConfig =
       of "arm", "arm64":
         result.arch = arch
       of "risc-v":
+        #### TODO: Check for riscv32 or riscv3
+        #### CONFIG_ARCH_RV32=y or CONFIG_ARCH_RV64=y
         result.arch = "riscv64"
       of "sim":
         if defined(amd64):
@@ -83,12 +86,16 @@ proc read_config(cfg: string): DotConfig =
           result.arch = "arm64"
         result.isSim = true
     of "DEBUG_NOOPT":
+      echo "line=" & line ####
       result.opt = oNone
     of "DEBUG_FULLOPT":
+      echo "line=" & line ####
       result.opt = oSize
     of "DEBUG_SYMBOLS":
+      echo "line=" & line ####
       result.debugSymbols = true
     of "RAM_SIZE":
+      echo "line=" & line ####
       result.ramSize = keyval[1].parseInt
   echo "* arch:    " & result.arch
   echo "* opt:     " & $result.opt
