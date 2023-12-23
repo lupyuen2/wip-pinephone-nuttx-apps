@@ -16,3 +16,16 @@ proc launch() {.async.} =
 proc hello_nim() {.exportc, cdecl.} =
   waitFor launch()
   GC_runOrc()
+
+# hello_nim() ####
+# Output:
+# $ ./hello_nim_async 
+# Hello from task 1! loops: 0
+# Hello from task 2! loops: 0
+# Hello from task 3! loops: 0
+# Hello from task 1! loops: 1
+# Hello from task 2! loops: 1
+# Hello from task 3! loops: 1
+# Hello from task 1! loops: 2
+# Hello from task 2! loops: 2
+# Hello from task 3! loops: 2
