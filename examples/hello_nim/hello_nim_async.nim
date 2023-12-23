@@ -14,7 +14,8 @@ proc launch() {.async.} =
   await task(3)
 
 proc hello_nim() {.exportc, cdecl.} =
-  waitFor launch()
+  #### waitFor launch()
+  echo "Hello Nim!" ####
   GC_runOrc()
 
 # Compile on NuttX:
