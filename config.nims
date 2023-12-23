@@ -27,8 +27,8 @@ switch "mm", "orc"
 switch "arm.nuttx.gcc.exe", "arm-none-eabi-gcc"
 switch "arm64.nuttx.gcc.exe", "aarch64-none-elf-gcc"
 ####switch "riscv32.nuttx.gcc.exe", "riscv64-unknown-elf-gcc"
-switch "riscv32.nuttx.gcc.exe", "riscv-none-elf-gcc" ####
-switch "riscv64.nuttx.gcc.exe", "riscv-none-elf-gcc" ####
+switch "riscv32.nuttx.gcc.exe", "riscv-none-elf-gcc" #### TODO
+switch "riscv64.nuttx.gcc.exe", "riscv-none-elf-gcc" #### TODO
 switch "amd64.nuttx.gcc.exe", "x86_64-linux-gnu-gcc"
 
 switch "nimcache", ".nimcache"
@@ -38,7 +38,7 @@ switch "d", "nimAllocPagesViaMalloc"
 switch "d", "noSignalHandler"
 switch "threads", "off"
 switch "noMain", "on"
-switch "compileOnly", "on"
+####switch "compileOnly", "on"
 switch "noLinking", "on"
 # TODO: need OpenSSL-mbedTLS wrapper library.
 #switch "d", "ssl"
