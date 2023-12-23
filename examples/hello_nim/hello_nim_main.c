@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include <nuttx/config.h>
-#include "../.nimcache/hello_nim_async.h"
+#include "hello_nim_async.h"
 
 /****************************************************************************
  * Public Functions
