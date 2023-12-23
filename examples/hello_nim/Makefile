@@ -31,7 +31,7 @@ MODULE    = $(CONFIG_EXAMPLES_HELLO_NIM)
 
 NIMPATH = $(shell choosenim show path)
 CFLAGS += -I $(NIMPATH)/lib -I ../../.nimcache
-CSRCS += $(wildcard .nimcache/*.c)
+CSRCS += $(wildcard ../../.nimcache/*.c)
 
 MAINSRC = hello_nim_main.c
 
