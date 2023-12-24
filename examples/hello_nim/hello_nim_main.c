@@ -40,5 +40,5 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-////TODO
+////TODO: Needed by nuttx/arch/risc-v/src/common/riscv_initialize.c
 void riscv_netinitialize(void) {} ////TODO
