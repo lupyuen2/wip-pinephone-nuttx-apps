@@ -1,4 +1,4 @@
-import std/strformat
+import std/strformat  ## String Formatting
 
 ## Import ioctl() from C
 ## Based on /home/vscode/.choosenim/toolchains/nim-#devel/lib/std/syncio.nim
