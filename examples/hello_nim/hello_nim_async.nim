@@ -1,5 +1,31 @@
-import std/asyncdispatch
 import std/strformat
+
+## Import ioctl() from C
+## Based on /home/vscode/.choosenim/toolchains/nim-#devel/lib/std/syncio.nim
+proc c_ioctl(fd: cint, request: cint): cint {.
+  importc: "ioctl", header: "<sys/ioctl.h>", varargs.}
+
+## Main Function in Nim
+proc hello_nim() {.exportc, cdecl.} =
+
+  ## Print something
+  echo "Hello Nim!"
+
+  ## Test ioctl
+  var ret = c_ioctl(0, 0)
+  echo &"ret={ret}"
+
+  ## Finish
+  ## waitFor launch()
+  GC_runOrc()
+
+## Compile on NuttX:
+# export TOPDIR=/workspaces/bookworm/nuttx
+# cd /workspaces/bookworm/apps/examples/hello_nim
+# nim c --header hello_nim_async.nim 
+
+## Previously:
+import std/asyncdispatch
 
 proc task(id: int): Future[void] {.async.} =
   for loop in 0..2:
@@ -12,29 +38,6 @@ proc launch() {.async.} =
     asyncCheck task(id)
     await sleepAsync(200)
   await task(3)
-
-## Import ioctl() from C
-proc c_ioctl(fd: cint, request: cint): cint {.
-  importc: "ioctl", header: "<sys/ioctl.h>", varargs.}
-
-proc hello_nim() {.exportc, cdecl.} =
-
-  ## Print something
-  echo "Hello Nim!"
-
-  ## Test ioctl
-  var ret = c_ioctl(0, 0)
-  echo "ret="
-  echo ret
-
-  ## Finish
-  ## waitFor launch()
-  GC_runOrc()
-
-# Compile on NuttX:
-# export TOPDIR=/workspaces/bookworm/nuttx
-# cd /workspaces/bookworm/apps/examples/hello_nim
-# nim c --header hello_nim_async.nim 
 
 # Test in Linux:
 # hello_nim() ####
