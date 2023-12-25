@@ -30,7 +30,7 @@ proc blink_led() =
 
   ## Sleep a while
   echo "Waiting..."
-  discard c_usleep(500 * 1000)
+  discard c_usleep(1000_000)
 
   ## Turn on LED
   echo "Set LED 0 to 0"
