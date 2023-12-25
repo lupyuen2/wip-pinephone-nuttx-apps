@@ -13,9 +13,22 @@ proc launch() {.async.} =
     await sleepAsync(200)
   await task(3)
 
+## Import ioctl() from C
+proc c_ioctl(fd: cint, request: cint): cint {.
+  importc: "ioctl", header: "<sys/ioctl.h>", varargs.}
+
 proc hello_nim() {.exportc, cdecl.} =
-  #### waitFor launch()
-  echo "Hello Nim!" ####
+
+  ## Print something
+  echo "Hello Nim!"
+
+  ## Test ioctl
+  var ret = c_ioctl(0, 0)
+  echo "ret="
+  echo ret
+
+  ## Finish
+  ## waitFor launch()
   GC_runOrc()
 
 # Compile on NuttX:
