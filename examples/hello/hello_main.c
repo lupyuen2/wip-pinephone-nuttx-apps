@@ -47,8 +47,8 @@ int main(int argc, FAR char *argv[])
   if (fd < 0)
     {
       int errcode = errno;
-      printf("ERROR: Failed to open %s: %d\n",
-             CONFIG_EXAMPLES_LEDS_DEVPATH, errcode);
+      printf("ERROR: Failed to open /dev/userleds: %d\n",
+             errcode);
       return EXIT_FAILURE;
     }
 
@@ -77,6 +77,9 @@ int main(int argc, FAR char *argv[])
               errcode);
       return EXIT_FAILURE;
     }
+
+  // Close the LED Driver
+  close(fd);
 
   return 0;
 }

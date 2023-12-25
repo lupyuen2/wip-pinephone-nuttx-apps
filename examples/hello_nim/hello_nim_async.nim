@@ -1,9 +1,46 @@
 import std/strformat  ## String Formatting
 
-## Import ioctl() from C
+## Import Standard Functions from C.
 ## Based on /home/vscode/.choosenim/toolchains/nim-#devel/lib/std/syncio.nim
+proc c_open(filename: cstring, mode: cint): cint {.
+  importc: "open", nodecl.}
+proc c_close(fd: cint): cint {.
+  importc: "close", nodecl.}
 proc c_ioctl(fd: cint, request: cint): cint {.
   importc: "ioctl", header: "<sys/ioctl.h>", varargs.}
+proc c_usleep(usec: cuint): cint {.
+  importc: "usleep", nodecl.}
+var O_WRONLY {.importc: "O_WRONLY", header: "<fcntl.h>".}: cint
+var ULEDIOC_SETALL {.importc: "ULEDIOC_SETALL", header: "<nuttx/leds/userled.h>".}: cint
+
+proc blink_led() =
+  ## Open the LED driver
+  echo "Opening /dev/userleds"
+  var fd = c_open("/dev/userleds", O_WRONLY)
+  if fd < 0:
+    echo "Failed to open /dev/userleds"
+    return
+
+  ## Turn on LED
+  echo "Set LED 0 to 1"
+  var ret = c_ioctl(fd, ULEDIOC_SETALL, 1)
+  if ret < 0:
+    echo "ioctl(ULEDIOC_SETALL) failed"
+    return
+
+  ## Sleep a while
+  echo "Waiting..."
+  discard c_usleep(500 * 1000)
+
+  ## Turn on LED
+  echo "Set LED 0 to 0"
+  ret = c_ioctl(fd, ULEDIOC_SETALL, 0)
+  if ret < 0:
+    echo "ioctl(ULEDIOC_SETALL) failed"
+    return
+
+  ## Close the LED Driver
+  discard c_close(fd)
 
 ## Main Function in Nim
 proc hello_nim() {.exportc, cdecl.} =
@@ -11,9 +48,8 @@ proc hello_nim() {.exportc, cdecl.} =
   ## Print something
   echo "Hello Nim!"
 
-  ## Test ioctl
-  var ret = c_ioctl(0, 0)
-  echo &"ret={ret}"
+  ## Blink the LED
+  blink_led()
 
   ## Finish
   ## waitFor launch()
