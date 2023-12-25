@@ -5,15 +5,17 @@ import std/strformat  ## String Formatting
 proc c_open(filename: cstring, mode: cint): cint {.
   importc: "open", nodecl.}
 proc c_close(fd: cint): cint {.
-  importc: "close", nodecl.}
+  importc: "close", nodecl, discardable.}
 proc c_ioctl(fd: cint, request: cint): cint {.
-  importc: "ioctl", header: "<sys/ioctl.h>", varargs.}
+  importc: "ioctl", nodecl, varargs.}
 proc c_usleep(usec: cuint): cint {.
-  importc: "usleep", nodecl.}
+  importc: "usleep", nodecl, discardable.}
 var O_WRONLY {.importc: "O_WRONLY", header: "<fcntl.h>".}: cint
 var ULEDIOC_SETALL {.importc: "ULEDIOC_SETALL", header: "<nuttx/leds/userled.h>".}: cint
 
+## Blink the LED
 proc blink_led() =
+
   ## Open the LED driver
   echo "Opening /dev/userleds"
   var fd = c_open("/dev/userleds", O_WRONLY)
@@ -28,9 +30,9 @@ proc blink_led() =
     echo "ioctl(ULEDIOC_SETALL) failed"
     return
 
-  ## Sleep a while
+  ## Wait a second (literally)
   echo "Waiting..."
-  discard c_usleep(1000_000)
+  c_usleep(1000_000)
 
   ## Turn on LED
   echo "Set LED 0 to 0"
@@ -40,7 +42,7 @@ proc blink_led() =
     return
 
   ## Close the LED Driver
-  discard c_close(fd)
+  c_close(fd)
 
 ## Main Function in Nim
 proc hello_nim() {.exportc, cdecl.} =
