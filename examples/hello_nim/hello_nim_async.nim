@@ -1,17 +1,23 @@
 import std/strformat  ## String Formatting
 
-## Import Standard Functions from C.
+## Import NuttX Functions and Macros from C.
 ## Based on /home/vscode/.choosenim/toolchains/nim-#devel/lib/std/syncio.nim
 proc c_open(filename: cstring, mode: cint): cint {.
-  importc: "open", nodecl.}
+  importc: "open", header: "<fcntl.h>",
+  nodecl.}
 proc c_close(fd: cint): cint {.
-  importc: "close", nodecl, discardable.}
+  importc: "close", header: "<fcntl.h>",
+  nodecl, discardable.}
 proc c_ioctl(fd: cint, request: cint): cint {.
-  importc: "ioctl", nodecl, varargs.}
+  importc: "ioctl", header: "<sys/ioctl.h>",
+  nodecl, varargs.}
 proc c_usleep(usec: cuint): cint {.
-  importc: "usleep", nodecl, discardable.}
-var O_WRONLY {.importc: "O_WRONLY", header: "<fcntl.h>".}: cint
-var ULEDIOC_SETALL {.importc: "ULEDIOC_SETALL", header: "<nuttx/leds/userled.h>".}: cint
+  importc: "usleep", header: "<unistd.h>",
+  nodecl, discardable.}
+var O_WRONLY {.
+  importc: "O_WRONLY", header: "<fcntl.h>".}: cint
+var ULEDIOC_SETALL {.
+  importc: "ULEDIOC_SETALL", header: "<nuttx/leds/userled.h>".}: cint
 
 ## Blink the LED
 proc blink_led() =
@@ -54,13 +60,29 @@ proc hello_nim() {.exportc, cdecl.} =
   blink_led()
 
   ## Finish
-  ## waitFor launch()
+  ## Previously: waitFor launch()
   GC_runOrc()
 
-## Compile on NuttX:
+## To test the compilation for NuttX:
 # export TOPDIR=/workspaces/bookworm/nuttx
 # cd /workspaces/bookworm/apps/examples/hello_nim
 # nim c --header hello_nim_async.nim 
+
+## Output Log:
+# nsh> hello_nim
+# Hello Nim!
+# Opening /dev/userleds
+# Set LED 0 to 1
+# board_userled_all: ledset=0x1
+# board_userled_all: led=0, val=1
+# board_userled_all: led=1, val=0
+# board_userled_all: led=2, val=0
+# Waiting...
+# Set LED 0 to 0
+# board_userled_all: ledset=0x0
+# board_userled_all: led=0, val=0
+# board_userled_all: led=1, val=0
+# board_userled_all: led=2, val=0
 
 ## Previously:
 import std/asyncdispatch
