@@ -22,7 +22,7 @@ var ULEDIOC_SETALL {.
 ## Blink the LED
 proc blink_led() =
 
-  ## Open the LED driver
+  ## Open the LED Driver
   echo "Opening /dev/userleds"
   var fd = c_open("/dev/userleds", O_WRONLY)
   if fd < 0:
@@ -40,7 +40,7 @@ proc blink_led() =
   echo "Waiting..."
   c_usleep(1000_000)
 
-  ## Turn on LED
+  ## Turn off LED
   echo "Set LED 0 to 0"
   ret = c_ioctl(fd, ULEDIOC_SETALL, 0)
   if ret < 0:

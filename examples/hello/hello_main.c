@@ -41,7 +41,7 @@ int main(int argc, FAR char *argv[])
 {
   printf("Hello, World!!\n");
 
-  // Open the LED driver
+  // Open the LED Driver
   printf("Opening /dev/userleds\n");
   int fd = open("/dev/userleds", O_WRONLY);
   if (fd < 0)
@@ -67,7 +67,7 @@ int main(int argc, FAR char *argv[])
   puts("Waiting...");
   usleep(500 * 1000L);
 
-  // Turn on LED
+  // Turn off LED
   puts("Set LED 0 to 0");
   ret = ioctl(fd, ULEDIOC_SETALL, 0);
   if (ret < 0)
