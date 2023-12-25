@@ -23,7 +23,11 @@
  ****************************************************************************/
 
 #include <nuttx/config.h>
+#include <sys/ioctl.h>
 #include <stdio.h>
+#include <fcntl.h>
+
+#include <nuttx/leds/userled.h>
 
 /****************************************************************************
  * Public Functions
@@ -36,5 +40,43 @@
 int main(int argc, FAR char *argv[])
 {
   printf("Hello, World!!\n");
+
+  // Open the LED driver
+  printf("Opening /dev/userleds\n");
+  int fd = open("/dev/userleds", O_WRONLY);
+  if (fd < 0)
+    {
+      int errcode = errno;
+      printf("ERROR: Failed to open %s: %d\n",
+             CONFIG_EXAMPLES_LEDS_DEVPATH, errcode);
+      return EXIT_FAILURE;
+    }
+
+  // Turn on LED
+  puts("Set LED 0 to 1");
+  int ret = ioctl(fd, ULEDIOC_SETALL, 1);
+  if (ret < 0)
+    {
+      int errcode = errno;
+      printf("ERROR: ioctl(ULEDIOC_SUPPORTED) failed: %d\n",
+              errcode);
+      return EXIT_FAILURE;
+    }
+
+  // Sleep a while
+  puts("Waiting...");
+  usleep(500 * 1000L);
+
+  // Turn on LED
+  puts("Set LED 0 to 0");
+  ret = ioctl(fd, ULEDIOC_SETALL, 0);
+  if (ret < 0)
+    {
+      int errcode = errno;
+      printf("ERROR: ioctl(ULEDIOC_SUPPORTED) failed: %d\n",
+              errcode);
+      return EXIT_FAILURE;
+    }
+
   return 0;
 }
