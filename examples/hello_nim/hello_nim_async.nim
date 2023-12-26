@@ -29,6 +29,9 @@ proc blink_led() =
     echo "Failed to open /dev/userleds"
     return
 
+  ## On Return: Close the LED Driver
+  defer: c_close(fd)
+
   ## Turn on LED
   echo "Set LED 0 to 1"
   var ret = c_ioctl(fd, ULEDIOC_SETALL, 1)
@@ -51,11 +54,11 @@ proc blink_led() =
   echo "Waiting..."
   c_usleep(1000_000)
 
-  ## Close the LED Driver
-  c_close(fd)
-
 ## Main Function in Nim
 proc hello_nim() {.exportc, cdecl.} =
+
+  ## On Return: Force the Garbage Collection
+  defer: GC_runOrc()
 
   ## Print something
   echo "Hello Nim!"
@@ -63,10 +66,6 @@ proc hello_nim() {.exportc, cdecl.} =
   ## Blink the LED 20 times
   for loop in 0..19:
     blink_led()
-
-  ## Finish
-  ## Previously: waitFor launch()
-  GC_runOrc()
 
 ## To test the compilation for NuttX:
 # export TOPDIR=/workspaces/bookworm/nuttx
