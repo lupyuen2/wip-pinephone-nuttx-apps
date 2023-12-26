@@ -1,7 +1,7 @@
 import std/strformat  ## String Formatting
 
 ## Import NuttX Functions and Macros from C.
-## Based on /home/vscode/.choosenim/toolchains/nim-#devel/lib/std/syncio.nim
+## Based on https://github.com/nim-lang/Nim/blob/devel/lib/std/syncio.nim
 proc c_open(filename: cstring, mode: cint): cint {.
   importc: "open", header: "<fcntl.h>",
   nodecl.}
