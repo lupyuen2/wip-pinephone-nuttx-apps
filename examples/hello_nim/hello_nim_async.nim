@@ -24,7 +24,7 @@ proc blink_led() =
 
   ## Open the LED Driver
   echo "Opening /dev/userleds"
-  var fd = c_open("/dev/userleds", O_WRONLY)
+  let fd = c_open("/dev/userleds", O_WRONLY)
   if fd < 0:
     echo "Failed to open /dev/userleds"
     return
@@ -47,6 +47,10 @@ proc blink_led() =
     echo "ioctl(ULEDIOC_SETALL) failed"
     return
 
+  ## Wait again
+  echo "Waiting..."
+  c_usleep(1000_000)
+
   ## Close the LED Driver
   c_close(fd)
 
@@ -56,8 +60,9 @@ proc hello_nim() {.exportc, cdecl.} =
   ## Print something
   echo "Hello Nim!"
 
-  ## Blink the LED
-  blink_led()
+  ## Blink the LED 20 times
+  for loop in 0..19:
+    blink_led()
 
   ## Finish
   ## Previously: waitFor launch()
