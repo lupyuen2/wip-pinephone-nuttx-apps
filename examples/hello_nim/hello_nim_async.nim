@@ -1,5 +1,3 @@
-import std/strformat  ## String Formatting
-
 ## Import NuttX Functions and Macros from C.
 ## Based on https://github.com/nim-lang/Nim/blob/devel/lib/std/syncio.nim
 proc c_open(filename: cstring, mode: cint): cint {.
@@ -88,8 +86,9 @@ proc hello_nim() {.exportc, cdecl.} =
 # board_userled_all: led=1, val=0
 # board_userled_all: led=2, val=0
 
-## Previously:
+## Previously: Test for Async Tasks
 import std/asyncdispatch
+import std/strformat
 
 proc task(id: int): Future[void] {.async.} =
   for loop in 0..2:
