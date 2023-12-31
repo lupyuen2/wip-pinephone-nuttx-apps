@@ -1,17 +1,16 @@
 ## Import NuttX Functions and Macros from C.
 ## Based on https://github.com/nim-lang/Nim/blob/devel/lib/std/syncio.nim
 proc c_open(filename: cstring, mode: cint): cint {.
-  importc: "open", header: "<fcntl.h>",
-  nodecl.}
+  importc: "open", header: "<fcntl.h>".}
 proc c_close(fd: cint): cint {.
   importc: "close", header: "<fcntl.h>",
-  nodecl, discardable.}
+  discardable.}
 proc c_ioctl(fd: cint, request: cint): cint {.
   importc: "ioctl", header: "<sys/ioctl.h>",
-  nodecl, varargs.}
+  varargs.}
 proc c_usleep(usec: cuint): cint {.
   importc: "usleep", header: "<unistd.h>",
-  nodecl, discardable.}
+  discardable.}
 var O_WRONLY {.
   importc: "O_WRONLY", header: "<fcntl.h>".}: cint
 var ULEDIOC_SETALL {.
