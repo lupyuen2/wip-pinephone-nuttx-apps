@@ -69,14 +69,19 @@ proc read_config(cfg: string): DotConfig =
       case arch
       of "arm", "arm64":
         result.arch = arch
-      of "risc-v":
-        result.arch = "riscv32"
       of "sim":
         if defined(amd64):
           result.arch = "amd64"
         elif defined(aarch64):
           result.arch = "arm64"
         result.isSim = true
+    of "ARCH_FAMILY":
+      let arch = keyval[1].strip(chars = {'"'})
+      case arch
+      of "rv32":
+        result.arch = "riscv32"
+      of "rv64":
+        result.arch = "riscv64"
     of "DEBUG_NOOPT":
       result.opt = oNone
     of "DEBUG_FULLOPT":
