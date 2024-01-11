@@ -474,7 +474,7 @@ FAR const struct extmatch_vtable_s *
 ssize_t readline_common(FAR struct rl_common_s *vtbl, FAR char *buf,
                         int buflen)
 {
-  _info("\n");////
+  // _info("\n");////
   int escape;
   int nch;
 #ifdef CONFIG_READLINE_CMD_HISTORY
@@ -512,7 +512,7 @@ ssize_t readline_common(FAR struct rl_common_s *vtbl, FAR char *buf,
        */
 
       int ch = RL_GETC(vtbl);
-      _info("ch=0x%x\n", ch);
+      // _info("ch=0x%x\n", ch);////
 
       /* Check for end-of-file or read error */
 

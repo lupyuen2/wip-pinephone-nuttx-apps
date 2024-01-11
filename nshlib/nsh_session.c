@@ -70,7 +70,7 @@
 int nsh_session(FAR struct console_stdio_s *pstate,
                 int login, int argc, FAR char *argv[])
 {
-  _info("\n");////
+  // _info("\n");////
   FAR struct nsh_vtbl_s *vtbl;
   int ret = EXIT_FAILURE;
 
@@ -227,10 +227,10 @@ int nsh_session(FAR struct console_stdio_s *pstate,
        * will cause the session to terminate.
        */
 
-      _info("Before readline_fd\n");////
+      // _info("Before readline_fd\n");////
       ret = readline_fd(pstate->cn_line, CONFIG_NSH_LINELEN,
                         INFD(pstate), OUTFD(pstate));
-      _info("After readline_fd\n");////
+      // _info("After readline_fd\n");////
       if (ret == EOF)
         {
           /* NOTE: readline() does not set the errno variable, but
