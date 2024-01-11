@@ -668,7 +668,7 @@ ssize_t readline_common(FAR struct rl_common_s *vtbl, FAR char *buf,
        * others both.
        */
 
-      else if (ch == '\n' || ch == '\r') //// TinyEMU returns CR, not LF
+      else if (ch == '\n')
         {
 #ifdef CONFIG_READLINE_CMD_HISTORY
           /* Save history of command, only if there was something
