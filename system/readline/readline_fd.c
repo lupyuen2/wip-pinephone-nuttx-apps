@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <assert.h>
+#include <debug.h>
 
 #include "system/readline.h"
 #include "readline.h"
@@ -202,6 +203,7 @@ static void readline_write(FAR struct rl_common_s *vtbl,
 
 ssize_t readline_fd(FAR char *buf, int buflen, int infd, int outfd)
 {
+  _info("\n");////
   UNUSED(outfd);
 
   struct readline_s vtbl;

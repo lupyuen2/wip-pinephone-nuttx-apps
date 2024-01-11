@@ -25,6 +25,7 @@
 #include <nuttx/config.h>
 
 #include <assert.h>
+#include <debug.h>
 
 #include "nsh.h"
 #include "nsh_console.h"
@@ -61,6 +62,7 @@
 
 int nsh_consolemain(int argc, FAR char *argv[])
 {
+  _info("\n");////
   FAR struct console_stdio_s *pstate = nsh_newconsole(true);
   int ret;
 

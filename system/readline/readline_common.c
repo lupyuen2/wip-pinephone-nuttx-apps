@@ -474,6 +474,7 @@ FAR const struct extmatch_vtable_s *
 ssize_t readline_common(FAR struct rl_common_s *vtbl, FAR char *buf,
                         int buflen)
 {
+  _info("\n");////
   int escape;
   int nch;
 #ifdef CONFIG_READLINE_CMD_HISTORY
@@ -511,6 +512,7 @@ ssize_t readline_common(FAR struct rl_common_s *vtbl, FAR char *buf,
        */
 
       int ch = RL_GETC(vtbl);
+      _info("ch=0x%x\n", ch);
 
       /* Check for end-of-file or read error */
 
@@ -666,7 +668,7 @@ ssize_t readline_common(FAR struct rl_common_s *vtbl, FAR char *buf,
        * others both.
        */
 
-      else if (ch == '\n')
+      else if (ch == '\n' || ch == '\r') //// TinyEMU returns CR, not LF
         {
 #ifdef CONFIG_READLINE_CMD_HISTORY
           /* Save history of command, only if there was something

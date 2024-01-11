@@ -31,6 +31,7 @@
 #include <sys/boardctl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <debug.h>
 
 #include "nshlib/nshlib.h"
 
@@ -50,6 +51,7 @@
 
 int main(int argc, FAR char *argv[])
 {
+  _info("\n");////
   struct sched_param param;
   int ret = 0;
 
