@@ -236,9 +236,11 @@ int main(int argc, FAR char *argv[])
       return EXIT_SUCCESS;
     }
 
-  ret = task_create("led_daemon", CONFIG_EXAMPLES_LEDS_PRIORITY,
-                    CONFIG_EXAMPLES_LEDS_STACKSIZE, led_daemon,
-                    NULL);
+  // TODO: task_create missing from QEMU knsh64
+  // ret = task_create("led_daemon", CONFIG_EXAMPLES_LEDS_PRIORITY,
+  //                   CONFIG_EXAMPLES_LEDS_STACKSIZE, led_daemon,
+  //                   NULL);
+  ret = led_daemon(argc, argv); ////
   if (ret < 0)
     {
       int errcode = errno;
