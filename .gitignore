@@ -39,3 +39,4 @@ Make.dep
 .dirlinks
 .vscode
 .DS_Store
+database/Kconfig
