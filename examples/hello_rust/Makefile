@@ -31,6 +31,8 @@ MODULE    = $(CONFIG_EXAMPLES_HELLO_RUST)
 
 MAINSRC = hello_rust_main.rs
 
-RUSTFLAGS += -C panic=abort
+# Need `-O` to fix "undefined reference to `core::panicking::panic'"
+# https://github.com/rust-lang/compiler-builtins/issues/245
+RUSTFLAGS += -C panic=abort -O
 
 include $(APPDIR)/Application.mk
