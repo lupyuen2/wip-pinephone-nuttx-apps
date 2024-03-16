@@ -56,6 +56,7 @@ extern "C" {
 
 #[panic_handler]
 fn panic(_panic: &PanicInfo<'_>) -> ! {
+    unsafe { printf(b"panic!\n\0" as *const u8); }
     loop {}
 }
 
@@ -85,6 +86,14 @@ pub extern "C" fn hello_rust_main(_argc: i32, _argv: *const *const u8) -> i32 {
         ).is_null() {
             printf(b"You entered...\n\0" as *const u8);
             puts(&buf[0]);
+
+            let i = 1 / buf[0];
+            printf(b"i=%d\n\0" as *const u8, i as core::ffi::c_int);
+
+            /* TODO: Why does `1 / buf[0]` fail to link?
+            riscv64-unknown-elf-ld: nuttx/staging/libapps.a(hello_rust_main.rs...apps.examples.hello_rust_1.o): in function `no symbol':
+            apps/examples/hello_rust/hello_rust_main.rs:90: undefined reference to `core::panicking::panic'
+             */
         }
     }
 
