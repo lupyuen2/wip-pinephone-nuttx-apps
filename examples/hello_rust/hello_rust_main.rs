@@ -30,6 +30,7 @@
  ****************************************************************************/
 
 use core::panic::PanicInfo;
+use core::ffi::{ c_char, c_int, c_void };
 
 /****************************************************************************
  * Externs
@@ -37,13 +38,13 @@ use core::panic::PanicInfo;
 
 extern "C" {
     pub fn printf(format: *const u8, ...) -> i32;
-    pub fn puts(s: *const core::ffi::c_char) -> core::ffi::c_int;
+    pub fn puts(s: *const c_char) -> c_int;
     pub fn fgets(
-        buf: *mut core::ffi::c_char,
-        n: core::ffi::c_int,
-        stream: *mut core::ffi::c_void
-    ) -> *mut core::ffi::c_char;
-    pub fn lib_get_stream(fd: core::ffi::c_int) -> *mut core::ffi::c_void;
+        buf: *mut c_char,
+        n: c_int,
+        stream: *mut c_void
+    ) -> *mut c_char;
+    pub fn lib_get_stream(fd: c_int) -> *mut c_void;
 }
 
 /****************************************************************************
@@ -76,11 +77,11 @@ pub extern "C" fn hello_rust_main(_argc: i32, _argv: *const *const u8) -> i32 {
 
         // Receive a string and print it.
         // `stdin` comes from https://github.com/apache/nuttx/blob/master/include/stdio.h#L64-L68
-        let stdin: *mut core::ffi::c_void = lib_get_stream(0);
-        let mut buf: [core::ffi::c_char; 256] = [0; 256];
+        let stdin: *mut c_void = lib_get_stream(0);
+        let mut buf: [c_char; 256] = [0; 256];
         if !fgets(
             &mut buf[0],  // Buffer
-            buf.len() as i32 - 1,  // Size
+            buf.len() as i32,  // Size
             stdin  // Standard Input
         ).is_null() {
             printf(b"You entered...\n\0" as *const u8);
