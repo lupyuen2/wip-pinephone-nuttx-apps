@@ -41,7 +41,6 @@
      pub fn close(fd: i32) -> i32;
      pub fn ioctl(fd: i32, request: i32, ...) -> i32;
      pub fn usleep(usec: u32) -> u32;
-     pub fn exit(status: u32) -> !;
  }
  
  /****************************************************************************
@@ -72,7 +71,8 @@
   ****************************************************************************/
  
  #[no_mangle]
- pub extern "C" fn hello_rust_main(_argc: i32, _argv: *const *const u8) -> i32 {
+pub extern "C" fn hello_rust_main(_argc: i32, _argv: *const *const u8) -> i32 {
+    /* "Hello, Rust!!" using printf() from libc */
      
      unsafe {
          /* "Hello, Rust!!" using printf() from libc */
@@ -92,22 +92,24 @@
          let ret = ioctl(fd, ULEDIOC_SETALL, 1);
          if ret < 0 {
              printf(b"ERROR: ioctl(ULEDIOC_SETALL) failed\n\0" as *const u8);
+             close(fd);
              return 1;
          }
          
          printf(b"Sleeping...\n\0" as *const u8);
-         usleep(500 * 1000);
+         usleep(500_000);
          
          printf(b"Set LED 1 to 0\n\0" as *const u8);
          let ret = ioctl(fd, ULEDIOC_SETALL, 0);         
          if ret < 0 {
              printf(b"ERROR: ioctl(ULEDIOC_SETALL) failed\n\0" as *const u8);
+             close(fd);
              return 1;
          }
          close(fd);
      }
      
-     /* exit with status 0 */
+     /* Exit with status 0 */
+
      0
  }
- 
