@@ -22,8 +22,8 @@
  * Attributes
  ****************************************************************************/
 
- #![no_main]
- #![no_std]
+#![no_main]
+#![no_std]
 
 /****************************************************************************
  * Uses
@@ -73,9 +73,7 @@ fn panic(_panic: &PanicInfo<'_>) -> ! {
 
 #[no_mangle]
 pub extern "C" fn hello_rust_main(_argc: i32, _argv: *const *const u8) -> i32 {
-
     unsafe {
-
         /* "Hello, Rust!!" using printf() from libc */
 
         printf(b"Hello, Rust!!\n\0" as *const u8);
