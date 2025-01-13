@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <sys/utsname.h> //// TODO: Added this
 
+static char test_static[] = "Testing Static Var"; //// TODO: Added this
+
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
@@ -51,6 +53,7 @@ int main(int argc, FAR char *argv[])
     printf("version=%s\n", info.version);
     printf("machine=%s\n", info.machine);
   }
+  printf("test_static=%s\n", test_static);
 
   return 0;
 }
