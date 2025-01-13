@@ -26,6 +26,7 @@
 
 #include <nuttx/config.h>
 #include <stdio.h>
+#include <sys/utsname.h> //// TODO: Added this
 
 /****************************************************************************
  * Public Functions
@@ -38,5 +39,18 @@
 int main(int argc, FAR char *argv[])
 {
   printf("Hello, World!!\n");
+
+  //// TODO: Added this
+  struct utsname info;
+  int ret = uname(&info);
+  printf("ret=%d\n", ret);
+  if (ret >= 0) {
+    printf("sysname=%s\n", info.sysname);
+    printf("nodename=%s\n", info.nodename);
+    printf("release=%s\n", info.release);
+    printf("version=%s\n", info.version);
+    printf("machine=%s\n", info.machine);
+  }
+
   return 0;
 }
