@@ -33,8 +33,10 @@
  * hello_main
  ****************************************************************************/
 
+static char NAME[] = "NuttX";
 int main(int argc, FAR char *argv[])
 {
-  printf("Hello, World!!\n");
+  printf("NAME=%s\n", NAME);
+  printf("Address of NAME=%p\n", NAME);
   return 0;
 }
