@@ -29,6 +29,8 @@
 #include <sys/utsname.h> //// TODO: Added this
 
 static char test_static[] = "Testing Static Var"; //// TODO: Added this
+static const char test_static_const[] = "Testing Static Const Var"; //// TODO: Added this
+static char *NAME = "NuttX";
 
 /****************************************************************************
  * Public Functions
@@ -55,6 +57,9 @@ int main(int argc, FAR char *argv[])
   }
   printf("test_static=%s\n", test_static);
   printf("Address of test_static=%p\n", test_static);
-
+  printf("test_static_const=%s\n", test_static_const);
+  printf("Address of test_static_const=%p\n", test_static_const);
+  printf("Hello, World of %s!!\n", NAME);
+  printf("Address of NAME=%p\n", NAME);
   return 0;
 }
