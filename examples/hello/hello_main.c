@@ -54,6 +54,7 @@ int main(int argc, FAR char *argv[])
     printf("machine=%s\n", info.machine);
   }
   printf("test_static=%s\n", test_static);
+  printf("Address of test_static=%p\n", test_static);
 
   return 0;
 }
