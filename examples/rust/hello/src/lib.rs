@@ -13,6 +13,7 @@ struct Person {
 #[no_mangle]
 pub extern "C" fn hello_rust_cargo_main() {
     ////
+    use std::os::fd::AsRawFd;
     use nix::fcntl::{open, OFlag};
     use nix::sys::stat::Mode;
     use nix::ioctl_write_int_bad;
@@ -22,18 +23,18 @@ pub extern "C" fn hello_rust_cargo_main() {
         OFlag::O_WRONLY,
         Mode::empty()
     ).unwrap();
-    println!("fd={fd}");
+    println!("fd={:?}", fd);
 
     const ULEDIOC_SETALL: i32 = 0x1d03;
     ioctl_write_int_bad!(led_set_all, ULEDIOC_SETALL);
 
     // Equivalent to ioctl(fd, ULEDIOC_SETALL, 1)
-    unsafe { led_set_all(fd, 1).unwrap(); }
+    unsafe { led_set_all(fd.as_raw_fd(), 1).unwrap(); }
 
     sleep(2);
 
     // Equivalent to ioctl(fd, ULEDIOC_SETALL, 0)
-    unsafe { led_set_all(fd, 0).unwrap(); }
+    unsafe { led_set_all(fd.as_raw_fd(), 0).unwrap(); }
     ////
 
     // Print hello world to stdout
