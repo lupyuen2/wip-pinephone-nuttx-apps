@@ -1,6 +1,5 @@
 extern crate serde;
 extern crate serde_json;
-extern crate nix;
 
 use serde::{Deserialize, Serialize};
 
@@ -17,6 +16,7 @@ pub extern "C" fn hello_rust_cargo_main() {
     use nix::fcntl::{open, OFlag};
     use nix::sys::stat::Mode;
     use nix::ioctl_write_int_bad;
+    use nix::unistd::sleep;
     let fd = open(
         "/dev/userleds",
         OFlag::O_WRONLY,
@@ -29,6 +29,8 @@ pub extern "C" fn hello_rust_cargo_main() {
 
     // Equivalent to ioctl(fd, ULEDIOC_SETALL, 1)
     unsafe { led_set_all(fd, 1).unwrap(); }
+
+    sleep(2);
 
     // Equivalent to ioctl(fd, ULEDIOC_SETALL, 0)
     unsafe { led_set_all(fd, 0).unwrap(); }
