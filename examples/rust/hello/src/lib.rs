@@ -1,5 +1,6 @@
 extern crate serde;
 extern crate serde_json;
+extern crate nix;
 
 use serde::{Deserialize, Serialize};
 
@@ -15,12 +16,28 @@ pub extern "C" fn hello_rust_cargo_main() {
     ////
     use nix::fcntl::{open, OFlag};
     use nix::sys::stat::Mode;
+    use nix::{ioctl_write_int, ioctl_none};
     let fd = open(
         "/dev/userleds",
         OFlag::O_WRONLY,
         Mode::empty()
     ).unwrap();
     println!("fd={fd}");
+
+    const ULEDIOC_SETALL: i32 = 0x1d03;
+    // ioctl_none!(led_on, ULEDIOC_SETALL, 1);
+    ioctl_write_int!(led_on, ULEDIOC_SETALL, 1);
+    unsafe { led_on(fd, 1).unwrap(); }
+    unsafe { led_on(fd, 0).unwrap(); }
+
+    // nuttx::safe_ioctl(fd, nuttx::ULEDIOC_SETALL, 1)?;
+    // nuttx::safe_puts("Sleeping...");
+    // nuttx::usleep(500_000);
+
+    // nuttx::safe_puts("Set LED 1 to 0");
+    // nuttx::safe_ioctl(fd, nuttx::ULEDIOC_SETALL, 0)?;
+    // nuttx::close(fd);
+
     ////
 
     // Print hello world to stdout
