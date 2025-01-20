@@ -12,6 +12,13 @@ struct Person {
 // Function hello_rust_cargo without manglng
 #[no_mangle]
 pub extern "C" fn hello_rust_cargo_main() {
+    ////
+    use nix::fcntl::{open, OFlag};
+    use nix::sys::stat::Mode;
+    let fd = open("/dev/userleds", OFlag::O_WRONLY, Mode::empty()).unwrap();
+    println!("fd={fd}");
+    ////
+
     // Print hello world to stdout
 
     let john = Person {
